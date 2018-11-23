@@ -1,19 +1,16 @@
 import React, { Component } from 'react';
-import { NavMenu } from './NavMenu';
 
 export class Layout extends Component {
-  displayName = Layout.name
-
   render() {
     return (
-      <div>
-        <div>
-            <NavMenu />
+        <div>    
+            <nav className="navbar navbar-expand navbar-dark bg-dark">
+                <span className="navbar-brand">Royal Bridal Oversr</span>
+            </nav>       
+            <div className="container">
+                {this.props.children}
+            </div>
         </div>
-        <div>
-            {this.props.children}
-        </div>
-      </div>
     );
   }
 }
