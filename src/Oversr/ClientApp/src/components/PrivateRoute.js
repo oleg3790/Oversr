@@ -1,9 +1,10 @@
 ﻿import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
+import { UserService } from '../services/UserService';
 
 export const PrivateRoute = ({ component: Component, ...rest }) => (
     <Route {...rest} render={props => (
-        localStorage.getItem('user')
+        UserService.IsAuthenticated()
             ? <Component {...props} />
             : <Redirect to="/login" />
     )} />

@@ -1,5 +1,6 @@
-﻿import React, { Component } from 'react'
-import { Redirect } from 'react-router-dom'
+﻿import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
+import { UserService } from '../services/UserService';
 
 export default class Login extends Component {
     constructor(props) {
@@ -7,31 +8,48 @@ export default class Login extends Component {
         this.onSubmit = this.onSubmit.bind(this);
         this.onUsernameChange = this.onUsernameChange.bind(this);
         this.onPasswordChange = this.onPasswordChange.bind(this);
+        this.handleLoginError = this.handleLoginError.bind(this);
+        this.handleLoginSuccess = this.handleLoginSuccess.bind(this);
         this.state = {
             username: '',
             password: '',
-            redirectToReferrer: false
+            loginError: '',
+            redirectToHome: false
+        };
+    }
+
+    onUsernameChange = (e) => {
+        this.setState({ username: e.target.value, loginError: '' });
+    }
+
+    onPasswordChange = (e) => {
+        this.setState({ password: e.target.value, loginError: '' });
+    }
+
+    onSubmit = (e) => {
+        e.preventDefault();
+        const { username, password } = this.state;
+
+        if (username && password) {
+            const y = UserService.Login(username, password, this.handleLoginError, this.handleLoginSuccess);
+        } else {
+            this.setState({ loginError: "Enter a Username and Password" });
         }
     }
 
-    onUsernameChange = () => {
-
+    handleLoginError(message) {
+        this.setState({ loginError: message });
     }
 
-    onPasswordChange = () => {
-
-    }
-
-    onSubmit = () => {
-        
+    handleLoginSuccess() {
+        this.setState({ redirectToHome: true });
     }
 
     render() {
-        let { from } = this.props.location.state || { from: { pathname: "/" }};
-        if (this.state.redirectToReferrer) return <Redirect to={from}/>
+        if (this.state.redirectToHome) return <Redirect to="/" />;
 
         return (
-            <div className="row mt-5">                
+            <div className="row mt-5">
                 <form className="col-lg-5 offset-lg-4 col-md-4 offset-md-4 col-sm-6 offset-sm-3" onSubmit={this.onSubmit}>
                     <h1 id="login-head" className="mb-4 text-center">Login</h1>
                     <div className="form-group">
@@ -42,9 +60,10 @@ export default class Login extends Component {
                         <label>Password</label>
                         <input id="password" className="form-control" onChange={this.onPasswordChange}></input>
                     </div>
-                    <button type="submit" className="btn btn-primary">Log In</button>                        
-                </form>              
-            </div>            
+                    <button type="submit" className="btn btn-primary">Log In</button>
+                    <small className="row no-gutters mt-3 text-danger">{this.state.loginError}</small>
+                </form>
+            </div>
         );
     }
 }
