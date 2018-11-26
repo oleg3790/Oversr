@@ -7,26 +7,25 @@ using System.Text;
 using Oversr.Model;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Dapper;
+using System.Data.SqlClient;
 
 namespace Oversr.Services
 {
     public class UserService : IUserService
     {
+        private const string AllUsersSql = "select * from users where username = @Username {0};";
         private readonly IConfiguration _config;
 
         public UserService(IConfiguration config)
         {
             _config = config;
-        }
-
-        private List<User> _users = new List<User>
-        {
-            new User { Id = 1, FirstName = "Test", LastName = "User", Username = "test", Password = "test" }
-        };
+        }       
 
         public User Login(string username, string password)
         {
-            var user = _users.SingleOrDefault(x => x.Username == username && x.Password == password);
+
+            var user = GetUser(username, password);
 
             if (user == null)
                 return null;
@@ -47,8 +46,26 @@ namespace Oversr.Services
             user.Token = tokenHandler.WriteToken(token);
 
             // Remove password before returning
-            user.Password = null;
+            user.PasswordHash = null;
 
+            return user;
+        }
+
+        private User GetUser(string username, string password)
+        {
+            User user = null;
+
+            using (var conn = new SqlConnection(_config.GetValue<string>("defaultConnection")))
+            {
+                // First get salt by username, then validate password
+                user = conn.QueryFirstOrDefault<User>(string.Format(AllUsersSql, ""), new { Username = username });
+                var passwordHash = new PasswordHash(password, user.PasswordSalt);
+
+                if (user.PasswordHash != passwordHash.Hash)
+                {
+                    user = null;
+                }
+            }
             return user;
         }
     }

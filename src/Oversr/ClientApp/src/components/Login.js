@@ -58,7 +58,7 @@ export default class Login extends Component {
                     </div>
                     <div className="form-group">
                         <label>Password</label>
-                        <input id="password" className="form-control" onChange={this.onPasswordChange}></input>
+                        <input id="password" type="password" className="form-control" onChange={this.onPasswordChange}></input>
                     </div>
                     <button type="submit" className="btn btn-primary">Log In</button>
                     <small className="row no-gutters mt-3 text-danger">{this.state.loginError}</small>
