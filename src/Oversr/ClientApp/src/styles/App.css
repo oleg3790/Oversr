@@ -3,9 +3,30 @@
     cursor: pointer;
 }
 
+.nav-item-active {
+    z-index: 2;
+}
+
+/*** generic classes ***/
+.icon-btn {
+    cursor: pointer;
+    color: #368b36;
+    transition: color 500ms;
+}
+
+    .icon-btn:hover {
+        color: #2f692f;
+    }
+
 /*** specific ***/
 #login-head {
     font-size: 2.5rem;
     font-weight: 300;
     line-height: 1.2;
+}
+
+#inventory-wrapper {
+    margin-top: -1px;
+    height: 800px;
+    border: 1px solid #dee2e6;
 }

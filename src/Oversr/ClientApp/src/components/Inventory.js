@@ -1,6 +1,7 @@
 ﻿import React, { Component } from 'react';
 import NavigationTabs from '../commons/NavigationTabs';
 import { ObjectAssignmentHelpers } from '../commons/ObjectAssignmentHelpers';
+import SampleInventory from './SampleInventory';
 
 export default class Inventory extends Component {
     constructor(props) {
@@ -10,13 +11,9 @@ export default class Inventory extends Component {
             types: [
                 {
                     id: 0,
-                    value: 'Sample Inventory',
-                    selected: true
-                },
-                {
-                    id: 1,
-                    value: 'Order Inventory',
-                    selected: false
+                    value: 'Sample Inventory', // rendered as tab title
+                    selected: true,
+                    renderDetails: <SampleInventory/> // rendered as tab details
                 }
             ]
         }
@@ -30,8 +27,13 @@ export default class Inventory extends Component {
 
     render() {
         return (
-            <div className="mt-2">
-                <NavigationTabs navItems={this.state.types} onSelectionChange={this.handleTabSelectionChange}/>
+            <div className="mt-2 row no-gutters">
+                <div className="col-12">
+                    <NavigationTabs navItems={this.state.types} onSelectionChange={this.handleTabSelectionChange}/>
+                </div>    
+                <div id="inventory-wrapper" className="col-12">
+                    {this.state.types.find(x => x.selected).renderDetails}
+                </div>            
             </div>
         );
     }
