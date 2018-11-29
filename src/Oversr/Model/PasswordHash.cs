@@ -8,18 +8,19 @@ namespace Oversr.Model
     {
         public string Hash { get; }
 
-
         public PasswordHash(string password, string salt)
         {
-            Hash = Convert.ToBase64String(KeyDerivation.Pbkdf2(
-                password,
-                Convert.FromBase64String(salt),
-                KeyDerivationPrf.HMACSHA1,
-                10000,
-                256 / 8));
+            Hash = GetHash(password, salt);
+        }        
+
+        public static Tuple<string, string> GenerateHashAndSalt(string password)
+        {
+            var salt = GenerateSalt();
+            var hash = GetHash(password, salt);
+            return new Tuple<string, string>(hash, salt);
         }
 
-        public string GenerateSalt()
+        private static string GenerateSalt()
         {
             byte[] salt = new byte[128 / 8];
 
@@ -30,5 +31,15 @@ namespace Oversr.Model
 
             return Convert.ToBase64String(salt);
         }
+
+        private static string GetHash(string password, string salt)
+        {
+            return Convert.ToBase64String(KeyDerivation.Pbkdf2(
+                password,
+                Convert.FromBase64String(salt),
+                KeyDerivationPrf.HMACSHA1,
+                10000,
+                256 / 8));
+        }        
     }
 }
