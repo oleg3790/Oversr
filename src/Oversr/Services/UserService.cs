@@ -14,7 +14,7 @@ namespace Oversr.Services
 {
     public class UserService : IUserService
     {
-        private const string AllUsersSql = "select * from users where username = @Username {0};";
+        private const string AllUsersSql = "select * from users where username = @Username;";
         private readonly IConfiguration _config;
 
         public UserService(IConfiguration config)
@@ -58,7 +58,7 @@ namespace Oversr.Services
             using (var conn = new SqlConnection(_config.GetValue<string>("defaultConnection")))
             {
                 // First get salt by username, then validate password
-                user = conn.QueryFirstOrDefault<User>(string.Format(AllUsersSql, ""), new { Username = username });
+                user = conn.QueryFirstOrDefault<User>(AllUsersSql, new { Username = username });
                 var passwordHash = new PasswordHash(password, user.PasswordSalt);
 
                 if (user.PasswordHash != passwordHash.Hash)
