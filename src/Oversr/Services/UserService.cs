@@ -59,6 +59,10 @@ namespace Oversr.Services
             {
                 // First get salt by username, then validate password
                 user = conn.QueryFirstOrDefault<User>(AllUsersSql, new { Username = username });
+
+                if (user == null)
+                    return user;
+
                 var passwordHash = new PasswordHash(password, user.PasswordSalt);
 
                 if (user.PasswordHash != passwordHash.Hash)

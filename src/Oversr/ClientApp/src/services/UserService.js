@@ -1,9 +1,9 @@
 ﻿import Axios from 'axios';
+import decode from 'jwt-decode';
 
 export const UserService = {
     Login,
-    IsAuthenticated,
-    Authenticate
+    IsAuthenticated
 };
 
 async function Login(username, password, onError, onSuccess) {
@@ -18,18 +18,18 @@ async function Login(username, password, onError, onSuccess) {
             }
         }
     )
-        .then(r => {
-            if (!r.data.token) {
-                onError("Authentication failed");
-                return;
-            }
+    .then(r => {
+        if (!r.data.token) {
+            onError("Authentication failed");
+            return;
+        }
 
-            localStorage.setItem("authToken", r.data.token);
-            onSuccess();
-        })
-        .catch(e => {
-            onError(e.response.data.message);
-        });
+        localStorage.setItem("authToken", r.data.token);
+        onSuccess();
+    })
+    .catch(e => {
+        onError(e.response.data.message);
+    });
 }
 
 function IsAuthenticated() {
@@ -37,12 +37,13 @@ function IsAuthenticated() {
     const token = localStorage.getItem('authToken');
     if (!token) return false;
 
-    return Authenticate(token);
-}
+    const decodedToken = decode(token);
 
-async function Authenticate(token) {
-    Axios.defaults.headers.common["Authorization"] = "Bearer " + token;
-    await Axios.get('/api/UserAccount/Authenticate')
-        .then(() => { return true; })
-        .catch(() => { return false; });
+    if (Date.now() / 1000 > decodedToken.exp)
+    {
+        return false;
+    } 
+    else {
+        return true;
+    }
 }

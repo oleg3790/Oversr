@@ -13,8 +13,7 @@ export default class Login extends Component {
         this.state = {
             username: '',
             password: '',
-            loginError: '',
-            redirectToHome: false
+            loginError: ''
         };
     }
 
@@ -42,12 +41,10 @@ export default class Login extends Component {
     }
 
     handleLoginSuccess() {
-        this.setState({ redirectToHome: true });
+        this.props.history.push('/');
     }
 
     render() {
-        if (this.state.redirectToHome) return <Redirect to="/" />;
-
         return (
             <div className="row mt-5">
                 <form className="col-lg-5 offset-lg-4 col-md-4 offset-md-4 col-sm-6 offset-sm-3" onSubmit={this.onSubmit}>
