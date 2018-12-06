@@ -29,11 +29,5 @@ namespace Oversr.Controllers
 
             return Ok(user);
         }
-
-        [HttpGet("[action]")]
-        public IActionResult Authenticate()
-        {
-            return Ok();
-        }
     }
 }

@@ -1,5 +1,4 @@
 ﻿import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 import { UserService } from '../services/UserService';
 
 export default class Login extends Component {
@@ -30,7 +29,7 @@ export default class Login extends Component {
         const { username, password } = this.state;
 
         if (username && password) {
-            const y = UserService.Login(username, password, this.handleLoginError, this.handleLoginSuccess);
+            UserService.Login(username, password, this.handleLoginError, this.handleLoginSuccess);
         } else {
             this.setState({ loginError: "Enter a Username and Password" });
         }
