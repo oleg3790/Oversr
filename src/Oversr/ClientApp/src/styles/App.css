@@ -1,10 +1,19 @@
 ﻿/*** bootstrap related ***/
+.modal {
+    background-color: #42404096;    
+}
+
 .nav-link {
     cursor: pointer;
 }
 
 .nav-item-active {
     z-index: 2;
+}
+
+.show {
+    opacity: 1;
+    display: block !important;
 }
 
 /*** generic classes ***/
@@ -29,4 +38,52 @@
     margin-top: -1px;
     height: 800px;
     border: 1px solid #dee2e6;
+}
+
+@media (max-width: 4000px) {
+    #samp-inv-item {
+        max-width: 40%;
+    }
+}
+
+@media (max-width: 1800px) {
+    #samp-inv-item {
+        max-width: 50%;
+    }
+}
+
+@media (max-width: 1550px) {
+    #samp-inv-item {
+        max-width: 60%;
+    }
+}
+
+@media (max-width: 1250px) {
+    #samp-inv-item {
+        max-width: 70%;
+    }
+}
+
+@media (max-width: 960px) {
+    #samp-inv-item {
+        max-width: 80%;
+    }
+}
+
+@media (max-width: 720px) {
+    #samp-inv-item {
+        max-width: 90%;
+    }
+}
+
+@media (max-width: 540px) {
+    #samp-inv-item {
+        max-width: 100%;
+    }
+}
+
+.samp-inv-field-lbl {
+    width: 180px;
+    display: block;
+    text-align: right;
 }
