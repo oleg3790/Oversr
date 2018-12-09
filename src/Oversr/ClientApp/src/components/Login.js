@@ -1,5 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { UserService } from '../services/UserService';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export default class Login extends Component {
     constructor(props) {
@@ -12,7 +14,8 @@ export default class Login extends Component {
         this.state = {
             username: '',
             password: '',
-            loginError: ''
+            loginError: '',
+            isBusy: false
         };
     }
 
@@ -29,6 +32,7 @@ export default class Login extends Component {
         const { username, password } = this.state;
 
         if (username && password) {
+            this.setState({ isBusy: !this.state.isBusy });
             UserService.Login(username, password, this.handleLoginError, this.handleLoginSuccess);
         } else {
             this.setState({ loginError: "Enter a Username and Password" });
@@ -37,9 +41,11 @@ export default class Login extends Component {
 
     handleLoginError(message) {
         this.setState({ loginError: message });
+        this.setState({ isBusy: !this.state.isBusy });
     }
 
     handleLoginSuccess() {
+        this.setState({ isBusy: !this.state.isBusy });
         this.props.history.push('/');
     }
 
@@ -56,7 +62,9 @@ export default class Login extends Component {
                         <label>Password</label>
                         <input id="password" type="password" className="form-control" onChange={this.onPasswordChange}></input>
                     </div>
-                    <button type="submit" className="btn btn-primary">Log In</button>
+                    <button type="submit" className="btn btn-primary">
+                        {this.state.isBusy ? <FontAwesomeIcon icon={faSpinner} pulse={true}/> : "Log In"}
+                    </button>
                     <small className="row no-gutters mt-3 text-danger">{this.state.loginError}</small>
                 </form>
             </div>
