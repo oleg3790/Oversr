@@ -12,14 +12,15 @@ export default class SampleInventory extends Component {
         };
     }
 
-    toggleAddNewItemModal() {
+    toggleAddNewItemModal(e) {
+        e.preventDefault();
         this.setState({ isAddNewVisible: !this.state.isAddNewVisible });
     }
 
     render() {
         return (
             <div className="m-3 mt-4">
-                {this.state.isAddNewVisible && <SampleInventoryItem onExit={this.toggleAddNewItemModal}/>}
+                <SampleInventoryItem toggleVisibility={this.toggleAddNewItemModal} isVisible={this.state.isAddNewVisible}/>
                 <div className="row no-gutters justify-content-between">
                     <div className="row no-gutters col-11 mb-3">
                         <input className="form-control col-5"></input>                      
