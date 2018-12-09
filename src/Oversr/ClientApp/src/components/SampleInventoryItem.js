@@ -1,4 +1,5 @@
 ﻿import React, { Component } from 'react'
+import ComboInput from '../commons/ComboInput';
 
 export default class SampleInventoryItem extends Component {
     constructor(props) {
@@ -19,12 +20,10 @@ export default class SampleInventoryItem extends Component {
                         <div className="modal-body">
                             <div className="row">
                                 <div className="col-6 offset-3">
-                                    <div className="input-group">
-                                        <div className="input-group-prepend">
-                                            <label className="input-group-text">Designer</label>
-                                        </div>
-                                        <input className="form-control"></input>
-                                    </div>                                                                                
+                                    <ComboInput labelText="Designer">
+                                        <option>Test 1</option>
+                                        <option>Test 2</option>
+                                    </ComboInput>                                                                                
                                 </div>                                    
                             </div>
                             <div className="row mt-3">

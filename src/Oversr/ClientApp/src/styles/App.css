@@ -27,6 +27,10 @@
         color: #2f692f;
     }
 
+.combo-input {
+    color: rgb(146, 146, 146);
+}
+
 /*** specific ***/
 #login-head {
     font-size: 2.5rem;
