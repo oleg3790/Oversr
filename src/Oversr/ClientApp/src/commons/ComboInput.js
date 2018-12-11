@@ -1,4 +1,6 @@
 ﻿import React, { Component } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes, faCheck } from '@fortawesome/free-solid-svg-icons';
 
 export default class ComboInput extends Component {
     constructor(props) {
@@ -11,13 +13,13 @@ export default class ComboInput extends Component {
     }
 
     handleSelectionChange(e) {
-        const id = e.target.dataset.id;
+        const val = e.target.value;
 
-        if (id === -1) {
+        if (val === "Add new value") {
             this.toggleInputSelection();
         } 
         else {
-
+            this.props.onSelectionChange(val);
         }
     }
 
@@ -32,13 +34,23 @@ export default class ComboInput extends Component {
                     <label className="input-group-text">{this.props.labelText}</label>
                 </div>
                 {this.state.isInputActive 
-                    ? (<input className="form-control"></input>)
+                    ? (
+                        <div className="row no-gutters">
+                            <input className="form-control col-9"></input>   
+                            <div className="col-1">
+                                <FontAwesomeIcon icon={faTimes} size="2x" className="text-danger"/>                                
+                            </div>   
+                            <div className="col-1">
+                                <FontAwesomeIcon icon={faCheck} size="2x" className="text-success"/>
+                            </div>                    
+                        </div>)
                     : (
                         <select className="form-control" onChange={this.handleSelectionChange}>
+                            <option></option>
                             {this.props.selectionItems.map((x,i) =>
-                                <option key={i} data-id={i}>{x.value}</option>
+                                <option key={i}>{x.value}</option>
                             )}
-                            <option data-id={-1} className="combo-input" onChange={this.toggleInputSelection}>Add new value</option>
+                            <option className="combo-input">Add new value</option>
                         </select>)}
             </div>             
         );
