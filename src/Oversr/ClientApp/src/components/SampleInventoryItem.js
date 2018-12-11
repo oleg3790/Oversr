@@ -6,13 +6,27 @@ export default class SampleInventoryItem extends Component {
         super(props);
     }
 
+    getDesignerSelectionItems() {
+        return [
+            {
+                value: "Test 1"
+            },
+            {
+                value: "Test 2"
+            },
+            {
+                value: "Test 3"
+            },
+        ];
+    }
+
     render() {
         return (
             <div className={this.props.isVisible ? "modal show" : "modal"}>        
                 <div id="samp-inv-item" className="modal-dialog modal-dialog-centered">
                     <form className="modal-content p-2">
                         <div className="modal-header">
-                            <h5 className="modal-title">Add New Sample Inventory Item</h5>
+                            <h5 className="modal-title">Add Sample Inventory Item</h5>
                             <button type="button" className="close" onClick={this.props.toggleVisibility}>
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -20,10 +34,7 @@ export default class SampleInventoryItem extends Component {
                         <div className="modal-body">
                             <div className="row">
                                 <div className="col-6 offset-3">
-                                    <ComboInput labelText="Designer">
-                                        <option>Test 1</option>
-                                        <option>Test 2</option>
-                                    </ComboInput>                                                                                
+                                    <ComboInput labelText="Designer" selectionItems={this.getDesignerSelectionItems()}/>                                                                                
                                 </div>                                    
                             </div>
                             <div className="row mt-3">

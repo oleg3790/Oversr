@@ -4,8 +4,20 @@ export default class ComboInput extends Component {
     constructor(props) {
         super(props); 
         this.toggleInputSelection = this.toggleInputSelection.bind(this);
+        this.handleSelectionChange = this.handleSelectionChange.bind(this);
         this.state = {
             isInputActive: false
+        }
+    }
+
+    handleSelectionChange(e) {
+        const id = e.target.dataset.id;
+
+        if (id === -1) {
+            this.toggleInputSelection();
+        } 
+        else {
+
         }
     }
 
@@ -22,9 +34,11 @@ export default class ComboInput extends Component {
                 {this.state.isInputActive 
                     ? (<input className="form-control"></input>)
                     : (
-                        <select className="form-control">
-                            {this.props.children}
-                            <option className="combo-input" onClick={this.toggleInputSelection}>Add new value</option>
+                        <select className="form-control" onChange={this.handleSelectionChange}>
+                            {this.props.selectionItems.map((x,i) =>
+                                <option key={i} data-id={i}>{x.value}</option>
+                            )}
+                            <option data-id={-1} className="combo-input" onChange={this.toggleInputSelection}>Add new value</option>
                         </select>)}
             </div>             
         );
