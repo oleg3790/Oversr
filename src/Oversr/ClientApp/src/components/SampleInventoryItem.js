@@ -2,8 +2,12 @@
 import ComboInput from '../commons/ComboInput';
 
 export default class SampleInventoryItem extends Component {
-    constructor(props) {
+    constructor(props) {        
         super(props);
+        this.handleDesignerSelectionChange = this.handleDesignerSelectionChange.bind(this);
+        this.state = {
+            designer: null
+        }
     }
 
     getDesignerSelectionItems() {
@@ -20,6 +24,10 @@ export default class SampleInventoryItem extends Component {
         ];
     }
 
+    handleDesignerSelectionChange(value) {
+        this.setState({ designer: value });
+    }
+
     render() {
         return (
             <div className={this.props.isVisible ? "modal show" : "modal"}>        
@@ -34,7 +42,7 @@ export default class SampleInventoryItem extends Component {
                         <div className="modal-body">
                             <div className="row">
                                 <div className="col-6 offset-3">
-                                    <ComboInput labelText="Designer" selectionItems={this.getDesignerSelectionItems()}/>                                                                                
+                                    <ComboInput labelText="Designer" selectionItems={this.getDesignerSelectionItems()} onSelectionChange={this.handleDesignerSelectionChange}/>                                                                                
                                 </div>                                    
                             </div>
                             <div className="row mt-3">
