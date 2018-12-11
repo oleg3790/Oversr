@@ -62,7 +62,7 @@ export default class Login extends Component {
                         <label>Password</label>
                         <input id="password" type="password" className="form-control" onChange={this.onPasswordChange}></input>
                     </div>
-                    <button type="submit" className="btn btn-primary">
+                    <button type="submit" className="btn btn-primary" disabled={this.state.isBusy}>
                         {this.state.isBusy ? <FontAwesomeIcon icon={faSpinner} pulse={true}/> : "Log In"}
                     </button>
                     <small className="row no-gutters mt-3 text-danger">{this.state.loginError}</small>
