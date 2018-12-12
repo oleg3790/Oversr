@@ -41,7 +41,7 @@ export default class SampleInventoryItem extends Component {
                         </div>
                         <div className="modal-body">
                             <div className="row">
-                                <div className="col-6 offset-3">
+                                <div className="col-12">
                                     <ComboInput labelText="Designer" selectionItems={this.getDesignerSelectionItems()} onSelectionChange={this.handleDesignerSelectionChange}/>                                                                                
                                 </div>                                    
                             </div>
