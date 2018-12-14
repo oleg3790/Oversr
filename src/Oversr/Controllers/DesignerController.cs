@@ -29,8 +29,22 @@ namespace Oversr.Controllers
 
         // POST: api/Designer
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult Post([FromBody] string name)
         {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return BadRequest("The designer name cannot be null or empty");
+            }
+
+            var designers = _inventoryService.GetAllDesigners();
+
+            if (designers.Any(x => x.Name.ToLower() == name.ToLower()))
+            {
+                return BadRequest("A designer with this name already exists");
+            }
+
+            _inventoryService.AddDesigner(name);
+            return Ok();
         }
     }
 }

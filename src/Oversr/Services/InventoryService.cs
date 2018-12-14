@@ -17,6 +17,14 @@ namespace Oversr.Services
             _config = config;
         }
 
+        public void AddDesigner(string name)
+        {            
+            using (var conn = new SqlConnection(_config.GetValue<string>("defaultConnection")))
+            {
+                conn.Execute("insert into designers (name) values (@iname)", new { iname = name });
+            }
+        }
+
         public ICollection<Designer> GetAllDesigners()
         {
             var designers = new List<Designer>();

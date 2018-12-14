@@ -6,5 +6,6 @@ namespace Oversr.Services
     public interface IInventoryService
     {
         ICollection<Designer> GetAllDesigners();
+        void AddDesigner(string name);
     }
 }
