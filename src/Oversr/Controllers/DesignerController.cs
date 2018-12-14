@@ -10,7 +10,7 @@ using Oversr.Services;
 
 namespace Oversr.Controllers
 {
-    //[Authorize]
+    [Authorize]
     [Route("api/[controller]")]
     public class DesignerController : Controller
     {
