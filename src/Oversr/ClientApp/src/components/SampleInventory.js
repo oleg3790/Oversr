@@ -20,7 +20,7 @@ export default class SampleInventory extends Component {
     render() {
         return (
             <div className="m-3 mt-4">
-                <SampleInventoryItem toggleVisibility={this.toggleAddNewItemModal} isVisible={this.state.isAddNewVisible}/>
+                {this.state.isAddNewVisible && <SampleInventoryItem toggleVisibility={this.toggleAddNewItemModal} isNewItem={true}/>}
                 <div className="row no-gutters justify-content-between">
                     <div className="row no-gutters col-11 mb-3">
                         <input className="form-control col-5"></input>                      
@@ -30,13 +30,13 @@ export default class SampleInventory extends Component {
                         size="2x" title="Add new inventory sample" onClick={this.toggleAddNewItemModal}/>
                 </div>                                
                 <table className="table table-sm">
-                    <thead className="bg-dark text-light">
+                    <thead className="bg-dark-1 text-light">
                         <tr>
                             <th scope="col">Designer</th>
                             <th scope="col">Style #</th>
                             <th scope="col">Style Name</th>
                             <th scope="col">Sizes</th>
-                            <th scope="col">Active/Disconitued/Sold</th>
+                            <th scope="col">Status</th>
                         </tr>
                     </thead>
                     <tbody>

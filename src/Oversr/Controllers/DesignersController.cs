@@ -12,11 +12,11 @@ namespace Oversr.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
-    public class DesignerController : Controller
+    public class DesignersController : Controller
     {
         private readonly IInventoryService _inventoryService;
 
-        public DesignerController(IInventoryService inventoryService)
+        public DesignersController(IInventoryService inventoryService)
         {
             _inventoryService = inventoryService;
         }
@@ -27,7 +27,6 @@ namespace Oversr.Controllers
             return _inventoryService.GetAllDesigners();
         }
 
-        // POST: api/Designer
         [HttpPost]
         public ActionResult Post([FromBody] string name)
         {

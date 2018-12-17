@@ -1,36 +1,30 @@
-﻿import React, { Component } from 'react'
+﻿import React, { Component } from 'react';
 import ComboInput from '../commons/ComboInput';
+import { DesignerService } from '../services/DesignerService';
 
 export default class SampleInventoryItem extends Component {
     constructor(props) {        
         super(props);
         this.handleDesignerSelectionChange = this.handleDesignerSelectionChange.bind(this);
         this.state = {
-            designer: null
+            designers: null,
+            selectedDesigner: null
         }
     }
 
-    getDesignerSelectionItems() {
-        return [
-            {
-                value: "Test 1"
-            },
-            {
-                value: "Test 2"
-            },
-            {
-                value: "Test 3"
-            },
-        ];
+    async componentWillMount() {   
+        if (this.props.isNewItem) {
+            this.setState({ designers: await DesignerService.GetAllDesigners() });
+        }      
     }
 
-    handleDesignerSelectionChange(value) {
-        this.setState({ designer: value });
+    handleDesignerSelectionChange(value) {        
+        this.setState({ selectedDesigner: value });
     }
 
     render() {
         return (
-            <div className={this.props.isVisible ? "modal show" : "modal"}>        
+            <div className="modal show">        
                 <div id="samp-inv-item" className="modal-dialog modal-dialog-centered">
                     <form className="modal-content p-2">
                         <div className="modal-header">
@@ -42,7 +36,7 @@ export default class SampleInventoryItem extends Component {
                         <div className="modal-body">
                             <div className="row">
                                 <div className="col-12">
-                                    <ComboInput labelText="Designer" selectionItems={this.getDesignerSelectionItems()} onSelectionChange={this.handleDesignerSelectionChange}/>                                                                                
+                                    <ComboInput labelText="Designer" selectionItems={this.state.designers} onSelectionChange={this.handleDesignerSelectionChange}/>                                                                                
                                 </div>                                    
                             </div>
                             <div className="row mt-3">

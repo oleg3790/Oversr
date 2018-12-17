@@ -24,7 +24,7 @@ async function Login(username, password, onError, onSuccess) {
             return;
         }
 
-        localStorage.setItem("authToken", r.data.token);
+        localStorage.setItem('authToken', r.data.token);
         onSuccess();
     })
     .catch(e => {
