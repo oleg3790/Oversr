@@ -1,14 +1,18 @@
 ﻿import React, { Component } from 'react';
 import ComboInput from '../commons/ComboInput';
 import { DesignerService } from '../services/DesignerService';
+import NotificationBanner from '../commons/NotificationBanner';
 
 export default class SampleInventoryItem extends Component {
     constructor(props) {        
         super(props);
         this.handleDesignerSelectionChange = this.handleDesignerSelectionChange.bind(this);
+        this.handleNewDesignerSave = this.handleNewDesignerSave.bind(this);
+        this.setNotification = this.setNotification.bind(this);
         this.state = {
             designers: null,
-            selectedDesigner: null
+            selectedDesigner: null,
+            notification: null
         }
     }
 
@@ -22,12 +26,31 @@ export default class SampleInventoryItem extends Component {
         this.setState({ selectedDesigner: value });
     }
 
+    async handleNewDesignerSave(designer) {
+        try {
+            await DesignerService.SaveNewDesigner(designer);  
+            this.setState({ designers: await DesignerService.GetAllDesigners() });     
+            this.setNotification(true, 'Successfully saved new designer');
+        }
+        catch(error) {
+            this.setNotification(false, error);
+        }                    
+    }
+
+    setNotification(isSuccess, text) {
+        this.setState({ statusMessage: { isSuccess: isSuccess, text: text } });
+        setTimeout(() => this.setState({ notification: { isSuccess: isSuccess, text: null }}), 5000);
+    }
+
     render() {
         return (
             <div className="modal show">        
                 <div id="samp-inv-item" className="modal-dialog modal-dialog-centered">
                     <form className="modal-content p-2">
-                        <div className="modal-header">
+                        {this.state.statusMessage &&
+                            <NotificationBanner notification={this.state.statusMessage}/>
+                        }
+                        <div className="modal-header">                            
                             <h5 className="modal-title">Add Sample Inventory Item</h5>
                             <button type="button" className="close" onClick={this.props.toggleVisibility}>
                                 <span aria-hidden="true">&times;</span>
@@ -36,7 +59,9 @@ export default class SampleInventoryItem extends Component {
                         <div className="modal-body">
                             <div className="row">
                                 <div className="col-12">
-                                    <ComboInput labelText="Designer" selectionItems={this.state.designers} onSelectionChange={this.handleDesignerSelectionChange}/>                                                                                
+                                    <ComboInput labelText="Designer" selectionItems={this.state.designers} onSelectionChange={this.handleDesignerSelectionChange}
+                                        onNewValueSave={this.handleNewDesignerSave}
+                                    />                                                                                
                                 </div>                                    
                             </div>
                             <div className="row mt-3">
