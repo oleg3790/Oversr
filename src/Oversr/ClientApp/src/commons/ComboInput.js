@@ -52,8 +52,8 @@ export default class ComboInput extends Component {
                     : (
                         <select className="form-control" onChange={this.handleSelectionChange}>
                             <option></option>
-                            {this.props.selectionItems.map((x, i) =>
-                                <option key={i}>{x.value}</option>
+                            {this.props.selectionItems && this.props.selectionItems.map(x =>
+                                <option key={x.id}>{x.name}</option>
                             )}
                             <option className="combo-input">Add new value</option>
                         </select>)}

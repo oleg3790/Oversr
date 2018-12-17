@@ -1,4 +1,10 @@
-﻿/*** bootstrap related ***/
+﻿/*** colors ***/
+
+.bg-dark-1 {
+    background-color: #727992 !important;
+}
+
+/*** bootstrap related ***/
 .modal {
     background-color: #42404096;    
 }
