@@ -6,10 +6,13 @@ export default class ComboInput extends Component {
     constructor(props) {
         super(props);
         this.toggleInputSelection = this.toggleInputSelection.bind(this);
+        this.handleNewValueTextChange = this.handleNewValueTextChange.bind(this);
         this.handleSelectionChange = this.handleSelectionChange.bind(this);
         this.handleNewValueSave = this.handleNewValueSave.bind(this);
         this.state = {
-            isInputActive: false
+            isInputActive: false,
+            newValueText: null,
+            error: null
         }
     }
 
@@ -28,8 +31,20 @@ export default class ComboInput extends Component {
         this.setState({ isInputActive: !this.state.isInputActive });
     }
 
-    handleNewValueSave() {
+    handleNewValueTextChange(e) {
+        this.setState({ newValueText: e.target.value });
+    }
 
+    handleNewValueSave(e) {
+        e.preventDefault();
+
+        if (this.state.newValueText) {
+            this.props.onNewValueSave(this.state.newValueText);
+            this.setState({ isInputActive: false });
+        }
+        else {
+            this.setState({ error: 'Value cannot be empty' });
+        }
     }
 
     render() {
@@ -41,7 +56,7 @@ export default class ComboInput extends Component {
                 {this.state.isInputActive
                     ? (
                         <div className="col-9 row no-gutters">
-                            <input className="form-control pl-2 col-8" placeholder="Enter a new value"></input>
+                            <input className="form-control pl-2 col-8" placeholder="Enter a new value" onChange={this.handleNewValueTextChange}></input>
                             <button className="btn btn-success col-2 ml-3" title="Save" onClick={this.handleNewValueSave}>
                                 <FontAwesomeIcon icon={faCheck} size="lg" className="text-light" />
                             </button>
@@ -57,6 +72,7 @@ export default class ComboInput extends Component {
                             )}
                             <option className="combo-input">Add new value</option>
                         </select>)}
+                {this.state.error && <small className="col-5 offset-3 text-danger">{this.state.error}</small>}
             </div>
         );
     }

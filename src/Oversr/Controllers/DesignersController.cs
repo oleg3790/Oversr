@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Oversr.Model;
+using Oversr.Model.ViewModel;
 using Oversr.Services;
 
 namespace Oversr.Controllers
@@ -28,21 +29,21 @@ namespace Oversr.Controllers
         }
 
         [HttpPost]
-        public ActionResult Post([FromBody] string name)
+        public ActionResult Post([FromBody] NewDesignerVM vm)
         {
-            if (string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(vm.Name))
             {
                 return BadRequest("The designer name cannot be null or empty");
             }
 
             var designers = _inventoryService.GetAllDesigners();
 
-            if (designers.Any(x => x.Name.ToLower() == name.ToLower()))
+            if (designers.Any(x => x.Name.ToLower() == vm.Name.ToLower()))
             {
                 return BadRequest("A designer with this name already exists");
             }
 
-            _inventoryService.AddDesigner(name);
+            _inventoryService.AddDesigner(vm.Name);
             return Ok();
         }
     }

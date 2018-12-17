@@ -44,6 +44,13 @@
     line-height: 1.2;
 }
 
+#notification-banner {
+    border-radius: 3px;
+    margin-bottom: 5px;
+    padding: 0px 0px 0px 10px;
+    transition: padding 250ms ease-in-out;
+}
+
 #inventory-wrapper {
     margin-top: -1px;
     height: 800px;
