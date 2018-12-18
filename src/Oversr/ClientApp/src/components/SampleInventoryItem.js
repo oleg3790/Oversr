@@ -2,6 +2,7 @@
 import ComboInput from '../commons/ComboInput';
 import { DesignerService } from '../services/DesignerService';
 import NotificationBanner from '../commons/NotificationBanner';
+import BusyOverlay from '../commons/BusyOverlay';
 
 export default class SampleInventoryItem extends Component {
     constructor(props) {        
@@ -9,7 +10,9 @@ export default class SampleInventoryItem extends Component {
         this.handleDesignerSelectionChange = this.handleDesignerSelectionChange.bind(this);
         this.handleNewDesignerSave = this.handleNewDesignerSave.bind(this);
         this.setNotification = this.setNotification.bind(this);
+        this.toggleIsBusy = this.toggleIsBusy.bind(this);
         this.state = {
+            isBusy: false,
             designers: null,
             selectedDesigner: null,
             notification: { 
@@ -19,10 +22,14 @@ export default class SampleInventoryItem extends Component {
         }
     }
 
-    async componentWillMount() {   
+    async componentWillMount() {  
+        this.toggleIsBusy();
+
         if (this.props.isNewItem) {
             this.setState({ designers: await DesignerService.GetAllDesigners() });
-        }      
+        }
+        
+        this.toggleIsBusy();
     }
 
     handleDesignerSelectionChange(value) {        
@@ -30,14 +37,18 @@ export default class SampleInventoryItem extends Component {
     }
 
     async handleNewDesignerSave(designer) {
+        this.toggleIsBusy();
+
         try {
             await DesignerService.SaveNewDesigner(designer);  
             this.setState({ designers: await DesignerService.GetAllDesigners() });     
             this.setNotification(true, 'Successfully saved new designer');
         }
         catch(error) {
-            this.setNotification(false, error);
-        }                    
+            this.setNotification(false, error.response.data);
+        } 
+        
+        this.toggleIsBusy();
     }
 
     setNotification(isSuccess, text) {
@@ -45,11 +56,16 @@ export default class SampleInventoryItem extends Component {
         setTimeout(() => this.setState({ notification: { isSuccess: isSuccess, text: null }}), 4000);
     }
 
+    toggleIsBusy() {
+        this.setState({ isBusy: !this.state.isBusy });
+    }
+
     render() {
         return (
             <div className="modal show">        
                 <div id="samp-inv-item" className="modal-dialog modal-dialog-centered">
-                    <form className="modal-content p-2">
+                    <form className="modal-content">
+                        {this.state.isBusy && <BusyOverlay/>}
                         <NotificationBanner notification={this.state.notification}/>
                         <div className="modal-header">                            
                             <h5 className="modal-title">Add Sample Inventory Item</h5>
