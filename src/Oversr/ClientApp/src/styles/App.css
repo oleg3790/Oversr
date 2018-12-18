@@ -45,7 +45,7 @@
 }
 
 #notification-banner {
-    border-radius: 3px;
+    border-radius: 3px 3px 0px 0px;
     margin-bottom: 5px;
     padding: 0px 0px 0px 10px;
     transition: padding 250ms ease-in-out;

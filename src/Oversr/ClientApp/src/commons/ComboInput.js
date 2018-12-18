@@ -9,6 +9,7 @@ export default class ComboInput extends Component {
         this.handleNewValueTextChange = this.handleNewValueTextChange.bind(this);
         this.handleSelectionChange = this.handleSelectionChange.bind(this);
         this.handleNewValueSave = this.handleNewValueSave.bind(this);
+        this.resetError = this.resetError.bind(this);
         this.state = {
             isInputActive: false,
             newValueText: null,
@@ -17,6 +18,7 @@ export default class ComboInput extends Component {
     }
 
     handleSelectionChange(e) {
+        this.resetError();
         const val = e.target.value;
 
         if (val === "Add new value") {
@@ -29,14 +31,17 @@ export default class ComboInput extends Component {
 
     toggleInputSelection() {
         this.setState({ isInputActive: !this.state.isInputActive });
+        this.resetError();
     }
 
     handleNewValueTextChange(e) {
         this.setState({ newValueText: e.target.value });
+        this.resetError();
     }
 
     handleNewValueSave(e) {
         e.preventDefault();
+        this.resetError();
 
         if (this.state.newValueText) {
             this.props.onNewValueSave(this.state.newValueText);
@@ -45,6 +50,10 @@ export default class ComboInput extends Component {
         else {
             this.setState({ error: 'Value cannot be empty' });
         }
+    }
+
+    resetError() {
+        this.setState({ error: null });
     }
 
     render() {
