@@ -1,5 +1,4 @@
-﻿using Oversr.Model.Enums;
-using System;
+﻿using System;
 
 namespace Oversr.Model.ViewModel
 {
