@@ -8,6 +8,7 @@ namespace Oversr.Data
         public DbSet<User> Users { get; set; }
 
         public DbSet<Designer> Designers { get; set; }
+        public DbSet<SampleInventoryStatusLookup> SampleInventoryStatuses {get; set;}
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> opts)
             : base(opts)
@@ -27,6 +28,8 @@ namespace Oversr.Data
                 x.Property(e => e.Id).HasDefaultValueSql("newid()");
                 x.Property(e => e.Created).HasDefaultValueSql("getdate()");
             });
+
+            builder.Entity<SampleInventoryStatusLookup>().HasData(SampleInventoryStatusLookup.Seed());
         }
     }
 }
