@@ -1,9 +1,10 @@
 ﻿using Oversr.Model;
+using Oversr.Model.ViewModel;
 
 namespace Oversr.Services
 {
     public interface IUserService
     {
-        User Login(string username, string password);
+        UserVM Login(UserVM vm);
     }
 }

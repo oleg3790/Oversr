@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Oversr.Model;
+using Oversr.Model.ViewModel;
 using Oversr.Services;
 
 namespace Oversr.Controllers
@@ -18,9 +18,9 @@ namespace Oversr.Controllers
 
         [AllowAnonymous]
         [HttpPost("[action]")]
-        public IActionResult Login([FromBody]User userParam)
+        public IActionResult Login([FromBody]UserVM vm)
         {
-            var user = _userService.Login(userParam.Username, userParam.Password);
+            var user = _userService.Login(vm);
 
             if (user == null)
             {

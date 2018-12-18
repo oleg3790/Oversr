@@ -1,41 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.SqlClient;
+﻿using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
 using Oversr.Model;
-using Dapper;
 using System.Linq;
+using Oversr.Data;
 
 namespace Oversr.Services
 {
     public class InventoryService : IInventoryService
     {
         private readonly IConfiguration _config;
+        private readonly ApplicationDbContext _dbContext;
 
-        public InventoryService(IConfiguration config)
+        public InventoryService(IConfiguration config, ApplicationDbContext dbContext)
         {
             _config = config;
+            _dbContext = dbContext;
         }
 
         public void AddDesigner(string name)
-        {            
-            using (var conn = new SqlConnection(_config.GetValue<string>("defaultConnection")))
-            {
-                conn.Execute("insert into designers (name) values (@iname)", new { iname = name });
-            }
+        {
+            _dbContext.Add(new Designer() { Name = name });
+            _dbContext.SaveChanges();
         }
 
         public ICollection<Designer> GetAllDesigners()
         {
-            var designers = new List<Designer>();
-
-            using (var conn = new SqlConnection(_config.GetValue<string>("defaultConnection")))
-            {
-                var result = conn.Query<Designer>("select * from designers");
-                designers = result.ToList();
-            }
-            
-            return designers;
+            return _dbContext.Designers.ToList();
+            _dbContext.SaveChanges();
         }
     }
 }
