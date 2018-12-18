@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -7,25 +6,25 @@ using System.Text;
 using Oversr.Model;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Dapper;
-using System.Data.SqlClient;
+using Oversr.Model.ViewModel;
+using Oversr.Data;
 
 namespace Oversr.Services
 {
     public class UserService : IUserService
     {
-        private const string AllUsersSql = "select * from users where username = @Username;";
         private readonly IConfiguration _config;
+        private readonly ApplicationDbContext _userContext;
 
-        public UserService(IConfiguration config)
+        public UserService(IConfiguration config, ApplicationDbContext userContext)
         {
             _config = config;
+            _userContext = userContext;
         }       
 
-        public User Login(string username, string password)
+        public UserVM Login(UserVM vm)
         {
-
-            var user = GetUser(username, password);
+            var user = GetUser(vm.Username, vm.Password);
 
             if (user == null)
                 return null;
@@ -43,32 +42,28 @@ namespace Oversr.Services
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
-            user.Token = tokenHandler.WriteToken(token);
+            vm.Token = tokenHandler.WriteToken(token);          
 
             // Remove password before returning
-            user.PasswordHash = null;
-
-            return user;
+            vm.Password = null;
+            return vm;
         }
 
         private User GetUser(string username, string password)
         {
             User user = null;
 
-            using (var conn = new SqlConnection(_config.GetValue<string>("defaultConnection")))
+            // First get salt by username, then validate password
+            user = _userContext.Users.FirstOrDefault(x => x.Username.Equals(username));
+
+            if (user == null)
+                return user;
+
+            var passwordHash = new PasswordHash(password, user.PasswordSalt);
+
+            if (user.PasswordHash != passwordHash.Hash)
             {
-                // First get salt by username, then validate password
-                user = conn.QueryFirstOrDefault<User>(AllUsersSql, new { Username = username });
-
-                if (user == null)
-                    return user;
-
-                var passwordHash = new PasswordHash(password, user.PasswordSalt);
-
-                if (user.PasswordHash != passwordHash.Hash)
-                {
-                    user = null;
-                }
+                user = null;
             }
             return user;
         }
