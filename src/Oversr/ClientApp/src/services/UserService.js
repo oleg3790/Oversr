@@ -23,6 +23,11 @@ async function Login(username, password, onError, onSuccess) {
             onError("Authentication failed");
             return;
         }
+        
+        // Remove old tokens
+        if (localStorage.getItem('authToken')) {
+            localStorage.removeItem('authToken');
+        }
 
         localStorage.setItem('authToken', r.data.token);
         onSuccess();
