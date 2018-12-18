@@ -12,7 +12,10 @@ export default class SampleInventoryItem extends Component {
         this.state = {
             designers: null,
             selectedDesigner: null,
-            notification: null
+            notification: { 
+                isSuccess: true, 
+                text: null 
+            }
         }
     }
 
@@ -38,8 +41,8 @@ export default class SampleInventoryItem extends Component {
     }
 
     setNotification(isSuccess, text) {
-        this.setState({ statusMessage: { isSuccess: isSuccess, text: text } });
-        setTimeout(() => this.setState({ notification: { isSuccess: isSuccess, text: null }}), 5000);
+        this.setState({ notification: { isSuccess: isSuccess, text: text } });
+        setTimeout(() => this.setState({ notification: { isSuccess: isSuccess, text: null }}), 4000);
     }
 
     render() {
@@ -47,9 +50,7 @@ export default class SampleInventoryItem extends Component {
             <div className="modal show">        
                 <div id="samp-inv-item" className="modal-dialog modal-dialog-centered">
                     <form className="modal-content p-2">
-                        {this.state.statusMessage &&
-                            <NotificationBanner notification={this.state.statusMessage}/>
-                        }
+                        <NotificationBanner notification={this.state.notification}/>
                         <div className="modal-header">                            
                             <h5 className="modal-title">Add Sample Inventory Item</h5>
                             <button type="button" className="close" onClick={this.props.toggleVisibility}>
