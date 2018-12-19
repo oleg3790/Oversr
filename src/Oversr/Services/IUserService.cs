@@ -1,5 +1,4 @@
-﻿using Oversr.Model;
-using Oversr.Model.ViewModel;
+﻿using Oversr.Model.ViewModel;
 
 namespace Oversr.Services
 {

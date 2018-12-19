@@ -26,7 +26,11 @@ namespace Oversr.Services
         public ICollection<Designer> GetAllDesigners()
         {
             return _dbContext.Designers.ToList();
-            _dbContext.SaveChanges();
+        }
+
+        public ICollection<SampleInventoryStatusLookup> GetAllStatuses()
+        {
+            return _dbContext.SampleInventoryStatuses.ToList();
         }
     }
 }
