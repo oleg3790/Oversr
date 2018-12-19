@@ -24,7 +24,7 @@ namespace Oversr.Services
 
         public UserVM Login(UserVM vm)
         {
-            var user = new User() { Id = new Guid() };//GetUser(vm.Username, vm.Password);
+            var user = GetUser(vm.Username, vm.Password);
 
             if (user == null)
                 return null;
