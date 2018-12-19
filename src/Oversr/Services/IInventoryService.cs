@@ -7,5 +7,7 @@ namespace Oversr.Services
     {
         ICollection<Designer> GetAllDesigners();
         void AddDesigner(string name);
+
+        ICollection<SampleInventoryStatusLookup> GetAllStatuses(); 
     }
 }

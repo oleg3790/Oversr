@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
 import ComboInput from '../commons/ComboInput';
-import { DesignerService } from '../services/DesignerService';
+import { SampleInventoryService } from '../services/SampleInventoryService';
 import NotificationBanner from '../commons/NotificationBanner';
 import BusyOverlay from '../commons/BusyOverlay';
 
@@ -13,12 +13,13 @@ export default class SampleInventoryItem extends Component {
         this.toggleIsBusy = this.toggleIsBusy.bind(this);
         this.state = {
             isBusy: false,
-            designers: null,
-            selectedDesigner: null,
             notification: { 
                 isSuccess: true, 
                 text: null 
-            }
+            },
+            designers: null,
+            selectedDesigner: null,
+            inventoryStatuses: null
         }
     }
 
@@ -26,7 +27,10 @@ export default class SampleInventoryItem extends Component {
         this.toggleIsBusy();
 
         if (this.props.isNewItem) {
-            this.setState({ designers: await DesignerService.GetAllDesigners() });
+            this.setState({ 
+                designers: await SampleInventoryService.GetAllDesigners(),
+                inventoryStatuses: await SampleInventoryService.GetAllInventoryStatuses()
+            });
         }
         
         this.toggleIsBusy();
@@ -40,8 +44,8 @@ export default class SampleInventoryItem extends Component {
         this.toggleIsBusy();
 
         try {
-            await DesignerService.SaveNewDesigner(designer);  
-            this.setState({ designers: await DesignerService.GetAllDesigners() });     
+            await SampleInventoryService.SaveNewDesigner(designer);  
+            this.setState({ designers: await SampleInventoryService.GetAllDesigners() });     
             this.setNotification(true, 'Successfully saved new designer');
         }
         catch(error) {
@@ -147,9 +151,12 @@ export default class SampleInventoryItem extends Component {
                                 <div className="col-6">
                                     <div className="input-group">
                                         <div className="input-group-prepend">
-                                            <label className="input-group-text samp-inv-field-lbl">Inventory Check Status</label>
+                                            <label className="input-group-text samp-inv-field-lbl">Inventory Status</label>
                                         </div>
-                                        <input className="form-control"></input>
+                                        <select className="form-control">
+                                            <option></option>
+                                            {this.state.inventoryStatuses && this.state.inventoryStatuses.map(x => <option key={x.id}>{x.name}</option>)}
+                                        </select>
                                     </div> 
                                 </div>
                             </div>
