@@ -7,25 +7,38 @@ import BusyOverlay from '../commons/BusyOverlay';
 export default class SampleInventoryItem extends Component {
     constructor(props) {        
         super(props);
-        this.handleDesignerSelectionChange = this.handleDesignerSelectionChange.bind(this);
+        this.handleDataChange = this.handleDataChange.bind(this);
         this.handleNewDesignerSave = this.handleNewDesignerSave.bind(this);
         this.setNotification = this.setNotification.bind(this);
         this.toggleIsBusy = this.toggleIsBusy.bind(this);
+        this.handleSave = this.handleSave.bind(this);
         this.state = {
             isBusy: false,
             notification: { 
                 isSuccess: true, 
                 text: null 
-            },
-            designers: null,
-            selectedDesigner: null,
-            inventoryStatuses: null
+            },            
+            designers: null,            
+            inventoryStatuses: null,
+            data: {
+                designer: null,
+                styleNumber: null,
+                styleName: null,                
+                size: null,
+                dateOrdered: null,
+                dateRecieved: null,
+                color: null,
+                inventoryStatus: null,
+                wholesalePrice: null,
+                msrpPrice: null
+            }
         }
     }
 
-    async componentWillMount() {  
+    async componentDidMount() {  
         this.toggleIsBusy();
 
+        // Only load when this is a new item
         if (this.props.isNewItem) {
             this.setState({ 
                 designers: await SampleInventoryService.GetAllDesigners(),
@@ -36,20 +49,32 @@ export default class SampleInventoryItem extends Component {
         this.toggleIsBusy();
     }
 
-    handleDesignerSelectionChange(value) {        
-        this.setState({ selectedDesigner: value });
+    handleDataChange(e) {        
+        const fieldId = e.target.id;
+        const value = e.target.value;
+
+        let data = {...this.state.data};
+
+        if (fieldId === 'designer' && value) {
+            data[fieldId] = this.state.designers.find(x => x.name === value);
+        } 
+        else {
+            data[fieldId] = value;
+        }        
+
+        this.setState({ data: data });
     }
 
     async handleNewDesignerSave(designer) {
         this.toggleIsBusy();
 
         try {
-            await SampleInventoryService.SaveNewDesigner(designer);  
+            await SampleInventoryService.SaveNewDesigner(designer.trim());  
             this.setState({ designers: await SampleInventoryService.GetAllDesigners() });     
             this.setNotification(true, 'Successfully saved new designer');
         }
-        catch(error) {
-            this.setNotification(false, error.response.data);
+        catch(err) {
+            this.setNotification(false, err.response.data);
         } 
         
         this.toggleIsBusy();
@@ -62,6 +87,29 @@ export default class SampleInventoryItem extends Component {
 
     toggleIsBusy() {
         this.setState({ isBusy: !this.state.isBusy });
+    }
+
+    async handleSave(e) {
+        e.preventDefault();              
+        const data = this.state.data;
+
+        for(let key in data) {
+            if (!data[key] && key !== 'dateRecieved') {
+                this.setNotification(false, 'Cannot save when values are empty');
+                return;
+            }
+        }
+
+        this.toggleIsBusy();
+
+        try {
+            await SampleInventoryService.SaveNewSampleInventoryItem(data);
+            this.props.onSuccessfulSave();
+        }
+        catch (err) {
+            this.setNotification(false, err.response.data);
+        }   
+        this.toggleIsBusy();     
     }
 
     render() {
@@ -77,21 +125,27 @@ export default class SampleInventoryItem extends Component {
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div className="modal-body">
+                        <div className="modal-body">                            
+                               
                             <div className="row">
                                 <div className="col-12">
-                                    <ComboInput labelText="Designer" selectionItems={this.state.designers} onSelectionChange={this.handleDesignerSelectionChange}
+                                    <ComboInput 
+                                        labelClass="samp-inv-field-lbl" 
+                                        labelText="Designer" 
+                                        fieldId="designer"
+                                        selectionItems={this.state.designers} 
+                                        onSelectionChange={this.handleDataChange}
                                         onNewValueSave={this.handleNewDesignerSave}
                                     />                                                                                
-                                </div>                                    
-                            </div>
+                                </div>                                                                   
+                            </div>                                                  
                             <div className="row mt-3">
                                 <div className="col-6">
                                     <div className="input-group">
                                         <div className="input-group-prepend">
                                             <label className="input-group-text samp-inv-field-lbl">Style #</label>
                                         </div>
-                                        <input className="form-control"></input>
+                                        <input className="form-control" id="styleNumber" onChange={this.handleDataChange}></input>
                                     </div> 
                                 </div>
                                 <div className="col-6">
@@ -99,7 +153,7 @@ export default class SampleInventoryItem extends Component {
                                         <div className="input-group-prepend">
                                             <label className="input-group-text samp-inv-field-lbl">Style Name</label>
                                         </div>
-                                        <input className="form-control"></input>
+                                        <input className="form-control" id="styleName" onChange={this.handleDataChange}></input>
                                     </div> 
                                 </div>
                             </div>                                  
@@ -107,66 +161,27 @@ export default class SampleInventoryItem extends Component {
                                 <div className="col-6">
                                     <div className="input-group">
                                         <div className="input-group-prepend">
-                                            <label className="input-group-text samp-inv-field-lbl">Status</label>
+                                            <label className="input-group-text samp-inv-field-lbl">Size</label>
                                         </div>
-                                        <input className="form-control"></input>
+                                        <input className="form-control" id="size" onChange={this.handleDataChange}></input>
                                     </div> 
                                 </div>
-                                <div className="col-6">
-                                    <div className="input-group">
-                                        <div className="input-group-prepend">
-                                            <label className="input-group-text samp-inv-field-lbl">Sizes</label>
-                                        </div>
-                                        <input className="form-control"></input>
-                                    </div> 
-                                </div>
-                            </div>   
-                            <div className="row mt-2">
-                                <div className="col-6">
-                                    <div className="input-group">
-                                        <div className="input-group-prepend">
-                                            <label className="input-group-text samp-inv-field-lbl">Date Ordered</label>
-                                        </div>
-                                        <input className="form-control"></input>
-                                    </div> 
-                                </div>
-                                <div className="col-6">
-                                    <div className="input-group">
-                                        <div className="input-group-prepend">
-                                            <label className="input-group-text samp-inv-field-lbl">Date Recieved</label>
-                                        </div>
-                                        <input className="form-control"></input>
-                                    </div> 
-                                </div>
-                            </div>
-                            <div className="row mt-2">                                    
                                 <div className="col-6">
                                     <div className="input-group">
                                         <div className="input-group-prepend">
                                             <label className="input-group-text samp-inv-field-lbl">Color</label>
                                         </div>
-                                        <input className="form-control"></input>
+                                        <input className="form-control" id="color" onChange={this.handleDataChange}></input>
                                     </div> 
-                                </div>
-                                <div className="col-6">
-                                    <div className="input-group">
-                                        <div className="input-group-prepend">
-                                            <label className="input-group-text samp-inv-field-lbl">Inventory Status</label>
-                                        </div>
-                                        <select className="form-control">
-                                            <option></option>
-                                            {this.state.inventoryStatuses && this.state.inventoryStatuses.map(x => <option key={x.id}>{x.name}</option>)}
-                                        </select>
-                                    </div> 
-                                </div>
-                            </div>
+                                </div> 
+                            </div>                               
                             <div className="row mt-2">
                                 <div className="col-6">
                                     <div className="input-group">
                                         <div className="input-group-prepend">
                                             <label className="input-group-text samp-inv-field-lbl">Wholesale Price</label>
                                         </div>
-                                        <input className="form-control"></input>
+                                        <input className="form-control" id="wholesalePrice" onChange={this.handleDataChange}></input>
                                     </div> 
                                 </div>
                                 <div className="col-6">
@@ -174,17 +189,48 @@ export default class SampleInventoryItem extends Component {
                                         <div className="input-group-prepend">
                                             <label className="input-group-text samp-inv-field-lbl">MSRP</label>
                                         </div>
-                                        <input className="form-control"></input>
+                                        <input className="form-control" id="msrpPrice" onChange={this.handleDataChange}></input>
                                     </div> 
                                 </div>
-                            </div>                                                    
+                            </div>
+                            <div className="row mt-2">
+                                <div className="col-6">
+                                    <div className="input-group">
+                                        <div className="input-group-prepend">
+                                            <label className="input-group-text samp-inv-field-lbl">Date Ordered</label>
+                                        </div>
+                                        <input className="form-control" type="date" id="dateOrdered" onChange={this.handleDataChange}></input>
+                                    </div> 
+                                </div>
+                                <div className="col-6">
+                                    <div className="input-group">
+                                        <div className="input-group-prepend">
+                                            <label className="input-group-text samp-inv-field-lbl">Date Recieved</label>
+                                        </div>
+                                        <input className="form-control" type="date" id="dateRecieved" onChange={this.handleDataChange}></input>
+                                    </div> 
+                                </div>
+                            </div>
+                            <div className="row mt-4">
+                                <div className="col-6">
+                                    <div className="input-group">
+                                        <div className="input-group-prepend">
+                                            <label className="input-group-text samp-inv-field-lbl">Inventory Status</label>
+                                        </div>
+                                        <select className="form-control" id="inventoryStatus" onChange={this.handleDataChange}>
+                                            <option></option>
+                                            {this.state.inventoryStatuses && this.state.inventoryStatuses.map(x => <option key={x.id}>{x.name}</option>)}
+                                        </select>
+                                    </div> 
+                                </div> 
+                            </div>                                                       
                         </div>
                         <div className="modal-footer row no-gutters">
                             <div className="col-2">
                                 <button className="btn btn-block btn-outline-primary" onClick={this.props.toggleVisibility}>Cancel</button>                                    
                             </div>
                             <div className="col-3">
-                                <button className="btn btn-block btn-primary">Save</button>
+                                <button className="btn btn-block btn-primary" onClick={this.handleSave}>Save</button>
                             </div>
                         </div>
                     </form>

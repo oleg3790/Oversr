@@ -21,7 +21,7 @@ export default class Inventory extends Component {
 
     handleTabSelectionChange(e) {
         const id = e.currentTarget.dataset.id;
-        const changedObj = ObjectAssignmentHelpers.changeSelectionById(this.state.types, id);
+        const changedObj = ObjectAssignmentHelpers.ChangeSelectionById(this.state.types, id);
         this.setState({ types: changedObj });
     }
 

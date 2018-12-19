@@ -25,7 +25,7 @@ export default class ComboInput extends Component {
             this.toggleInputSelection();
         }
         else {
-            this.props.onSelectionChange(val);
+            this.props.onSelectionChange(e);
         }
     }
 
@@ -59,8 +59,8 @@ export default class ComboInput extends Component {
     render() {
         return (
             <div className="input-group row no-gutters">
-                <div className="input-group-prepend col-3">
-                    <label className="input-group-text d-inline-block text-right w-100">{this.props.labelText}</label>
+                <div className="input-group-prepend">
+                    <label className={"input-group-text " + this.props.labelClass}>{this.props.labelText}</label>
                 </div>
                 {this.state.isInputActive
                     ? (
@@ -74,7 +74,7 @@ export default class ComboInput extends Component {
                             </button>
                         </div>)
                     : (
-                        <select className="form-control" onChange={this.handleSelectionChange}>
+                        <select className="form-control" id={this.props.fieldId} onChange={this.handleSelectionChange}>
                             <option></option>
                             {this.props.selectionItems && this.props.selectionItems.map(x =>
                                 <option key={x.id}>{x.name}</option>
