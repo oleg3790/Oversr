@@ -1,4 +1,5 @@
 ﻿using Oversr.Model;
+using Oversr.Model.ViewModel;
 using System.Collections.Generic;
 
 namespace Oversr.Services
@@ -8,6 +9,9 @@ namespace Oversr.Services
         ICollection<Designer> GetAllDesigners();
         void AddDesigner(string name);
 
-        ICollection<SampleInventoryStatusLookup> GetAllStatuses(); 
+        ICollection<SampleInventoryStatusLookup> GetAllStatuses();
+        ICollection<SampleInventoryItem> GetAllSampleInventoryItems();
+        ICollection<SampleInventoryItem> GetSampleInventoryItemsByStatus(SampleInventoryStatus status);
+        void AddSampleInventoryItem(SampleInventoryItemVM vm);
     }
 }

@@ -19,14 +19,15 @@ namespace Oversr.Controllers
             _inventoryService = inventoryService;
         }
 
+
         [HttpGet]
-        public IEnumerable<Designer> Get()
+        public IEnumerable<Designer> Index()
         {
             return _inventoryService.GetAllDesigners();
         }
 
-        [HttpPost]
-        public ActionResult Post([FromBody] NewDesignerVM vm)
+        [HttpPost("[action]")]
+        public ActionResult Create([FromBody] NewDesignerVM vm)
         {
             if (string.IsNullOrWhiteSpace(vm.Name))
             {

@@ -9,6 +9,7 @@ namespace Oversr.Data
 
         public DbSet<Designer> Designers { get; set; }
         public DbSet<SampleInventoryStatusLookup> SampleInventoryStatuses {get; set;}
+        public DbSet<SampleInventoryItem> SampleInventoryItems { get; set; }
 
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> opts)
             : base(opts)
@@ -30,6 +31,13 @@ namespace Oversr.Data
             });
 
             builder.Entity<SampleInventoryStatusLookup>().HasData(SampleInventoryStatusLookup.Seed());
+
+            builder.Entity<SampleInventoryItem>(x =>
+            {
+                x.Property(e => e.Id).HasDefaultValueSql("newid()");
+                x.Property(e => e.Created).HasDefaultValueSql("getdate()");
+                x.Property(e => e.LastModified).HasDefaultValueSql("getdate()");
+            });
         }
     }
 }

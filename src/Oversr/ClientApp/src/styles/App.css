@@ -57,6 +57,10 @@
     border: 1px solid #dee2e6;
 }
 
+#samp-inv-designer-label {
+    width: 100px;
+}
+
 @media (max-width: 4000px) {
     #samp-inv-item {
         max-width: 40%;
@@ -100,7 +104,7 @@
 }
 
 .samp-inv-field-lbl {
-    width: 180px;
+    width: 150px;
     display: block;
     text-align: right;
 }

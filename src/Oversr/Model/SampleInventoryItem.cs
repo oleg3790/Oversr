@@ -1,11 +1,21 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Oversr.Model.ViewModel
+namespace Oversr.Model
 {
-    public class SampleInventoryItemVM
+    public class SampleInventoryItem
     {
+        public Guid Id { get; set; }
+
         [Required]
+        public DateTime Created { get; set; }
+
+        [Required]
+        public DateTime LastModified { get; set; }
+
+        [Required]
+        public Guid DesignerId { get; set; }
         public Designer Designer { get; set; }
 
         [Required]
@@ -28,10 +38,12 @@ namespace Oversr.Model.ViewModel
 
         [Required]
         public DateTime DateOrdered { get; set; }
-    
+
         public DateTime? DateRecieved { get; set; }
 
         [Required]
-        public SampleInventoryStatus InventoryStatus { get; set; }
+        [ForeignKey("SampleInventoryStatusLookup")]
+        public int InventoryStatusId { get; set; }
+        public SampleInventoryStatusLookup InventoryStatus { get; set; }
     }
 }

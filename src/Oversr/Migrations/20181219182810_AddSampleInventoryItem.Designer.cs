@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Oversr.Data;
 
 namespace Oversr.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20181219182810_AddSampleInventoryItem")]
+    partial class AddSampleInventoryItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -144,7 +146,7 @@ namespace Oversr.Migrations
             modelBuilder.Entity("Oversr.Model.SampleInventoryItem", b =>
                 {
                     b.HasOne("Oversr.Model.Designer", "Designer")
-                        .WithMany()
+                        .WithMany("SampleInventoryItems")
                         .HasForeignKey("DesignerId")
                         .OnDelete(DeleteBehavior.Cascade);
 

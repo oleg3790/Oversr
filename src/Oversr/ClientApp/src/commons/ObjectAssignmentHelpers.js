@@ -1,8 +1,8 @@
 ﻿export const ObjectAssignmentHelpers = {
-    changeSelectionById
+    ChangeSelectionById
 }
 
-function changeSelectionById(obj, id) {
+function ChangeSelectionById(obj, id) {
     const newObj = unsetSelection(obj);
     newObj.find(x => x.id == id).selected = true;
     return newObj;

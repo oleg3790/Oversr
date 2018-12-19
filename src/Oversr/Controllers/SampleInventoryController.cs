@@ -9,7 +9,7 @@ using Oversr.Services;
 namespace Oversr.Controllers
 {
     [Authorize]
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     public class SampleInventoryController : Controller
     {
         private readonly IInventoryService _inventoryService;
@@ -19,16 +19,43 @@ namespace Oversr.Controllers
             _inventoryService = inventoryService;
         }
 
-        [HttpGet]
+        [HttpGet("[action]")]
         public IEnumerable<SampleInventoryStatusLookup> Statuses()
         {
             return _inventoryService.GetAllStatuses();
         }
 
-        [HttpPost]
-        public JsonResult Create([FromBody] SampleInventoryItemVM vm)
+        [HttpGet]
+        public IEnumerable<SampleInventoryItem> Index()
         {
-            throw new NotImplementedException();
+            return _inventoryService.GetAllSampleInventoryItems();
+        }
+
+        [HttpGet("{statusString}")]
+        public IEnumerable<SampleInventoryItem> Index(string statusString)
+        {
+            SampleInventoryStatus status;
+            bool isStatusValid = Enum.TryParse(statusString, out status);
+
+            if (!isStatusValid)
+            {
+                return _inventoryService.GetAllSampleInventoryItems();
+            }
+
+            return _inventoryService.GetSampleInventoryItemsByStatus(status);
+        }
+
+        [HttpPost("[action]")]
+        public ActionResult Create([FromBody] SampleInventoryItemVM vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest("An error was encountered, the passed data was invalid");
+            }
+
+            _inventoryService.AddSampleInventoryItem(vm);
+
+            return Ok();
         }
     }
 }

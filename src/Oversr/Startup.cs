@@ -25,9 +25,12 @@ namespace Oversr
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
+
             services.AddCors();
-            
+          
             // Configure JWT Authentication
             var key = Encoding.ASCII.GetBytes(Configuration.GetValue<string>("authSecret"));
             services.AddAuthentication(x =>
