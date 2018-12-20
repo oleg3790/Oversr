@@ -1,75 +1,110 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.Extensions.Configuration;
-using Oversr.Model;
-using System.Linq;
 using Oversr.Data;
-using Oversr.Model.ViewModel;
+using Oversr.Model.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace Oversr.Services
 {
-    public class InventoryService : IInventoryService
+    public class InventoryService : ServiceBase, IInventoryService
     {
-        private readonly IConfiguration _config;
-        private readonly ApplicationDbContext _dbContext;
-
         public InventoryService(IConfiguration config, ApplicationDbContext dbContext)
+            :base(config, dbContext)
         {
-            _config = config;
-            _dbContext = dbContext;
-        }               
+        }
 
+        #region designers
         public ICollection<Designer> GetAllDesigners()
         {
-            return _dbContext.Designers.ToList();
+            return base.GetAllActive<Designer>();
         }
 
         public void AddDesigner(string name)
         {
-            _dbContext.Add(new Designer() { Name = name });
-            _dbContext.SaveChanges();
+            base.Add<Designer>(new Designer() { Name = name });
         }
 
+        public void DeleteDesigner(Guid id)
+        {
+            base.Delete<Designer>(id);
+        }
+        #endregion
+
+        #region styles
+        public ICollection<Style> GetAllStyles()
+        {
+            return base.GetAllActive<Style>();
+        }
+
+        public Style GetStyleById(Guid id)
+        {
+            return base.GetById<Style>(id);
+        }
+
+        public void AddStyle(string number, string name = null)
+        {
+            base.Add<Style>(new Style() { Number = number, Name = name });
+        }
+
+        public void DeleteStyle(Guid id)
+        {
+            base.Delete<Style>(id);
+        }
+        #endregion
+
+        #region statuses
         public ICollection<SampleInventoryStatusLookup> GetAllStatuses()
         {
-            return _dbContext.SampleInventoryStatuses.ToList();
+            return base.GetAllLookups<SampleInventoryStatusLookup>();
         }
+        #endregion
 
+        #region inventory items
         public ICollection<SampleInventoryItem> GetSampleInventoryItemsByStatus(SampleInventoryStatus status)
         {
             return _dbContext.SampleInventoryItems
-                .Include(x => x.Designer)
+                .Include(x => x.Style)
+                    .ThenInclude(x => x.Designer)
                 .Include(x => x.InventoryStatus)
-                .Where(x => x.InventoryStatus.Id == (int)status)                
+                .Where(x => x.InventoryStatus.Id == (int)status)
                 .ToList();
         }
 
         public ICollection<SampleInventoryItem> GetAllSampleInventoryItems()
         {
             return _dbContext.SampleInventoryItems
-                .Include(x => x.Designer)
+                .Include(x => x.Style)
+                    .ThenInclude(x => x.Designer)
                 .Include(x => x.InventoryStatus)
                 .ToList();
         }
 
-        public void AddSampleInventoryItem(SampleInventoryItemVM vm)
-        {            
+        public void AddSampleInventoryItem(
+            Style style,
+            SampleInventoryStatus inventoryStatus,
+            string size,
+            string color,
+            int wholesalePrice,
+            int msrpPrice,
+            DateTime dateOrdered,
+            DateTime? dateRecieved)
+        {
             var item = new SampleInventoryItem()
             {
-                DesignerId = vm.Designer.Id,
-                StyleNumber = vm.StyleNumber,
-                StyleName = vm.StyleName,
-                Size = vm.Size,
-                Color = vm.Color,
-                WholesalePrice = vm.WholesalePrice,
-                MsrpPrice = vm.MsrpPrice,
-                DateOrdered = vm.DateOrdered,
-                DateRecieved = vm.DateRecieved,
-                InventoryStatusId = (int)vm.InventoryStatus
+                Style = style,
+                Size = size,
+                Color = color,
+                WholesalePrice = wholesalePrice,
+                MsrpPrice = msrpPrice,
+                DateOrdered = dateOrdered,
+                DateRecieved = dateRecieved,
+                InventoryStatusId = (int)inventoryStatus
             };
 
-            _dbContext.Add(item);
-            _dbContext.SaveChanges();
-        }        
+            base.Add<SampleInventoryItem>(item);
+        }
+        #endregion
     }
 }

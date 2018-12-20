@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Oversr.Model;
+using Oversr.Model.Entities;
 using Oversr.Model.ViewModel;
 using Oversr.Services;
 
@@ -53,7 +53,21 @@ namespace Oversr.Controllers
                 return BadRequest("An error was encountered, the passed data was invalid");
             }
 
-            _inventoryService.AddSampleInventoryItem(vm);
+            if (vm.Style == null)
+            {
+                return BadRequest("No style has been passed");
+            }
+
+            var style = _inventoryService.GetStyleById(Guid.Parse(vm.Style.Id));
+            _inventoryService.AddSampleInventoryItem(
+                style, 
+                vm.InventoryStatus,
+                vm.Size,
+                vm.Color,
+                vm.WholesalePrice,
+                vm.MsrpPrice,
+                vm.DateOrdered,
+                vm.DateRecieved);
 
             return Ok();
         }

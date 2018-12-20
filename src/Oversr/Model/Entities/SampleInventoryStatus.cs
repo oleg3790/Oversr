@@ -1,4 +1,4 @@
-﻿namespace Oversr.Model
+﻿namespace Oversr.Model.Entities
 {
     public enum SampleInventoryStatus
     {

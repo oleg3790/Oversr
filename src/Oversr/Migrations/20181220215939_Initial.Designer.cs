@@ -10,8 +10,8 @@ using Oversr.Data;
 namespace Oversr.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181219182810_AddSampleInventoryItem")]
-    partial class AddSampleInventoryItem
+    [Migration("20181220215939_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -21,13 +21,21 @@ namespace Oversr.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Oversr.Model.Designer", b =>
+            modelBuilder.Entity("Oversr.Model.Entities.Designer", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValueSql("newid()");
 
                     b.Property<DateTime>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("getdate()");
+
+                    b.Property<bool>("Deleted")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("0");
+
+                    b.Property<DateTime>("LastModified")
                         .ValueGeneratedOnAdd()
                         .HasDefaultValueSql("getdate()");
 
@@ -40,7 +48,7 @@ namespace Oversr.Migrations
                     b.ToTable("Designers");
                 });
 
-            modelBuilder.Entity("Oversr.Model.SampleInventoryItem", b =>
+            modelBuilder.Entity("Oversr.Model.Entities.SampleInventoryItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -57,7 +65,7 @@ namespace Oversr.Migrations
 
                     b.Property<DateTime?>("DateRecieved");
 
-                    b.Property<Guid>("DesignerId");
+                    b.Property<bool>("Deleted");
 
                     b.Property<int>("InventoryStatusId");
 
@@ -70,24 +78,20 @@ namespace Oversr.Migrations
                     b.Property<string>("Size")
                         .IsRequired();
 
-                    b.Property<string>("StyleName")
-                        .IsRequired();
-
-                    b.Property<string>("StyleNumber")
-                        .IsRequired();
+                    b.Property<Guid>("StyleId");
 
                     b.Property<int>("WholesalePrice");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DesignerId");
-
                     b.HasIndex("InventoryStatusId");
+
+                    b.HasIndex("StyleId");
 
                     b.ToTable("SampleInventoryItems");
                 });
 
-            modelBuilder.Entity("Oversr.Model.SampleInventoryStatusLookup", b =>
+            modelBuilder.Entity("Oversr.Model.Entities.SampleInventoryStatusLookup", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -108,7 +112,41 @@ namespace Oversr.Migrations
                     );
                 });
 
-            modelBuilder.Entity("Oversr.Model.User", b =>
+            modelBuilder.Entity("Oversr.Model.Entities.Style", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("newid()");
+
+                    b.Property<DateTime>("Created")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("getdate()");
+
+                    b.Property<bool>("Deleted")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("0");
+
+                    b.Property<Guid>("DesignerId");
+
+                    b.Property<DateTime>("LastModified")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("getdate()");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasMaxLength(100);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DesignerId");
+
+                    b.ToTable("Styles");
+                });
+
+            modelBuilder.Entity("Oversr.Model.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -143,16 +181,24 @@ namespace Oversr.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Oversr.Model.SampleInventoryItem", b =>
+            modelBuilder.Entity("Oversr.Model.Entities.SampleInventoryItem", b =>
                 {
-                    b.HasOne("Oversr.Model.Designer", "Designer")
-                        .WithMany("SampleInventoryItems")
-                        .HasForeignKey("DesignerId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Oversr.Model.SampleInventoryStatusLookup", "InventoryStatus")
+                    b.HasOne("Oversr.Model.Entities.SampleInventoryStatusLookup", "InventoryStatus")
                         .WithMany()
                         .HasForeignKey("InventoryStatusId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Oversr.Model.Entities.Style", "Style")
+                        .WithMany()
+                        .HasForeignKey("StyleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Oversr.Model.Entities.Style", b =>
+                {
+                    b.HasOne("Oversr.Model.Entities.Designer", "Designer")
+                        .WithMany()
+                        .HasForeignKey("DesignerId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
