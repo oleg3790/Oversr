@@ -1,7 +1,7 @@
 ﻿import React, { Component } from 'react';
 import NavigationTabs from '../commons/NavigationTabs';
 import { ObjectAssignmentHelpers } from '../commons/ObjectAssignmentHelpers';
-import SampleInventory from './SampleInventory';
+import SampleInventory from './sample inventory/SampleInventory';
 
 export default class Inventory extends Component {
     constructor(props) {

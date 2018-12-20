@@ -9,8 +9,6 @@ export default class Login extends Component {
         this.onSubmit = this.onSubmit.bind(this);
         this.onUsernameChange = this.onUsernameChange.bind(this);
         this.onPasswordChange = this.onPasswordChange.bind(this);
-        this.handleLoginError = this.handleLoginError.bind(this);
-        this.handleLoginSuccess = this.handleLoginSuccess.bind(this);
         this.state = {
             username: '',
             password: '',
@@ -27,26 +25,27 @@ export default class Login extends Component {
         this.setState({ password: e.target.value, loginError: '' });
     }
 
-    onSubmit = (e) => {
+    onSubmit = async (e) => {
         e.preventDefault();
         const { username, password } = this.state;
 
         if (username && password) {
             this.setState({ isBusy: !this.state.isBusy });
-            UserService.Login(username, password, this.handleLoginError, this.handleLoginSuccess);
+
+            try{
+                await UserService.Login(username, password);
+                this.setState({ isBusy: !this.state.isBusy });
+                this.props.history.push('/');
+            } 
+            catch (err) {
+                this.setState({ 
+                    loginError: err.response.data.message,
+                    isBusy: !this.state.isBusy
+                });
+            }            
         } else {
             this.setState({ loginError: "Enter a Username and Password" });
         }
-    }
-
-    handleLoginError(message) {
-        this.setState({ loginError: message });
-        this.setState({ isBusy: !this.state.isBusy });
-    }
-
-    handleLoginSuccess() {
-        this.setState({ isBusy: !this.state.isBusy });
-        this.props.history.push('/');
     }
 
     render() {

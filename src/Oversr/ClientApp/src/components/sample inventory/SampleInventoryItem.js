@@ -1,8 +1,8 @@
 ﻿import React, { Component } from 'react';
-import ComboInput from '../commons/ComboInput';
-import { SampleInventoryService } from '../services/SampleInventoryService';
-import NotificationBanner from '../commons/NotificationBanner';
-import BusyOverlay from '../commons/BusyOverlay';
+import ComboInput from '../../commons/ComboInput';
+import { SampleInventoryService } from '../../services/SampleInventoryService';
+import NotificationBanner from '../../commons/NotificationBanner';
+import BusyOverlay from '../../commons/BusyOverlay';
 
 export default class SampleInventoryItem extends Component {
     constructor(props) {        
