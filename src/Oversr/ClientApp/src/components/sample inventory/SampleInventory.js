@@ -2,7 +2,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import SampleInventoryItem from './SampleInventoryItem';
-import { SampleInventoryService } from '../services/SampleInventoryService';
+import { SampleInventoryService } from '../../services/SampleInventoryService';
 
 export default class SampleInventory extends Component {
     constructor(props) {

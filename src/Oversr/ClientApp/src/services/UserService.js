@@ -6,8 +6,8 @@ export const UserService = {
     IsAuthenticated
 };
 
-async function Login(username, password, onError, onSuccess) {
-    Axios.post('/api/UserAccount/Login', {
+async function Login(username, password) { 
+    const response = await Axios.post('/api/UserAccount/Login', {
         username: username,
         password: password
     }, {
@@ -17,24 +17,14 @@ async function Login(username, password, onError, onSuccess) {
                 'Access-Control-Allow-Origin': '*'
             }
         }
-    )
-    .then(r => {
-        if (!r.data.token) {
-            onError("Authentication failed");
-            return;
-        }
-        
-        // Remove old tokens
-        if (localStorage.getItem('authToken')) {
-            localStorage.removeItem('authToken');
-        }
+    );
+    
+    // Remove old tokens
+    if (localStorage.getItem('authToken')) {
+        localStorage.removeItem('authToken');
+    }
 
-        localStorage.setItem('authToken', r.data.token);
-        onSuccess();
-    })
-    .catch(e => {
-        onError(e.response.data.message);
-    });
+    localStorage.setItem('authToken', response.data.token);
 }
 
 function IsAuthenticated() {
