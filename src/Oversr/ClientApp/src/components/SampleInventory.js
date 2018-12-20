@@ -46,7 +46,7 @@ export default class SampleInventory extends Component {
                         size="2x" title="Add new inventory sample" onClick={this.toggleAddNewItemModal}/>
                 </div>                                
                 <table className="table table-sm">
-                    <thead className="bg-dark-1 text-light">
+                    <thead className="bg-light-1">
                         <tr>
                             <th scope="col">Designer</th>
                             <th scope="col">Style #</th>
@@ -56,8 +56,8 @@ export default class SampleInventory extends Component {
                         </tr>
                     </thead>
                     <tbody>
-                        {this.state.sampleInventoryItems &&
-                            this.state.sampleInventoryItems.map(x => (
+                        {this.state.sampleInventoryItems.length !== 0 
+                        ? this.state.sampleInventoryItems.map(x => (
                             <tr key={x.id}>
                                 <td>{x.designer.name}</td>
                                 <td>{x.styleNumber}</td>
@@ -65,7 +65,14 @@ export default class SampleInventory extends Component {
                                 <td>{x.size}</td>
                                 <td>{x.inventoryStatus.name}</td>
                             </tr>
-                        ))}
+                        )) 
+                        : (
+                            <tr>
+                                <td colSpan="5" className="text-center pt-4">
+                                    No inventory items to display
+                                </td>
+                            </tr>
+                        )}
                     </tbody>
                 </table>
             </div>
