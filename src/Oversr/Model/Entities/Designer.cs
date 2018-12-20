@@ -1,14 +1,12 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Oversr.Model
+namespace Oversr.Model.Entities
 {
-    public class Designer
+    public class Designer : EntityBase
     {
-        public Guid Id { get; set; }
-
         [Required]
-        public DateTime Created { get; set; }
+        public DateTime LastModified { get; set; }
 
         [Required]
         [MaxLength(200)]

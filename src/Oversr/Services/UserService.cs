@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Oversr.Model.ViewModel;
 using Oversr.Data;
+using Oversr.Model.Entities;
 
 namespace Oversr.Services
 {

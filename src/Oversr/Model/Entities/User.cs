@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Oversr.Model
+namespace Oversr.Model.Entities
 {
     public class User
     {

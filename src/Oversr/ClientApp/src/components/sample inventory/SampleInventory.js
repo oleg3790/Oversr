@@ -4,7 +4,6 @@ import { faSearch, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import SampleInventoryItem from './SampleInventoryItem';
 import { SampleInventoryService } from '../../services/SampleInventoryService';
 import BusyOverlay from '../../commons/BusyOverlay';
-import { watchFile } from 'fs';
 
 export default class SampleInventory extends Component {
     constructor(props) {

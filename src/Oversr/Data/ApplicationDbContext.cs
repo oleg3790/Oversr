@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Oversr.Model;
+using Oversr.Model.Entities;
 
 namespace Oversr.Data
 {
@@ -8,6 +8,7 @@ namespace Oversr.Data
         public DbSet<User> Users { get; set; }
 
         public DbSet<Designer> Designers { get; set; }
+        public DbSet<Style> Styles { get; set; }
         public DbSet<SampleInventoryStatusLookup> SampleInventoryStatuses {get; set;}
         public DbSet<SampleInventoryItem> SampleInventoryItems { get; set; }
 
@@ -28,6 +29,16 @@ namespace Oversr.Data
             {
                 x.Property(e => e.Id).HasDefaultValueSql("newid()");
                 x.Property(e => e.Created).HasDefaultValueSql("getdate()");
+                x.Property(e => e.LastModified).HasDefaultValueSql("getdate()");
+                x.Property(e => e.Deleted).HasDefaultValueSql("0");
+            });
+
+            builder.Entity<Style>(x =>
+            {
+                x.Property(e => e.Id).HasDefaultValueSql("newid()");
+                x.Property(e => e.Created).HasDefaultValueSql("getdate()");
+                x.Property(e => e.LastModified).HasDefaultValueSql("getdate()");
+                x.Property(e => e.Deleted).HasDefaultValueSql("0");
             });
 
             builder.Entity<SampleInventoryStatusLookup>().HasData(SampleInventoryStatusLookup.Seed());
