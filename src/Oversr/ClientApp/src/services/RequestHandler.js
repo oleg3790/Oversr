@@ -1,10 +1,14 @@
 ﻿import axios from 'axios';
 
-const headers = {
-    headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
-        'Access-Control-Allow-Origin': '*',
-        'Authorization': 'Bearer ' + localStorage.getItem('authToken')
+function getHeaders() {
+    const token = localStorage.getItem('authToken');
+
+    return {
+        headers: {
+            'Content-Type': 'application/json;charset=UTF-8',
+            'Access-Control-Allow-Origin': '*',
+            'Authorization': 'Bearer ' + token
+        }
     }
 }
 
@@ -14,11 +18,13 @@ export const RequestHandler = {
 };
 
 async function Get(requestUrl) {
+    const headers = getHeaders();
     const result = await axios.get(requestUrl, headers);
     return await result.data;
 }
 
 async function Post(requestUrl, data) {
+    const headers = getHeaders();
     const result = await axios.post(requestUrl, data, headers);
     return await result.data;
 }
