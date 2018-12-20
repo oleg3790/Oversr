@@ -3,22 +3,28 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import SampleInventoryItem from './SampleInventoryItem';
 import { SampleInventoryService } from '../../services/SampleInventoryService';
+import BusyOverlay from '../../commons/BusyOverlay';
+import { watchFile } from 'fs';
 
 export default class SampleInventory extends Component {
     constructor(props) {
         super(props);
         this.toggleAddNewItemModal = this.toggleAddNewItemModal.bind(this);   
         this.handleNewItemSave = this.handleNewItemSave.bind(this);
+        this.toggleIsBusy = this.toggleIsBusy.bind(this);
         this.state = {
+            isBusy: false,
             isAddNewVisible: false,
             sampleInventoryItems: []
         };
     }
 
     async componentDidMount() {
+        this.toggleIsBusy();
         this.setState({ 
             sampleInventoryItems: await SampleInventoryService.GetSampleInventoryItems('Active')
         }); 
+        this.toggleIsBusy();
     }
 
     toggleAddNewItemModal(e) {
@@ -26,11 +32,17 @@ export default class SampleInventory extends Component {
         this.setState({ isAddNewVisible: !this.state.isAddNewVisible });
     }
 
-    async handleNewItemSave() {        
+    async handleNewItemSave() {   
+        this.toggleIsBusy();  
         this.setState({ 
             isAddNewVisible: !this.state.isAddNewVisible,
             sampleInventoryItems: await SampleInventoryService.GetSampleInventoryItems('Active')
-        });        
+        }); 
+        this.toggleIsBusy();    
+    }
+
+    toggleIsBusy() {
+        this.setState({ isBusy: !this.state.isBusy });
     }
 
     render() {
@@ -56,8 +68,15 @@ export default class SampleInventory extends Component {
                         </tr>
                     </thead>
                     <tbody>
+                        {this.state.isBusy && (                            
+                            <tr>
+                                <td colSpan="5" className="text-center pt-4">
+                                    <BusyOverlay/>
+                                </td>                                
+                            </tr>
+                        )}
                         {this.state.sampleInventoryItems.length !== 0 
-                        ? this.state.sampleInventoryItems.map(x => (
+                        && this.state.sampleInventoryItems.map(x => (
                             <tr key={x.id}>
                                 <td>{x.designer.name}</td>
                                 <td>{x.styleNumber}</td>
@@ -65,8 +84,8 @@ export default class SampleInventory extends Component {
                                 <td>{x.size}</td>
                                 <td>{x.inventoryStatus.name}</td>
                             </tr>
-                        )) 
-                        : (
+                        ))} 
+                        {this.state.sampleInventoryItems.length === 0 && !this.state.isBusy && (
                             <tr>
                                 <td colSpan="5" className="text-center pt-4">
                                     No inventory items to display

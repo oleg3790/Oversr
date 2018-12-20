@@ -117,7 +117,7 @@ export default class SampleInventoryItem extends Component {
             <div className="modal show">        
                 <div id="samp-inv-item" className="modal-dialog modal-dialog-centered">
                     <form className="modal-content">
-                        {this.state.isBusy && <BusyOverlay/>}
+                        {this.state.isBusy && <BusyOverlay isAbsolute={true}/>}
                         <NotificationBanner notification={this.state.notification}/>
                         <div className="modal-header">                            
                             <h5 className="modal-title">Add Sample Inventory Item</h5>
