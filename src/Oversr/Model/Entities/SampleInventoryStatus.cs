@@ -2,10 +2,9 @@
 {
     public enum SampleInventoryStatus
     {
-        Discontinued = 1,
-        Active = 2,        
-        InTransit = 3,
-        Sold = 4
+        InStock = 1,        
+        InTransit = 2,
+        Sold = 3
     }
 
     public class SampleInventoryStatusLookup : LookupBase

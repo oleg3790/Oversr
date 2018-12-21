@@ -103,10 +103,9 @@ namespace Oversr.Migrations
                     b.ToTable("SampleInventoryStatuses");
 
                     b.HasData(
-                        new { Id = 1, Name = "Discontinued" },
-                        new { Id = 2, Name = "Active" },
-                        new { Id = 3, Name = "InTransit" },
-                        new { Id = 4, Name = "Sold" }
+                        new { Id = 1, Name = "InStock" },
+                        new { Id = 2, Name = "InTransit" },
+                        new { Id = 3, Name = "Sold" }
                     );
                 });
 
@@ -125,6 +124,10 @@ namespace Oversr.Migrations
                         .HasDefaultValueSql("0");
 
                     b.Property<Guid>("DesignerId");
+
+                    b.Property<bool>("Discontinued")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValueSql("0");
 
                     b.Property<DateTime>("LastModified")
                         .ValueGeneratedOnAdd()

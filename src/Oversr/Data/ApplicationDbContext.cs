@@ -39,6 +39,7 @@ namespace Oversr.Data
                 x.Property(e => e.Created).HasDefaultValueSql("getdate()");
                 x.Property(e => e.LastModified).HasDefaultValueSql("getdate()");
                 x.Property(e => e.Deleted).HasDefaultValueSql("0");
+                x.Property(e => e.Discontinued).HasDefaultValueSql("0");
             });
 
             builder.Entity<SampleInventoryStatusLookup>().HasData(SampleInventoryStatusLookup.Seed());
