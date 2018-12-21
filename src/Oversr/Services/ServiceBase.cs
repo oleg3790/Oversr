@@ -24,11 +24,21 @@ namespace Oversr.Services
             return _dbContext.Set<TEntity>().FirstOrDefault(x => x.Id.Equals(id));
         }
 
-        protected ICollection<TEntity> GetAllActive<TEntity>() where TEntity : EntityBase
+        /// <summary>
+        /// Get all entities that have a deleted flag set to false
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <returns></returns>
+        protected ICollection<TEntity> GetAllEnabled<TEntity>() where TEntity : EntityBase
         {
             return _dbContext.Set<TEntity>().Where(x => x.Deleted.Equals(false)).ToList();
         }
 
+        /// <summary>
+        /// Get all (deleted and enabled) entities
+        /// </summary>
+        /// <typeparam name="TEntity"></typeparam>
+        /// <returns></returns>
         protected ICollection<TEntity> GetAllEntities<TEntity>() where TEntity : EntityBase
         {
             return _dbContext.Set<TEntity>().ToList();
