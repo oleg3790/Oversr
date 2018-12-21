@@ -18,7 +18,17 @@ namespace Oversr.Services
         #region designers
         public ICollection<Designer> GetAllDesigners()
         {
-            return base.GetAllActive<Designer>();
+            return base.GetAllEntities<Designer>();
+        }
+
+        public ICollection<Designer> GetEnabledDesigners()
+        {
+            return base.GetAllEnabled<Designer>();
+        }
+
+        public Designer GetDesigner(Guid id)
+        {
+            return base.GetById<Designer>(id);
         }
 
         public void AddDesigner(string name)
@@ -35,22 +45,35 @@ namespace Oversr.Services
         #region styles
         public ICollection<Style> GetAllStyles()
         {
-            return base.GetAllActive<Style>();
+            return this.QueryAllStyles().ToList();
+        }
+
+        public ICollection<Style> GetEnabledStyles()
+        {
+            return this.QueryAllStyles()
+                .Where(x => x.Deleted.Equals(false)).ToList();
         }
 
         public Style GetStyleById(Guid id)
         {
-            return base.GetById<Style>(id);
+            return this.QueryAllStyles()
+                .FirstOrDefault(x => x.Id.Equals(id));
         }
 
-        public void AddStyle(string number, string name = null)
+        public void AddStyle(Designer designer, string number, string name = null)
         {
-            base.Add<Style>(new Style() { Number = number, Name = name });
+            base.Add<Style>(new Style() { Designer = designer, Number = number, Name = name });
         }
 
         public void DeleteStyle(Guid id)
         {
             base.Delete<Style>(id);
+        }
+
+        private IQueryable<Style> QueryAllStyles()
+        {
+            return _dbContext.Styles
+                .Include(x => x.Designer);
         }
         #endregion
 
@@ -62,22 +85,22 @@ namespace Oversr.Services
         #endregion
 
         #region inventory items
-        public ICollection<SampleInventoryItem> GetSampleInventoryItemsByStatus(SampleInventoryStatus status)
+        public ICollection<SampleInventoryItem> GetAllSampleInventoryItems()
         {
-            return _dbContext.SampleInventoryItems
-                .Include(x => x.Style)
-                    .ThenInclude(x => x.Designer)
-                .Include(x => x.InventoryStatus)
-                .Where(x => x.InventoryStatus.Id == (int)status)
+            return this.QueryAllSampleInventoryItems().ToList();
+        }
+
+        public ICollection<SampleInventoryItem> GetEnabledSampleInventoryItemsByStatus(SampleInventoryStatus status)
+        {
+            return this.QueryAllSampleInventoryItems()
+                .Where(x => x.InventoryStatus.Id.Equals((int)status) && x.Deleted.Equals(false))
                 .ToList();
         }
 
-        public ICollection<SampleInventoryItem> GetAllSampleInventoryItems()
+        public ICollection<SampleInventoryItem> GetEnabledSampleInventoryItems()
         {
-            return _dbContext.SampleInventoryItems
-                .Include(x => x.Style)
-                    .ThenInclude(x => x.Designer)
-                .Include(x => x.InventoryStatus)
+            return this.QueryAllSampleInventoryItems()
+                .Where(x => x.Deleted.Equals(false))
                 .ToList();
         }
 
@@ -104,6 +127,19 @@ namespace Oversr.Services
             };
 
             base.Add<SampleInventoryItem>(item);
+        }
+
+        public void DeleteSampleInventoryItem(Guid id)
+        {
+            base.Delete<SampleInventoryItem>(id);
+        }
+
+        private IQueryable<SampleInventoryItem> QueryAllSampleInventoryItems()
+        {
+            return _dbContext.SampleInventoryItems
+                .Include(x => x.Style)
+                    .ThenInclude(x => x.Designer)
+                .Include(x => x.InventoryStatus);
         }
         #endregion
     }

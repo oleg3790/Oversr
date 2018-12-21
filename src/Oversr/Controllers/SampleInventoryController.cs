@@ -19,32 +19,36 @@ namespace Oversr.Controllers
             _inventoryService = inventoryService;
         }
 
+        // api/SampleInventory/Statuses
         [HttpGet("[action]")]
         public IEnumerable<SampleInventoryStatusLookup> Statuses()
         {
             return _inventoryService.GetAllStatuses();
         }
 
+        // api/SampleInventory
         [HttpGet]
-        public IEnumerable<SampleInventoryItem> Index()
+        public IEnumerable<SampleInventoryItem> GetEnabled()
         {
-            return _inventoryService.GetAllSampleInventoryItems();
+            return _inventoryService.GetEnabledSampleInventoryItems();
         }
 
+        // api/Sampleinventory/{statusString}
         [HttpGet("{statusString}")]
-        public IEnumerable<SampleInventoryItem> Index(string statusString)
+        public IEnumerable<SampleInventoryItem> GetEnabledByStatus(string statusString)
         {
             SampleInventoryStatus status;
             bool isStatusValid = Enum.TryParse(statusString, out status);
 
             if (!isStatusValid)
             {
-                return _inventoryService.GetAllSampleInventoryItems();
+                return _inventoryService.GetEnabledSampleInventoryItems();
             }
 
-            return _inventoryService.GetSampleInventoryItemsByStatus(status);
+            return _inventoryService.GetEnabledSampleInventoryItemsByStatus(status);
         }
 
+        // api/SampleInventory/Create
         [HttpPost("[action]")]
         public ActionResult Create([FromBody] SampleInventoryItemVM vm)
         {

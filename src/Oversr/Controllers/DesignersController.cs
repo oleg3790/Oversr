@@ -19,15 +19,17 @@ namespace Oversr.Controllers
             _inventoryService = inventoryService;
         }
 
+        // api/Designers/
         [HttpGet]
-        public IEnumerable<DesignerVM> Index()
+        public IEnumerable<DesignerVM> GetEnabled()
         {
-            IEnumerable<DesignerVM> designers = _inventoryService.GetAllDesigners()
+            IEnumerable<DesignerVM> designers = _inventoryService.GetEnabledDesigners()
                 .Select(x => new DesignerVM() { Id = x.Id.ToString("N"), Created = x.Created, Name = x.Name });          
 
             return designers;
         }
 
+        // api/Designers/Create
         [HttpPost("[action]")]
         public ActionResult Create([FromBody] DesignerVM vm)
         {
@@ -47,14 +49,10 @@ namespace Oversr.Controllers
             return Ok();
         }
 
+        // api/Designers/Delete
         [HttpPost("[action]")]
         public ActionResult Delete([FromBody] DesignerVM vm)
         {
-            if (!ModelState.IsValid)
-            {
-                BadRequest("Server error encountered, examine request parameters");
-            }
-
             if (string.IsNullOrEmpty(vm.Id))
             {
                 BadRequest("Designer ID is required");
