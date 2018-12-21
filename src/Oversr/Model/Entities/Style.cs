@@ -18,5 +18,8 @@ namespace Oversr.Model.Entities
 
         [MaxLength(100)]
         public string Name { get; set; }
+
+        [Required]
+        public bool Discontinued { get; set; }
     }
 }

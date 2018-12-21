@@ -63,7 +63,8 @@ namespace Oversr.Migrations
                     DesignerId = table.Column<Guid>(nullable: false),
                     LastModified = table.Column<DateTime>(nullable: false, defaultValueSql: "getdate()"),
                     Number = table.Column<string>(maxLength: 100, nullable: false),
-                    Name = table.Column<string>(maxLength: 100, nullable: true)
+                    Name = table.Column<string>(maxLength: 100, nullable: true),
+                    Discontinued = table.Column<bool>(nullable: false, defaultValueSql: "0")
                 },
                 constraints: table =>
                 {
@@ -113,13 +114,17 @@ namespace Oversr.Migrations
             migrationBuilder.InsertData(
                 table: "SampleInventoryStatuses",
                 columns: new[] { "Id", "Name" },
-                values: new object[,]
-                {
-                    { 1, "Discontinued" },
-                    { 2, "Active" },
-                    { 3, "InTransit" },
-                    { 4, "Sold" }
-                });
+                values: new object[] { 1, "InStock" });
+
+            migrationBuilder.InsertData(
+                table: "SampleInventoryStatuses",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 2, "InTransit" });
+
+            migrationBuilder.InsertData(
+                table: "SampleInventoryStatuses",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 3, "Sold" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_SampleInventoryItems_InventoryStatusId",
