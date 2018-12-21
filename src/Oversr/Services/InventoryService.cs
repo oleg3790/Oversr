@@ -51,7 +51,7 @@ namespace Oversr.Services
         public ICollection<Style> GetEnabledStyles()
         {
             return this.QueryAllStyles()
-                .Where(x => x.Deleted.Equals(false)).ToList();
+                .Where(x => x.Deleted.Equals(false) && x.Designer.Deleted.Equals(false)).ToList();
         }
 
         public Style GetStyleById(Guid id)
@@ -93,14 +93,19 @@ namespace Oversr.Services
         public ICollection<SampleInventoryItem> GetEnabledSampleInventoryItemsByStatus(SampleInventoryStatus status)
         {
             return this.QueryAllSampleInventoryItems()
-                .Where(x => x.InventoryStatus.Id.Equals((int)status) && x.Deleted.Equals(false))
+                .Where(x => x.InventoryStatus.Id.Equals((int)status) 
+                    && x.Deleted.Equals(false) 
+                    && x.Style.Deleted.Equals(false) 
+                    && x.Style.Designer.Deleted.Equals(false))
                 .ToList();
         }
 
         public ICollection<SampleInventoryItem> GetEnabledSampleInventoryItems()
         {
             return this.QueryAllSampleInventoryItems()
-                .Where(x => x.Deleted.Equals(false))
+                .Where(x => x.Deleted.Equals(false)
+                    && x.Style.Deleted.Equals(false)
+                    && x.Style.Designer.Deleted.Equals(false))
                 .ToList();
         }
 
