@@ -7,15 +7,13 @@ namespace Oversr.Services
     public interface IInventoryService
     {
         // Designers
-        ICollection<Designer> GetAllDesigners();
-        ICollection<Designer> GetEnabledDesigners();
+        ICollection<Designer> GetDesigners(bool enabledOnly);
         Designer GetDesigner(Guid id);
         void AddDesigner(string name);
         void DeleteDesigner(Guid id);
 
         // Styles
-        ICollection<Style> GetAllStyles();
-        ICollection<Style> GetEnabledStyles();
+        ICollection<Style> GetStyles(bool enabledOnly);
         Style GetStyleById(Guid id);
         void AddStyle(Designer designer, string number, string name = null);
         void DeleteStyle(Guid id);

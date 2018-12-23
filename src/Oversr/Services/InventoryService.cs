@@ -16,14 +16,9 @@ namespace Oversr.Services
         }
 
         #region designers
-        public ICollection<Designer> GetAllDesigners()
+        public ICollection<Designer> GetDesigners(bool enabledOnly)
         {
-            return base.GetAllEntities<Designer>();
-        }
-
-        public ICollection<Designer> GetEnabledDesigners()
-        {
-            return base.GetAllEnabled<Designer>();
+            return enabledOnly ? base.GetAllEnabled<Designer>() : base.GetAllEntities<Designer>();
         }
 
         public Designer GetDesigner(Guid id)
@@ -43,15 +38,12 @@ namespace Oversr.Services
         #endregion
 
         #region styles
-        public ICollection<Style> GetAllStyles()
+        public ICollection<Style> GetStyles(bool enabledOnly)
         {
-            return this.QueryAllStyles().ToList();
-        }
-
-        public ICollection<Style> GetEnabledStyles()
-        {
-            return this.QueryAllStyles()
-                .Where(x => x.Deleted.Equals(false) && x.Designer.Deleted.Equals(false)).ToList();
+            return enabledOnly
+                ? this.QueryAllStyles().Where(x => x.Deleted.Equals(false) && x.Designer.Deleted.Equals(false)).ToList()
+                : this.QueryAllStyles().ToList();
+            ;
         }
 
         public Style GetStyleById(Guid id)

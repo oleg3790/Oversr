@@ -1,20 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace Oversr.Model.ViewModel
 {
-    public class StyleVM
+    public class StyleVM : NewStyleVM
     {
+        [Required]
         public string Id { get; set; }
 
-        public string Number { get; set; }
-
-        public string Name { get; set; }
-
+        [Required]
         public DateTime? Created { get; set; }
 
-        public DesignerVM Designer { get; set; }
+        [Required]
+        public bool Discontinued { get; set; }
+
+        [Required]
+        public bool Deleted { get; set; }
     }
 }
