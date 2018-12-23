@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Oversr.Model.Entities;
+using Oversr.Model.Extensions;
 using Oversr.Model.ViewModel;
 using Oversr.Services;
 
@@ -21,28 +23,39 @@ namespace Oversr.Controllers
 
         // api/Designers/
         [HttpGet]
-        public IEnumerable<DesignerVM> GetEnabled()
+        public ActionResult GetEnabled()
         {
-            IEnumerable<DesignerVM> designers = _inventoryService.GetEnabledDesigners()
-                .Select(x => new DesignerVM() { Id = x.Id.ToString("N"), Created = x.Created, Name = x.Name });          
+            try
+            {
+                ICollection<Designer> designers = _inventoryService.GetEnabledDesigners();
 
-            return designers;
+                if (designers == null || designers.Count == 0)
+                {
+                    return Ok();
+                }
+
+                return Ok(designers.Select(x => new DesignerVM() { Id = x.Id.ToString("N"), Created = x.Created, Name = x.Name }));
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
         }
 
         // api/Designers/Create
         [HttpPost("[action]")]
-        public ActionResult Create([FromBody] DesignerVM vm)
+        public ActionResult Create([FromBody] NewDesignerVM vm)
         {
-            if (string.IsNullOrWhiteSpace(vm.Name) || vm == null)
+            if (!ModelState.IsValid)
             {
-                return BadRequest("The designer name cannot be null or empty");
+                return Ok(ModelState.GetAllErrors());
             }
 
             var designers = _inventoryService.GetAllDesigners();
 
             if (designers.Any(x => x.Name.ToLower() == vm.Name.ToLower()))
             {
-                return BadRequest("A designer with this name already exists");
+                return Ok("A designer with this name already exists");
             }
 
             _inventoryService.AddDesigner(vm.Name);
@@ -53,14 +66,25 @@ namespace Oversr.Controllers
         [HttpPost("[action]")]
         public ActionResult Delete([FromBody] DesignerVM vm)
         {
-            if (string.IsNullOrEmpty(vm.Id))
+            if (!ModelState.IsValid)
             {
-                BadRequest("Designer ID is required");
+                return Ok(ModelState.GetAllErrors());
             }
 
-            var designerId = Guid.Parse(vm.Id);
-            _inventoryService.DeleteDesigner(designerId);
-            return Ok();
+            try
+            {
+                var designerId = Guid.Parse(vm.Id);
+                _inventoryService.DeleteDesigner(designerId);
+                return Ok();
+            }
+            catch (FormatException)
+            {
+                return StatusCode(500, "Designer ID is in an incorrect format");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(500, e.Message);
+            }                       
         }
     }
 }
