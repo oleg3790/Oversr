@@ -21,56 +21,99 @@ namespace Oversr.Controllers
         }
 
         // api/Styles/
-        [HttpGet]
-        public IEnumerable<StyleVM> GetEnabled()
+        [HttpGet("{getEnabledOnly}")]
+        public ActionResult Get(bool getEnabledOnly)
         {
-            IEnumerable<StyleVM> styles = _inventoryService.GetEnabledStyles()
-                .Select(x => new StyleVM()
+            try
+            {
+                ICollection<Style> styles = _inventoryService.GetStyles(getEnabledOnly);
+
+                return Ok(styles.Select(x => new StyleVM()
                 {
                     Id = x.Id.ToString("N"),
-                    Designer = new DesignerVM() { Id = x.Designer.Id.ToString("N"), Created = x.Designer.Created, Name = x.Designer.Name },
+                    Designer = new DesignerVM()
+                    {
+                        Id = x.Designer.Id.ToString("N"),
+                        Created = x.Designer.Created,
+                        Name = x.Designer.Name,
+                        Deleted = x.Designer.Deleted
+                    },
                     Created = x.Created,
                     Name = x.Name,
-                    Number = x.Number
-                });
-
-            return styles;
+                    Number = x.Number,
+                    Discontinued = x.Discontinued,
+                    Deleted = x.Deleted
+                }));
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
+                
         }
 
         // api/Styles/Create
         [HttpPost("[action]")]
-        public ActionResult Create([FromBody] StyleVM vm)
+        public ActionResult Create([FromBody] NewStyleVM vm)
         {
-            if (string.IsNullOrWhiteSpace(vm.Number) || vm.Designer == null)
+            try
             {
-                return BadRequest("A style number and designer is required");
+                if (vm.Designer == null)
+                {
+                    return Ok("A designer is required");
+                }
+
+                if (string.IsNullOrWhiteSpace(vm.Number))
+                {
+                    return Ok("A number is required");
+                }
+
+                var styles = _inventoryService.GetStyles(false);
+
+                var designerId = Guid.Parse(vm.Designer.Id);
+                if (styles.Any(x => x.Designer.Id == designerId && x.Number == vm.Number))
+                {
+                    return Ok("A style with this designer and number already exists");
+                }
+
+                Designer designer = _inventoryService.GetDesigner(designerId);
+                _inventoryService.AddStyle(designer, vm.Number, vm.Name);
+                return Ok();
             }
-
-            var styles = _inventoryService.GetAllStyles();
-
-            var designerId = Guid.Parse(vm.Designer.Id);
-            if (styles.Any(x => x.Designer.Id == designerId && x.Number == vm.Number))
-            {                
-                return BadRequest("A style with this designer and number already exists");
+            catch (FormatException)
+            {
+                return StatusCode(500, "Could not parse Id");
             }
-
-            Designer designer = _inventoryService.GetDesigner(designerId);
-            _inventoryService.AddStyle(designer, vm.Number, vm.Name);
-            return Ok();
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }
+            
         }
 
         // api/Styles/Delete
         [HttpPost("[action]")]
         public ActionResult Delete([FromBody] StyleVM vm)
         {
-            if (string.IsNullOrWhiteSpace(vm.Id))
+            try
             {
-                return BadRequest("Style ID is required");
-            }
+                if (string.IsNullOrWhiteSpace(vm.Id))
+                {
+                    return BadRequest("Style ID is required");
+                }
 
-            var id = Guid.Parse(vm.Id);
-            _inventoryService.DeleteStyle(id);
-            return Ok();
+                var id = Guid.Parse(vm.Id);
+                _inventoryService.DeleteStyle(id);
+                return Ok();
+            }
+            catch (FormatException)
+            {
+                return StatusCode(500, "Could not parse Id");
+            }
+            catch (Exception)
+            {
+                return StatusCode(500);
+            }            
         }
     }
 }

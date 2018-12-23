@@ -21,20 +21,21 @@ namespace Oversr.Controllers
             _inventoryService = inventoryService;
         }
 
-        // api/Designers/
-        [HttpGet]
-        public ActionResult GetEnabled()
+        // api/Designers/{getEnabledOnly}
+        [HttpGet("{getEnabledOnly}")]
+        public ActionResult Get(bool getEnabledOnly)
         {
             try
             {
-                ICollection<Designer> designers = _inventoryService.GetEnabledDesigners();
+                ICollection<Designer> designers = _inventoryService.GetDesigners(getEnabledOnly);
 
                 if (designers == null || designers.Count == 0)
                 {
-                    return Ok();
+                    // return empty designer vm list
+                    return Ok(new List<DesignerVM>());
                 }
 
-                return Ok(designers.Select(x => new DesignerVM() { Id = x.Id.ToString("N"), Created = x.Created, Name = x.Name }));
+                return Ok(designers.Select(x => new DesignerVM() { Id = x.Id.ToString("N"), Created = x.Created, Name = x.Name, Deleted = x.Deleted }));
             }
             catch
             {
@@ -51,7 +52,7 @@ namespace Oversr.Controllers
                 return Ok(ModelState.GetAllErrors());
             }
 
-            var designers = _inventoryService.GetAllDesigners();
+            var designers = _inventoryService.GetDesigners(false);
 
             if (designers.Any(x => x.Name.ToLower() == vm.Name.ToLower()))
             {
