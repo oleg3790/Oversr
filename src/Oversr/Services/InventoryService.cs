@@ -77,28 +77,29 @@ namespace Oversr.Services
         #endregion
 
         #region inventory items
-        public ICollection<SampleInventoryItem> GetAllSampleInventoryItems()
+        public ICollection<SampleInventoryItem> GetSampleInventoryItems(bool enabledOnly)
         {
-            return this.QueryAllSampleInventoryItems().ToList();
+            return enabledOnly
+                ? this.QueryAllSampleInventoryItems()
+                    .Where(x => x.Deleted.Equals(false)
+                        && x.Style.Deleted.Equals(false)
+                        && x.Style.Designer.Deleted.Equals(false))
+                    .ToList()
+                : this.QueryAllSampleInventoryItems().ToList();                
         }
 
-        public ICollection<SampleInventoryItem> GetEnabledSampleInventoryItemsByStatus(SampleInventoryStatus status)
+        public ICollection<SampleInventoryItem> GetSampleInventoryItemsByStatus(SampleInventoryStatus status, bool enabledOnly)
         {
-            return this.QueryAllSampleInventoryItems()
-                .Where(x => x.InventoryStatus.Id.Equals((int)status) 
-                    && x.Deleted.Equals(false) 
-                    && x.Style.Deleted.Equals(false) 
-                    && x.Style.Designer.Deleted.Equals(false))
-                .ToList();
-        }
-
-        public ICollection<SampleInventoryItem> GetEnabledSampleInventoryItems()
-        {
-            return this.QueryAllSampleInventoryItems()
-                .Where(x => x.Deleted.Equals(false)
-                    && x.Style.Deleted.Equals(false)
-                    && x.Style.Designer.Deleted.Equals(false))
-                .ToList();
+            return enabledOnly
+                ? this.QueryAllSampleInventoryItems()
+                    .Where(x => x.InventoryStatus.Id.Equals((int)status)
+                        && x.Deleted.Equals(false)
+                        && x.Style.Deleted.Equals(false)
+                        && x.Style.Designer.Deleted.Equals(false))
+                    .ToList()
+                : this.QueryAllSampleInventoryItems()
+                    .Where(x => x.InventoryStatus.Id.Equals((int)status))
+                    .ToList();
         }
 
         public void AddSampleInventoryItem(

@@ -22,9 +22,8 @@ namespace Oversr.Services
         ICollection<SampleInventoryStatusLookup> GetAllStatuses();
 
         // Inventory Items
-        ICollection<SampleInventoryItem> GetAllSampleInventoryItems();
-        ICollection<SampleInventoryItem> GetEnabledSampleInventoryItems();
-        ICollection<SampleInventoryItem> GetEnabledSampleInventoryItemsByStatus(SampleInventoryStatus status);
+        ICollection<SampleInventoryItem> GetSampleInventoryItems(bool enabledOnly);
+        ICollection<SampleInventoryItem> GetSampleInventoryItemsByStatus(SampleInventoryStatus status, bool enabledOnly);
         void AddSampleInventoryItem(Style style, SampleInventoryStatus inventoryStatus, string size, string color, int wholesalePrice, int msrpPrice, DateTime dateOrdered, DateTime? dateRecieved);
         void DeleteSampleInventoryItem(Guid id);
     }

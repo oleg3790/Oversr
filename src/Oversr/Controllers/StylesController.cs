@@ -28,6 +28,11 @@ namespace Oversr.Controllers
             {
                 ICollection<Style> styles = _inventoryService.GetStyles(getEnabledOnly);
 
+                if (styles == null || styles.Count == 0)
+                {
+                    return Ok(new List<StyleVM>());
+                }
+
                 return Ok(styles.Select(x => new StyleVM()
                 {
                     Id = x.Id.ToString("N"),

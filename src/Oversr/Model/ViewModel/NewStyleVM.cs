@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Oversr.Model.ViewModel
 {
@@ -8,7 +7,6 @@ namespace Oversr.Model.ViewModel
         [Required]
         public string Number { get; set; }
 
-        [Required]
         public string Name { get; set; }        
 
         [Required]
