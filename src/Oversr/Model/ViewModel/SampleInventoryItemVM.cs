@@ -1,26 +1,17 @@
-﻿using Oversr.Model.Entities;
-using System;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Oversr.Model.ViewModel
 {
-    public class SampleInventoryItemVM
+    public class SampleInventoryItemVM : NewSampleInventoryItemVM
     {
+        [Required]
         public string Id { get; set; }        
 
-        public string Size { get; set; }
+        [Required]
+        public DateTime Created { get; set; }
 
-        public string Color { get; set; }
-
-        public int WholesalePrice { get; set; }
-
-        public int MsrpPrice { get; set; }
-
-        public DateTime DateOrdered { get; set; }
-    
-        public DateTime? DateRecieved { get; set; }
-
-        public SampleInventoryStatus InventoryStatus { get; set; }
-
-        public StyleVM Style { get; set; }
+        [Required]
+        public bool Deleted { get; set; }
     }
 }

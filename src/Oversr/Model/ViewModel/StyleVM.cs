@@ -9,7 +9,7 @@ namespace Oversr.Model.ViewModel
         public string Id { get; set; }
 
         [Required]
-        public DateTime? Created { get; set; }
+        public DateTime Created { get; set; }
 
         [Required]
         public bool Discontinued { get; set; }
