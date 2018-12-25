@@ -31,6 +31,15 @@ namespace Oversr.Services
             base.Add<Designer>(new Designer() { Name = name });
         }
 
+        public void EditDesigner(Designer designer)
+        {
+            var dbItem = base.GetById<Designer>(designer.Id);
+
+            dbItem.LastModified = DateTime.Now;
+            dbItem.Name = designer.Name;
+            _dbContext.SaveChanges();
+        }
+
         public void DeleteDesigner(Guid id)
         {
             base.Delete<Designer>(id);
@@ -55,6 +64,18 @@ namespace Oversr.Services
         public void AddStyle(Designer designer, string number, string name = null)
         {
             base.Add<Style>(new Style() { Designer = designer, Number = number, Name = name });
+        }
+
+        public void EditStyle(Style style)
+        {
+            var dbItem = base.GetById<Style>(style.Id);
+
+            dbItem.LastModified = DateTime.Now;
+            dbItem.Number = style.Number;
+            dbItem.Name = style.Name;
+            dbItem.Designer = style.Designer;
+            dbItem.Discontinued = style.Discontinued;
+            _dbContext.SaveChanges();
         }
 
         public void DeleteStyle(Guid id)
@@ -125,6 +146,22 @@ namespace Oversr.Services
             };
 
             base.Add<SampleInventoryItem>(item);
+        }
+
+        public void EditSampleInventoryItem(SampleInventoryItem sampleInventoryItem)
+        {
+            var dbItem = base.GetById<SampleInventoryItem>(sampleInventoryItem.Id);
+
+            dbItem.LastModified = DateTime.Now;
+            dbItem.Style = sampleInventoryItem.Style;
+            dbItem.Size = sampleInventoryItem.Size;
+            dbItem.Color = sampleInventoryItem.Color;
+            dbItem.InventoryStatusId = sampleInventoryItem.InventoryStatusId;
+            dbItem.WholesalePrice = sampleInventoryItem.WholesalePrice;
+            dbItem.MsrpPrice = sampleInventoryItem.MsrpPrice;
+            dbItem.DateOrdered = sampleInventoryItem.DateOrdered;
+            dbItem.DateRecieved = sampleInventoryItem.DateRecieved;
+            _dbContext.SaveChanges();
         }
 
         public void DeleteSampleInventoryItem(Guid id)
