@@ -155,6 +155,15 @@ namespace Oversr.Controllers
                 var styleId = Guid.Parse(vm.Style.Id);
                 var style = _inventoryService.GetStyleById(styleId);
 
+                var existingItems = _inventoryService.GetSampleInventoryItems(false);
+
+                if (existingItems.Any(x => x.Style.Equals(style) 
+                    && x.Size.Equals(vm.Size)
+                    && x.Color.Equals(vm.Color)))
+                {
+                    return Ok("An item with this style, size, and color already exists");
+                }
+
                 _inventoryService.AddSampleInventoryItem(
                     style,
                     vm.InventoryStatus,
@@ -178,7 +187,7 @@ namespace Oversr.Controllers
         }
 
         [HttpPost("[action]")]
-        public ActionResult Delete([FromBody] SampleInventoryItemVM vm)
+        public ActionResult Edit([FromBody] SampleInventoryItemVM vm)
         {
             if (!ModelState.IsValid)
             {
@@ -187,8 +196,23 @@ namespace Oversr.Controllers
 
             try
             {
-                var itemId = Guid.Parse(vm.Id);
-                _inventoryService.DeleteSampleInventoryItem(itemId);
+                var sampleInventoryItem = new SampleInventoryItem()
+                {
+                    Id = Guid.Parse(vm.Id),
+                    Created = vm.Created,
+                    LastModified = DateTime.Now,
+                    Deleted = vm.Deleted,
+                    InventoryStatusId = (int)vm.InventoryStatus,
+                    Size = vm.Size,
+                    Color = vm.Color,
+                    WholesalePrice = vm.WholesalePrice,
+                    MsrpPrice = vm.MsrpPrice,
+                    DateOrdered = vm.DateOrdered,
+                    DateRecieved = vm.DateRecieved,
+                    Style = _inventoryService.GetStyleById(Guid.Parse(vm.Style.Id))
+                };
+
+                _inventoryService.EditSampleInventoryItem(sampleInventoryItem);
                 return Ok();
             }
             catch (FormatException)

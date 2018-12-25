@@ -37,12 +37,8 @@ namespace Oversr.Services
 
             dbItem.LastModified = DateTime.Now;
             dbItem.Name = designer.Name;
+            dbItem.Deleted = designer.Deleted;
             _dbContext.SaveChanges();
-        }
-
-        public void DeleteDesigner(Guid id)
-        {
-            base.Delete<Designer>(id);
         }
         #endregion
 
@@ -75,12 +71,8 @@ namespace Oversr.Services
             dbItem.Name = style.Name;
             dbItem.Designer = style.Designer;
             dbItem.Discontinued = style.Discontinued;
+            dbItem.Deleted = style.Deleted;
             _dbContext.SaveChanges();
-        }
-
-        public void DeleteStyle(Guid id)
-        {
-            base.Delete<Style>(id);
         }
 
         private IQueryable<Style> QueryAllStyles()
@@ -161,12 +153,8 @@ namespace Oversr.Services
             dbItem.MsrpPrice = sampleInventoryItem.MsrpPrice;
             dbItem.DateOrdered = sampleInventoryItem.DateOrdered;
             dbItem.DateRecieved = sampleInventoryItem.DateRecieved;
+            dbItem.Deleted = sampleInventoryItem.Deleted;
             _dbContext.SaveChanges();
-        }
-
-        public void DeleteSampleInventoryItem(Guid id)
-        {
-            base.Delete<SampleInventoryItem>(id);
         }
 
         private IQueryable<SampleInventoryItem> QueryAllSampleInventoryItems()
