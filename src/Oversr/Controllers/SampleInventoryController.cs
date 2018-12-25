@@ -150,18 +150,55 @@ namespace Oversr.Controllers
                 return Ok(ModelState.GetAllErrors());
             }
 
-            var style = _inventoryService.GetStyleById(Guid.Parse(vm.Style.Id));
-            _inventoryService.AddSampleInventoryItem(
-                style, 
-                vm.InventoryStatus,
-                vm.Size,
-                vm.Color,
-                vm.WholesalePrice,
-                vm.MsrpPrice,
-                vm.DateOrdered,
-                vm.DateRecieved);
+            try
+            {
+                var styleId = Guid.Parse(vm.Style.Id);
+                var style = _inventoryService.GetStyleById(styleId);
 
-            return Ok();
+                _inventoryService.AddSampleInventoryItem(
+                    style,
+                    vm.InventoryStatus,
+                    vm.Size,
+                    vm.Color,
+                    vm.WholesalePrice,
+                    vm.MsrpPrice,
+                    vm.DateOrdered,
+                    vm.DateRecieved);
+
+                return Ok();
+            }
+            catch (FormatException)
+            {
+                return StatusCode(500, "Could not parse Id");
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
+        }
+
+        [HttpPost("[action]")]
+        public ActionResult Delete([FromBody] SampleInventoryItemVM vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Ok(ModelState.GetAllErrors());
+            }
+
+            try
+            {
+                var itemId = Guid.Parse(vm.Id);
+                _inventoryService.DeleteSampleInventoryItem(itemId);
+                return Ok();
+            }
+            catch (FormatException)
+            {
+                return StatusCode(500, "Could not parse Id");
+            }
+            catch
+            {
+                return StatusCode(500, "Error encountered while trying to delete sample inventory item");
+            }
         }
     }
 }
