@@ -92,13 +92,12 @@ namespace Oversr.Controllers
             catch (Exception)
             {
                 return StatusCode(500);
-            }
-            
+            }            
         }
 
-        // api/Styles/Delete
+        // api/Styles/Edit
         [HttpPost("[action]")]
-        public ActionResult Delete([FromBody] StyleVM vm)
+        public ActionResult Edit([FromBody] StyleVM vm)
         {
             try
             {
@@ -107,8 +106,19 @@ namespace Oversr.Controllers
                     return BadRequest("Style ID is required");
                 }
 
-                var id = Guid.Parse(vm.Id);
-                _inventoryService.DeleteStyle(id);
+                var style = new Style()
+                {
+                    Id = Guid.Parse(vm.Id),
+                    Created = vm.Created,
+                    LastModified = DateTime.Now,
+                    Number = vm.Number,
+                    Name = vm.Name,
+                    Deleted = vm.Deleted,
+                    Discontinued = vm.Discontinued,
+                    Designer = _inventoryService.GetDesigner(Guid.Parse(vm.Designer.Id)),
+                };                
+
+                _inventoryService.EditStyle(style);
                 return Ok();
             }
             catch (FormatException)

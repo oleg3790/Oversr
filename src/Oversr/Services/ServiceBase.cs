@@ -54,19 +54,5 @@ namespace Oversr.Services
             _dbContext.Add(entity);
             _dbContext.SaveChanges();
         }
-
-        protected void Delete<TEntity>(Guid id) where TEntity : EntityBase
-        {
-            var entity = _dbContext.Set<TEntity>()
-                .FirstOrDefault(x => x.Id.Equals(id));
-
-            if (entity == null)
-            {
-                throw new NullReferenceException("No entity found to delete");
-            }
-
-            entity.Deleted = true;
-            _dbContext.SaveChanges();
-        }
     }
 }

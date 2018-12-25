@@ -63,9 +63,9 @@ namespace Oversr.Controllers
             return Ok();
         }
 
-        // api/Designers/Delete
+        // api/Designer/Edit
         [HttpPost("[action]")]
-        public ActionResult Delete([FromBody] DesignerVM vm)
+        public ActionResult Edit([FromBody] DesignerVM vm)
         {
             if (!ModelState.IsValid)
             {
@@ -74,8 +74,16 @@ namespace Oversr.Controllers
 
             try
             {
-                var designerId = Guid.Parse(vm.Id);
-                _inventoryService.DeleteDesigner(designerId);
+                var designer = new Designer()
+                {
+                    Id = Guid.Parse(vm.Id),
+                    Created = vm.Created,
+                    LastModified = DateTime.Now,
+                    Name = vm.Name,
+                    Deleted = vm.Deleted
+                };
+
+                _inventoryService.EditDesigner(designer);
                 return Ok();
             }
             catch (FormatException)
@@ -85,7 +93,7 @@ namespace Oversr.Controllers
             catch (Exception e)
             {
                 return StatusCode(500, e.Message);
-            }                       
+            }
         }
     }
 }
