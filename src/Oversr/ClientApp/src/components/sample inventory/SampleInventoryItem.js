@@ -82,7 +82,6 @@ export default class SampleInventoryItem extends Component {
 
     setNotification(isSuccess, text) {
         this.setState({ notification: { isSuccess: isSuccess, text: text } });
-        setTimeout(() => this.setState({ notification: { isSuccess: isSuccess, text: null }}), 4000);
     }
 
     toggleIsBusy() {

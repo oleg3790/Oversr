@@ -21,7 +21,7 @@
     display: block !important;
 }
 
-input {
+input[type='checkbox'] {
     width: 16px;
     height: 16px;
     padding: 0;
@@ -30,6 +30,10 @@ input {
     position: relative;
     top: -1px;
     *overflow: hidden;
+}
+
+.table-hover tbody tr:hover {
+    cursor: pointer;
 }
 
 /*** generic classes ***/
