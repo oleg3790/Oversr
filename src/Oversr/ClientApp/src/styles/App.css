@@ -3,9 +3,27 @@
     background-color: #f9f8f8 !important;
 }
 
+.bg-dark-1, .btn-dark-1 {
+    background-color: #517496 !important;
+}
+
+.btn-dark-1 {
+    border-color: #517496 !important;
+    color: white !important;
+}
+
+    .btn-dark-1:hover {
+        background-color: #486581 !important;
+        border-color: #486581 !important;
+    }
+
 /*** bootstrap overrides ***/
 .modal {
     background-color: #42404096;    
+}
+
+.nav-bg {
+    background-color: #2f3338 !important;
 }
 
 .nav-link {

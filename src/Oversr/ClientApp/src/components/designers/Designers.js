@@ -77,18 +77,23 @@ export default class Designers extends Component {
     render() {
         return (
             <div className="pt-4">
-                {this.state.isAddDesignerVisible && <NewDesigner toggleVisibility={(isSaveSuccess) => this.toggleAddNewDesignerVisibility(isSaveSuccess)}/>}
-                <NotificationBanner notification={this.state.notification}/>
-                <div className="d-inline"> 
-                    <FontAwesomeIcon icon={faPlusSquare} className="icon-btn" 
-                        size="2x" title="Add new designer" onClick={this.toggleAddNewDesignerVisibility}/>   
-                    <div className="float-right d-inline mt-2">
-                        <input type="checkbox" className="ml-2" onClick={this.toggleShowDeletedDesigners}/>
-                        <span className="ml-1">Include deleted designers</span>
-                    </div>                                                        
-                </div>
-                <InteractiveDataTable className="mt-2" isBusy={this.state.isBusy} 
-                    items={this.state.designers} th={this.getDesignerTh()} body={this.getDesignerTBody(this.state.designers, this.state.showDeletedDesigners)}/>
+                <div className="card">
+                    <h5 className="card-header bg-dark-1 text-light p-2 pl-3">Designers</h5>
+                    <div className="card-body">
+                        {this.state.isAddDesignerVisible && <NewDesigner toggleVisibility={(isSaveSuccess) => this.toggleAddNewDesignerVisibility(isSaveSuccess)}/>}
+                        <NotificationBanner notification={this.state.notification}/>
+                        <div className="d-inline"> 
+                            <FontAwesomeIcon icon={faPlusSquare} className="icon-btn" 
+                                size="2x" title="Add new designer" onClick={this.toggleAddNewDesignerVisibility}/>   
+                            <div className="float-right d-inline mt-2">
+                                <input type="checkbox" className="ml-2" onClick={this.toggleShowDeletedDesigners}/>
+                                <span className="ml-1">Include deleted designers</span>
+                            </div>                                                        
+                        </div>
+                        <InteractiveDataTable className="mt-2" isBusy={this.state.isBusy} 
+                            items={this.state.designers} th={this.getDesignerTh()} body={this.getDesignerTBody(this.state.designers, this.state.showDeletedDesigners)}/>
+                    </div>
+                </div>                                
             </div>
         );
     }
