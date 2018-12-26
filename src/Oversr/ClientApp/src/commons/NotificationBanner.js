@@ -14,7 +14,7 @@ export default class NotificationBanner extends Component {
     componentDidUpdate(prevProps, prevState) {
         if (prevProps.notification !== this.props.notification) {
             this.setState({ notification: this.props.notification });
-            setTimeout(() => this.setState({ notification: { isSuccess: false, text: null }}), 4000);
+            setTimeout(() => this.setState({ notification: { isSuccess: this.props.notification.isSuccess, text: null }}), 4000);
         }
     }
 

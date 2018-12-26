@@ -11,8 +11,10 @@ export default class Designers extends Component {
     constructor(props) {
         super(props);
         this.getDesigners = this.getDesigners.bind(this);
-        this.toggleIsBusy = this.toggleIsBusy.bind(this);
         this.setNotification = this.setNotification.bind(this);
+        this.setDesignerDeleteFlag = this.setDesignerDeleteFlag.bind(this);
+        this.editDesigner = this.editDesigner.bind(this);
+        this.toggleIsBusy = this.toggleIsBusy.bind(this);        
         this.toggleAddNewDesignerVisibility = this.toggleAddNewDesignerVisibility.bind(this);
         this.toggleShowDeletedDesigners = this.toggleShowDeletedDesigners.bind(this); 
         this.state = {
@@ -77,6 +79,28 @@ export default class Designers extends Component {
         this.setState({ notification: { isSuccess: isSuccess, text: text }});
     }
 
+    async setDesignerDeleteFlag(designer, deleted) {
+        designer.deleted = deleted;
+        await this.editDesigner(designer, designer.name + (deleted ? " has been deleted" : " has been restored"));
+    }
+
+    async editDesigner(designer, successNotification) {
+        try {
+            const result = await InventoryService.EditDesigner(designer);
+
+            if (!result) {                
+                await this.getDesigners();
+                this.setNotification(true, successNotification);
+            }
+            else {
+                this.setNotification(false, result);
+            }
+        }
+        catch (err) {
+            this.setNotification(false, err.message);
+        }
+    }
+
     render() {
         return (
             <div className="pt-4">
@@ -130,7 +154,9 @@ export default class Designers extends Component {
                                     <FontAwesomeIcon icon={faEdit} className="icon-btn text-info"/>
                                 </td>
                                 <td>
-                                    {x.deleted ? <FontAwesomeIcon icon={faPlus} className="icon-btn text-success"/> : <FontAwesomeIcon icon={faTrash} className="icon-btn text-danger"/>}
+                                    {x.deleted 
+                                        ? <FontAwesomeIcon icon={faPlus} className="icon-btn text-success" onClick={() => this.setDesignerDeleteFlag(x, false)}/> 
+                                        : <FontAwesomeIcon icon={faTrash} className="icon-btn text-danger" onClick={() => this.setDesignerDeleteFlag(x, true)}/>}
                                 </td>
                             </tr>
                         );

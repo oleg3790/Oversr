@@ -3,6 +3,7 @@
 export const InventoryService = {
     GetAllDesigners,
     SaveNewDesigner,
+    EditDesigner,
     GetAllInventoryStatuses,
     SaveNewSampleInventoryItem,
     GetSampleInventoryItems
@@ -13,7 +14,11 @@ async function GetAllDesigners() {
 }
 
 async function SaveNewDesigner(designer) {
-    return await RequestHandler.Post('api/Designers/Create/', { name: designer });
+    return await RequestHandler.Post('api/Designers/Create', { name: designer });
+} 
+
+async function EditDesigner(designer) {
+    return await RequestHandler.Post('api/Designers/Edit', designer);
 } 
 
 async function GetAllInventoryStatuses() {
