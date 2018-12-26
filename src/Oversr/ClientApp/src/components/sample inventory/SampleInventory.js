@@ -2,7 +2,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import SampleInventoryItem from './SampleInventoryItem';
-import { SampleInventoryService } from '../../services/SampleInventoryService';
+import { InventoryService } from '../../services/InventoryService';
 import BusyOverlay from '../../commons/BusyOverlay';
 
 export default class SampleInventory extends Component {
@@ -21,7 +21,7 @@ export default class SampleInventory extends Component {
     async componentDidMount() {
         this.toggleIsBusy();
         this.setState({ 
-            sampleInventoryItems: await SampleInventoryService.GetSampleInventoryItems('Active')
+            sampleInventoryItems: await InventoryService.GetSampleInventoryItems('Active')
         }); 
         this.toggleIsBusy();
     }
@@ -35,7 +35,7 @@ export default class SampleInventory extends Component {
         this.toggleIsBusy();  
         this.setState({ 
             isAddNewVisible: !this.state.isAddNewVisible,
-            sampleInventoryItems: await SampleInventoryService.GetSampleInventoryItems('Active')
+            sampleInventoryItems: await InventoryService.GetSampleInventoryItems('Active')
         }); 
         this.toggleIsBusy();    
     }
