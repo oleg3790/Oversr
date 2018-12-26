@@ -6,12 +6,12 @@ import logo from '../images/logo.png';
 export default function Layout(props) {
     return (
         <div>    
-            <nav className="navbar fixed-top navbar-expand navbar-dark bg-dark">
+            <nav className="navbar fixed-top navbar-expand nav-bg">
                 <span className="text-danger pr-5">
                     <img src={logo} width="150"/>
                 </span>
-                {UserService.IsAuthenticated() && <Link className="nav-link btn btn-primary mr-3" to="/inventory">Inventory</Link>}
-                {UserService.IsAuthenticated() && <Link className="nav-link btn btn-primary" to="/designers">Designers</Link>}                
+                {UserService.IsAuthenticated() && <Link className="nav-link btn btn-dark-1 mr-3" to="/inventory">Inventory</Link>}
+                {UserService.IsAuthenticated() && <Link className="nav-link btn btn-dark-1" to="/designers">Designers</Link>}                
             </nav>       
             <div id="main" className="container">
                 {props.children}
