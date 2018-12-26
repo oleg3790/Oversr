@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
 import ComboInput from '../../commons/ComboInput';
-import { SampleInventoryService } from '../../services/SampleInventoryService';
+import { InventoryService } from '../../services/InventoryService';
 import NotificationBanner from '../../commons/NotificationBanner';
 import BusyOverlay from '../../commons/BusyOverlay';
 
@@ -41,8 +41,8 @@ export default class SampleInventoryItem extends Component {
         // Only load when this is a new item
         if (this.props.isNewItem) {
             this.setState({ 
-                designers: await SampleInventoryService.GetAllDesigners(),
-                inventoryStatuses: await SampleInventoryService.GetAllInventoryStatuses()
+                designers: await InventoryService.GetAllDesigners(),
+                inventoryStatuses: await InventoryService.GetAllInventoryStatuses()
             });
         }
         
@@ -69,8 +69,8 @@ export default class SampleInventoryItem extends Component {
         this.toggleIsBusy();
 
         try {
-            await SampleInventoryService.SaveNewDesigner(designer.trim());  
-            this.setState({ designers: await SampleInventoryService.GetAllDesigners() });     
+            await InventoryService.SaveNewDesigner(designer.trim());  
+            this.setState({ designers: await InventoryService.GetAllDesigners() });     
             this.setNotification(true, 'Successfully saved new designer');
         }
         catch(err) {
@@ -103,7 +103,7 @@ export default class SampleInventoryItem extends Component {
         this.toggleIsBusy();
 
         try {
-            await SampleInventoryService.SaveNewSampleInventoryItem(data);
+            await InventoryService.SaveNewSampleInventoryItem(data);
             this.props.onSuccessfulSave();
         }
         catch (err) {

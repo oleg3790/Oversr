@@ -3,7 +3,7 @@
     background-color: #f9f8f8 !important;
 }
 
-/*** bootstrap related ***/
+/*** bootstrap overrides ***/
 .modal {
     background-color: #42404096;    
 }
@@ -21,6 +21,17 @@
     display: block !important;
 }
 
+input {
+    width: 16px;
+    height: 16px;
+    padding: 0;
+    margin:0;
+    vertical-align: middle;
+    position: relative;
+    top: -1px;
+    *overflow: hidden;
+}
+
 /*** generic classes ***/
 .icon-btn {
     cursor: pointer;
@@ -36,7 +47,18 @@
     color: rgb(146, 146, 146);
 }
 
+.search-input {
+    border-color: transparent;
+}
+    .search-input:focus {
+        outline: none !important;
+    }
+
 /*** specific ***/
+#main {
+    margin-top: 70px;
+}
+
 #login-head {
     font-size: 2.5rem;
     font-weight: 300;

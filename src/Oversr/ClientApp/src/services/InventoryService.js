@@ -1,6 +1,6 @@
 ﻿import { RequestHandler } from './RequestHandler';
 
-export const SampleInventoryService = {
+export const InventoryService = {
     GetAllDesigners,
     SaveNewDesigner,
     GetAllInventoryStatuses,
@@ -9,7 +9,7 @@ export const SampleInventoryService = {
 };
 
 async function GetAllDesigners() {
-    return await RequestHandler.Get('/api/Designers/');
+    return await RequestHandler.Get('/api/Designers/false');
 }
 
 async function SaveNewDesigner(designer) {

@@ -6,8 +6,7 @@ export class Home extends Component {
     render() {
         return (
             <div>
-                <Link to="/inventory">Inventory</Link>
-                <Link to="/designers">Designers</Link>
+                <center className="mt-5"><h3>Home</h3></center>
             </div>
         );
     }
