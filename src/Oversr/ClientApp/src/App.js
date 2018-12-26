@@ -5,7 +5,7 @@ import { Home } from './components/Home';
 import Login from './components/Login';
 import Layout from './components/Layout';
 import Inventory from './components/Inventory';
-import Designers from './components/Designers';
+import Designers from './components/designers/Designers';
 
 export default class App extends Component {
     render() {    
