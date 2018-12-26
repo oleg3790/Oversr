@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
+import { faPlusSquare, faTrash, faPlus, faEdit } from '@fortawesome/free-solid-svg-icons';
 import InteractiveDataTable from '../../commons/InteractiveDataTable';
 import { InventoryService } from '../../services/InventoryService';
 import { ObjectAssignmentHelpers } from '../../commons/ObjectAssignmentHelpers';
@@ -37,7 +37,10 @@ export default class Designers extends Component {
             var designerResult = await InventoryService.GetAllDesigners();
 
             if (Array.isArray(designerResult)) {
-                const sorted = designerResult.sort((a, b) => { return a.name.toLowerCase() == b.name.toLowerCase() ? 0 : a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;}) 
+                let sorted = designerResult.sort((a, b) => { return a.name.toLowerCase() == b.name.toLowerCase() ? 0 : a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;});
+                
+                // add view related attributes
+                sorted = sorted.map(x => ({ ...x, inEdit: false }));
                 this.setState({ designers: sorted });
             }
             else {
@@ -104,6 +107,7 @@ export default class Designers extends Component {
                 <th scope="col" width="220">Name</th>
                 <th scope="col" width="320">Created</th>
                 <th scope="col" width="150"></th>
+                <th scope="col" width="100"></th>
                 <th scope="col"></th>
             </tr>
         );
@@ -121,8 +125,13 @@ export default class Designers extends Component {
                             <tr key={x.id} className={x.deleted ? "text-danger" : undefined}>
                                 <td>{x.name}</td>
                                 <td>{ObjectAssignmentHelpers.ToLongDate(x.created)}</td>
-                                {x.deleted ? <td>Not active</td> : <td/>}
-                                <td></td>
+                                {x.deleted ? <td>Not active</td> : <td/>}                                
+                                <td>
+                                    <FontAwesomeIcon icon={faEdit} className="icon-btn text-info"/>
+                                </td>
+                                <td>
+                                    {x.deleted ? <FontAwesomeIcon icon={faPlus} className="icon-btn text-success"/> : <FontAwesomeIcon icon={faTrash} className="icon-btn text-danger"/>}
+                                </td>
                             </tr>
                         );
                     }                    
