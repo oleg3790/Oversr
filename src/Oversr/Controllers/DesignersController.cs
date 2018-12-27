@@ -74,6 +74,13 @@ namespace Oversr.Controllers
 
             try
             {
+                var existingDesigners = _inventoryService.GetDesignersExceptThis(Guid.Parse(vm.Id));
+
+                if (existingDesigners.Any(x => x.Name.ToLower() == vm.Name.ToLower()))
+                {
+                    return Ok("A designer with this name already exists");
+                }
+
                 var designer = new Designer()
                 {
                     Id = Guid.Parse(vm.Id),

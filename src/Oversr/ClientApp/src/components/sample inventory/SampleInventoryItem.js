@@ -129,7 +129,7 @@ export default class SampleInventoryItem extends Component {
                             <div className="row">
                                 <div className="col-12">
                                     <ComboInput 
-                                        labelClass="samp-inv-field-lbl" 
+                                        labelClass="input-lbl" 
                                         labelText="Designer" 
                                         fieldId="designer"
                                         selectionItems={this.state.designers} 
@@ -142,7 +142,7 @@ export default class SampleInventoryItem extends Component {
                                 <div className="col-6">
                                     <div className="input-group">
                                         <div className="input-group-prepend">
-                                            <label className="input-group-text samp-inv-field-lbl">Style #</label>
+                                            <label className="input-group-text input-lbl">Style #</label>
                                         </div>
                                         <input className="form-control" id="styleNumber" onChange={this.handleDataChange}></input>
                                     </div> 
@@ -150,7 +150,7 @@ export default class SampleInventoryItem extends Component {
                                 <div className="col-6">
                                     <div className="input-group">
                                         <div className="input-group-prepend">
-                                            <label className="input-group-text samp-inv-field-lbl">Style Name</label>
+                                            <label className="input-group-text input-lbl">Style Name</label>
                                         </div>
                                         <input className="form-control" id="styleName" onChange={this.handleDataChange}></input>
                                     </div> 
@@ -160,7 +160,7 @@ export default class SampleInventoryItem extends Component {
                                 <div className="col-6">
                                     <div className="input-group">
                                         <div className="input-group-prepend">
-                                            <label className="input-group-text samp-inv-field-lbl">Size</label>
+                                            <label className="input-group-text input-lbl">Size</label>
                                         </div>
                                         <input className="form-control" id="size" onChange={this.handleDataChange}></input>
                                     </div> 
@@ -168,7 +168,7 @@ export default class SampleInventoryItem extends Component {
                                 <div className="col-6">
                                     <div className="input-group">
                                         <div className="input-group-prepend">
-                                            <label className="input-group-text samp-inv-field-lbl">Color</label>
+                                            <label className="input-group-text input-lbl">Color</label>
                                         </div>
                                         <input className="form-control" id="color" onChange={this.handleDataChange}></input>
                                     </div> 
@@ -178,7 +178,7 @@ export default class SampleInventoryItem extends Component {
                                 <div className="col-6">
                                     <div className="input-group">
                                         <div className="input-group-prepend">
-                                            <label className="input-group-text samp-inv-field-lbl">Wholesale Price</label>
+                                            <label className="input-group-text input-lbl">Wholesale Price</label>
                                         </div>
                                         <input className="form-control" id="wholesalePrice" onChange={this.handleDataChange}></input>
                                     </div> 
@@ -186,7 +186,7 @@ export default class SampleInventoryItem extends Component {
                                 <div className="col-6">
                                     <div className="input-group">
                                         <div className="input-group-prepend">
-                                            <label className="input-group-text samp-inv-field-lbl">MSRP</label>
+                                            <label className="input-group-text input-lbl">MSRP</label>
                                         </div>
                                         <input className="form-control" id="msrpPrice" onChange={this.handleDataChange}></input>
                                     </div> 
@@ -196,7 +196,7 @@ export default class SampleInventoryItem extends Component {
                                 <div className="col-6">
                                     <div className="input-group">
                                         <div className="input-group-prepend">
-                                            <label className="input-group-text samp-inv-field-lbl">Date Ordered</label>
+                                            <label className="input-group-text input-lbl">Date Ordered</label>
                                         </div>
                                         <input className="form-control" type="date" id="dateOrdered" onChange={this.handleDataChange}></input>
                                     </div> 
@@ -204,7 +204,7 @@ export default class SampleInventoryItem extends Component {
                                 <div className="col-6">
                                     <div className="input-group">
                                         <div className="input-group-prepend">
-                                            <label className="input-group-text samp-inv-field-lbl">Date Recieved</label>
+                                            <label className="input-group-text input-lbl">Date Recieved</label>
                                         </div>
                                         <input className="form-control" type="date" id="dateRecieved" onChange={this.handleDataChange}></input>
                                     </div> 
@@ -214,7 +214,7 @@ export default class SampleInventoryItem extends Component {
                                 <div className="col-6">
                                     <div className="input-group">
                                         <div className="input-group-prepend">
-                                            <label className="input-group-text samp-inv-field-lbl">Inventory Status</label>
+                                            <label className="input-group-text input-lbl">Inventory Status</label>
                                         </div>
                                         <select className="form-control" id="inventoryStatus" onChange={this.handleDataChange}>
                                             <option></option>

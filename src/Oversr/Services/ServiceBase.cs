@@ -44,6 +44,11 @@ namespace Oversr.Services
             return _dbContext.Set<TEntity>().ToList();
         }
 
+        protected ICollection<TEntity> GetAllExceptThis<TEntity>(Guid id) where TEntity : EntityBase
+        {
+            return _dbContext.Set<TEntity>().Where(x => x.Id != id).ToList();
+        }
+
         protected ICollection<TEntity> GetAllLookups<TEntity>() where TEntity : LookupBase
         {
             return _dbContext.Set<TEntity>().ToList();
