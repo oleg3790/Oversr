@@ -21,6 +21,11 @@ namespace Oversr.Services
             return enabledOnly ? base.GetAllEnabled<Designer>() : base.GetAllEntities<Designer>();
         }
 
+        public ICollection<Designer> GetDesignersExceptThis(Guid id)
+        {
+            return base.GetAllExceptThis<Designer>(id);
+        }
+
         public Designer GetDesigner(Guid id)
         {
             return base.GetById<Designer>(id);

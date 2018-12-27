@@ -1,10 +1,11 @@
 ﻿import React, { Component } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlusSquare, faTrash, faPlus, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faPlusSquare, faEdit } from '@fortawesome/free-solid-svg-icons';
 import InteractiveDataTable from '../../commons/InteractiveDataTable';
 import { InventoryService } from '../../services/InventoryService';
 import { ObjectAssignmentHelpers } from '../../commons/ObjectAssignmentHelpers';
 import NewDesigner from './NewDesigner';
+import EditDesigner from './EditDesigner';
 import NotificationBanner from '../../commons/NotificationBanner';
 
 export default class Designers extends Component {
@@ -12,20 +13,22 @@ export default class Designers extends Component {
         super(props);
         this.getDesigners = this.getDesigners.bind(this);
         this.setNotification = this.setNotification.bind(this);
-        this.setDesignerDeleteFlag = this.setDesignerDeleteFlag.bind(this);
-        this.editDesigner = this.editDesigner.bind(this);
+        this.setDesignerToEdit = this.setDesignerToEdit.bind(this);
         this.toggleIsBusy = this.toggleIsBusy.bind(this);        
         this.toggleAddNewDesignerVisibility = this.toggleAddNewDesignerVisibility.bind(this);
+        this.toggleEditDesignerVisibility = this.toggleEditDesignerVisibility.bind(this);
         this.toggleShowDeletedDesigners = this.toggleShowDeletedDesigners.bind(this); 
         this.state = {
             isBusy: false,
             designers: [],
+            designerToEdit: null,
             showDeletedDesigners: false,
             notification: {
                 isSuccess: false,
                 text: null
             },
-            isAddDesignerVisible: false
+            isAddDesignerVisible: false,
+            isEditDesignerVisible: false
         };
     }
 
@@ -39,10 +42,7 @@ export default class Designers extends Component {
             var designerResult = await InventoryService.GetAllDesigners();
 
             if (Array.isArray(designerResult)) {
-                let sorted = designerResult.sort((a, b) => { return a.name.toLowerCase() == b.name.toLowerCase() ? 0 : a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;});
-                
-                // add view related attributes
-                sorted = sorted.map(x => ({ ...x, inEdit: false }));
+                let sorted = designerResult.sort((a, b) => { return a.name.toLowerCase() == b.name.toLowerCase() ? 0 : a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;});            
                 this.setState({ designers: sorted });
             }
             else {
@@ -67,6 +67,14 @@ export default class Designers extends Component {
         }
     }
 
+    toggleEditDesignerVisibility(isSaveSuccess) {
+        this.setState({ isEditDesignerVisible: !this.state.isEditDesignerVisible });
+
+        if(isSaveSuccess) {
+            this.getDesigners();
+        }
+    }
+
     toggleShowDeletedDesigners() {
         this.setState({ showDeletedDesigners: !this.state.showDeletedDesigners });
     }
@@ -79,26 +87,8 @@ export default class Designers extends Component {
         this.setState({ notification: { isSuccess: isSuccess, text: text }});
     }
 
-    async setDesignerDeleteFlag(designer, deleted) {
-        designer.deleted = deleted;
-        await this.editDesigner(designer, designer.name + (deleted ? " has been deleted" : " has been restored"));
-    }
-
-    async editDesigner(designer, successNotification) {
-        try {
-            const result = await InventoryService.EditDesigner(designer);
-
-            if (!result) {                
-                await this.getDesigners();
-                this.setNotification(true, successNotification);
-            }
-            else {
-                this.setNotification(false, result);
-            }
-        }
-        catch (err) {
-            this.setNotification(false, err.message);
-        }
+    setDesignerToEdit(designer) {
+        this.setState({ designerToEdit: designer, isEditDesignerVisible: !this.state.isEditDesignerVisible });
     }
 
     render() {
@@ -108,6 +98,10 @@ export default class Designers extends Component {
                     <h5 className="card-header bg-dark-1 text-light p-2 pl-3">Designers</h5>
                     <div className="card-body">
                         {this.state.isAddDesignerVisible && <NewDesigner toggleVisibility={(isSaveSuccess) => this.toggleAddNewDesignerVisibility(isSaveSuccess)}/>}
+                        {this.state.isEditDesignerVisible 
+                            && <EditDesigner toggleVisibility={(isSaveSuccess) => this.toggleEditDesignerVisibility(isSaveSuccess)}
+                                    designer={this.state.designerToEdit}
+                            />}
                         <NotificationBanner notification={this.state.notification}/>
                         <div className="d-inline"> 
                             <FontAwesomeIcon icon={faPlusSquare} className="icon-btn" 
@@ -119,6 +113,7 @@ export default class Designers extends Component {
                         </div>
                         <InteractiveDataTable className="mt-2" isBusy={this.state.isBusy} 
                             items={this.state.designers} th={this.getDesignerTh()} body={this.getDesignerTBody(this.state.designers, this.state.showDeletedDesigners)}/>
+                        {this.state.showDeletedDesigners && <small className="text-danger">* All styles and inventory associated with deleted designers will automatically be deactivated</small>}
                     </div>
                 </div>                                
             </div>
@@ -129,8 +124,7 @@ export default class Designers extends Component {
         return (
             <tr>
                 <th scope="col" width="220">Name</th>
-                <th scope="col" width="320">Created</th>
-                <th scope="col" width="150"></th>
+                <th scope="col" width="350">Created</th>                
                 <th scope="col" width="100"></th>
                 <th scope="col"></th>
             </tr>
@@ -148,16 +142,11 @@ export default class Designers extends Component {
                         return (
                             <tr key={x.id} className={x.deleted ? "text-danger" : undefined}>
                                 <td>{x.name}</td>
-                                <td>{ObjectAssignmentHelpers.ToLongDate(x.created)}</td>
-                                {x.deleted ? <td>Not active</td> : <td/>}                                
+                                <td>{ObjectAssignmentHelpers.ToLongDate(x.created)}</td>                                                               
                                 <td>
-                                    <FontAwesomeIcon icon={faEdit} className="icon-btn text-info"/>
+                                    <FontAwesomeIcon icon={faEdit} className="icon-btn text-info" title="Edit designer" onClick={() => this.setDesignerToEdit(x)}/>
                                 </td>
-                                <td>
-                                    {x.deleted 
-                                        ? <FontAwesomeIcon icon={faPlus} className="icon-btn text-success" onClick={() => this.setDesignerDeleteFlag(x, false)}/> 
-                                        : <FontAwesomeIcon icon={faTrash} className="icon-btn text-danger" onClick={() => this.setDesignerDeleteFlag(x, true)}/>}
-                                </td>
+                                {x.deleted ? <td>Deleted</td> : <td/>} 
                             </tr>
                         );
                     }                    

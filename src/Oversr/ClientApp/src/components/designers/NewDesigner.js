@@ -69,7 +69,7 @@ export default class NewDesigner extends Component {
                                 <div className="col-12">
                                     <div className="input-group">
                                         <div className="input-group-prepend">
-                                            <label className="input-group-text samp-inv-field-lbl">Name</label>
+                                            <label className="input-group-text input-lbl">Name</label>
                                         </div>
                                         <input className="form-control" type="text" onChange={this.handleNameChange}></input>
                                     </div> 
