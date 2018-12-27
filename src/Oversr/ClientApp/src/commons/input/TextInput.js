@@ -7,7 +7,7 @@ export default function TextInput(props) {
                 <label className="input-group-text" 
                     style={{ display: 'block', textAlign: 'right', width: props.labelWidth ? props.labelWidth : '100px' }}>{props.label}</label>
             </div>
-            <input className="form-control" type="text" onChange={props.onChange} 
+            <input className="form-control" type="text" onChange={props.onChange} id={props.fieldId}
                 value={props.value ? props.value : undefined} readOnly={props.readOnly}/>
         </div>
     );

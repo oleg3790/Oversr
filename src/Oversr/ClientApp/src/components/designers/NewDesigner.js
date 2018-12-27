@@ -28,7 +28,7 @@ export default class NewDesigner extends Component {
         this.clearNotification();
         try {
             if (this.state.name) {
-                const result = await InventoryService.SaveNewDesigner(this.state.name);
+                const result = await InventoryService.SaveNewDesigner(this.state.name.trim());
                 
                 if (!result) {
                     this.props.toggleVisibility(true);

@@ -11,14 +11,14 @@ export default function InteractiveDataTable(props) {
                 <tbody>
                     {props.isBusy && (                            
                         <tr>
-                            <td colSpan="5" className="text-center pt-4">
+                            <td colSpan="99" className="text-center pt-4">
                                 <BusyOverlay/>
                             </td>                                
                         </tr>
                     )}                
                     {props.items.length === 0 && !props.isBusy && (
                         <tr>
-                            <td colSpan="5" className="text-center pt-4">
+                            <td colSpan="99" className="text-center pt-4">
                                 No items to display
                             </td>
                         </tr>

@@ -82,10 +82,6 @@ export default class Designers extends Component {
         this.setState({ showDeletedDesigners: !this.state.showDeletedDesigners });
     }
 
-    clearNotification() {
-        this.setNotification(false, null);
-    }
-
     setNotification(isSuccess, text) {
         this.setState({ notification: { isSuccess: isSuccess, text: text }});
     }
@@ -95,7 +91,7 @@ export default class Designers extends Component {
     }
 
     handleDesignerSelection(designer) {
-        if (designer == this.state.selectedDesigner)
+        if (designer === this.state.selectedDesigner)
         {
             this.setState({ selectedDesigner: null });
         }
@@ -175,7 +171,7 @@ export default class Designers extends Component {
                             && <small className="text-danger">* All styles and inventory associated with deleted designers will automatically be deactivated</small>}
                     </div>
                 </div> 
-                <Styles className="mt-2" designer={selectedDesigner}/>                               
+                <Styles className="mt-2" designer={selectedDesigner} designers={designers}/>                               
             </div>
         );
     }

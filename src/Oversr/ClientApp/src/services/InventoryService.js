@@ -6,13 +6,14 @@ export const InventoryService = {
     EditDesigner,
     GetAllStyles,
     GetAllStylesByDesigner,
+    SaveNewStyle,
     GetAllInventoryStatuses,
     SaveNewSampleInventoryItem,
     GetSampleInventoryItems
 };
 
-async function GetAllDesigners() {
-    return await RequestHandler.Get('/api/Designers/false');
+async function GetAllDesigners(enabledOnly = false) {
+    return await RequestHandler.Get(`/api/Designers/${enabledOnly}`);
 }
 
 async function SaveNewDesigner(designer) {
@@ -23,12 +24,16 @@ async function EditDesigner(designer) {
     return await RequestHandler.Post('/api/Designers/Edit', designer);
 } 
 
-async function GetAllStyles() {
-    return await RequestHandler.Get('/api/Styles/false');
+async function GetAllStyles(enabledOnly = false) {
+    return await RequestHandler.Get(`/api/Styles/${enabledOnly}`);
 }
 
 async function GetAllStylesByDesigner(designerId) {
     return await RequestHandler.Get(`/api/Styles/Designer/${designerId}/false`);
+}
+
+async function SaveNewStyle(style) {
+    return await RequestHandler.Post('/api/Styles/Create', style);
 }
 
 async function GetAllInventoryStatuses() {
