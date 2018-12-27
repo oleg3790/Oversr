@@ -50,11 +50,47 @@ namespace Oversr.Controllers
                     Deleted = x.Deleted
                 }));
             }
-            catch
+            catch (Exception ex)
             {
                 return StatusCode(500);
             }
                 
+        }
+
+        // api/Styles/Designer/{designerId}/{getEnabledOnly}
+        [HttpGet("Designer/{designerId}/{getEnabledOnly}")]
+        public ActionResult GetByDesigner(string designerId, bool getEnabledOnly)
+        {
+            try
+            {
+                ICollection<Style> styles = _inventoryService.GetStylesByDesigner(Guid.Parse(designerId), getEnabledOnly);
+
+                if (styles == null || styles.Count == 0)
+                {
+                    return Ok(new List<StyleVM>());
+                }
+
+                return Ok(styles.Select(x => new StyleVM()
+                {
+                    Id = x.Id.ToString("N"),
+                    Designer = new DesignerVM()
+                    {
+                        Id = x.Designer.Id.ToString("N"),
+                        Created = x.Designer.Created,
+                        Name = x.Designer.Name,
+                        Deleted = x.Designer.Deleted
+                    },
+                    Created = x.Created,
+                    Name = x.Name,
+                    Number = x.Number,
+                    Discontinued = x.Discontinued,
+                    Deleted = x.Deleted
+                }));
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }
         }
 
         // api/Styles/Create
@@ -89,7 +125,7 @@ namespace Oversr.Controllers
             {
                 return StatusCode(500, "Could not parse Id");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return StatusCode(500);
             }            
@@ -125,7 +161,7 @@ namespace Oversr.Controllers
             {
                 return StatusCode(500, "Could not parse Id");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 return StatusCode(500);
             }            

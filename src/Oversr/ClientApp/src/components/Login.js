@@ -50,7 +50,7 @@ export default class Login extends Component {
 
     render() {
         return (
-            <div className="row mt-5">
+            <div className="row pt-5">
                 <form className="col-lg-5 offset-lg-4 col-md-4 offset-md-4 col-sm-6 offset-sm-3" onSubmit={this.onSubmit}>
                     <h1 id="login-head" className="mb-4 text-center">Login</h1>
                     <div className="form-group">

@@ -7,6 +7,7 @@ import { ObjectAssignmentHelpers } from '../../commons/ObjectAssignmentHelpers';
 import NewDesigner from './NewDesigner';
 import EditDesigner from './EditDesigner';
 import NotificationBanner from '../../commons/NotificationBanner';
+import Styles from '../styles/Styles';
 
 export default class Designers extends Component {
     constructor(props) {
@@ -18,10 +19,12 @@ export default class Designers extends Component {
         this.toggleAddNewDesignerVisibility = this.toggleAddNewDesignerVisibility.bind(this);
         this.toggleEditDesignerVisibility = this.toggleEditDesignerVisibility.bind(this);
         this.toggleShowDeletedDesigners = this.toggleShowDeletedDesigners.bind(this); 
+        this.handleDesignerSelection = this.handleDesignerSelection.bind(this);
         this.state = {
             isBusy: false,
             designers: [],
             designerToEdit: null,
+            selectedDesigner: null,
             showDeletedDesigners: false,
             notification: {
                 isSuccess: false,
@@ -90,6 +93,16 @@ export default class Designers extends Component {
     setDesignerToEdit(designer) {
         this.setState({ designerToEdit: designer, isEditDesignerVisible: !this.state.isEditDesignerVisible });
     }
+
+    handleDesignerSelection(designer) {
+        if (designer == this.state.selectedDesigner)
+        {
+            this.setState({ selectedDesigner: null });
+        }
+        else {
+            this.setState({ selectedDesigner: designer });
+        }        
+    }
     
     getDesignerTh() {
         return (
@@ -102,16 +115,19 @@ export default class Designers extends Component {
         );
     }
 
-    getDesignerTBody(designers, showDeletedDesigners) {
+    getDesignerTBody(designers, selectedDesigner, showDeletedDesigners) {
         return (
             <tbody>
                 {designers.map(x => {
+                    const deletedClass = x.deleted && "text-danger";
+                    const selectedClass = selectedDesigner && (x.id === selectedDesigner.id && "selected-row");
+
                     if (!showDeletedDesigners && x.deleted) {
                         return null;
                     } 
                     else {
                         return (
-                            <tr key={x.id} className={x.deleted ? "text-danger" : undefined}>
+                            <tr key={x.id} className={`${deletedClass} ${selectedClass}`} onClick={() => this.handleDesignerSelection(x)}>
                                 <td>{x.name}</td>
                                 <td>{ObjectAssignmentHelpers.ToLongDate(x.created)}</td>                                                               
                                 <td>
@@ -127,12 +143,12 @@ export default class Designers extends Component {
     }
 
     render() {
-        const {designers, showDeletedDesigners, designerToEdit, isAddDesignerVisible, isEditDesignerVisible, notification, isBusy} = this.state;
+        const {designers, showDeletedDesigners, designerToEdit, selectedDesigner, isAddDesignerVisible, isEditDesignerVisible, notification, isBusy} = this.state;
 
         return (
             <div className="pt-4">
                 <div className="card">
-                    <h5 className="card-header bg-dark-1 text-light p-2 pl-3">Designers</h5>
+                    <h5 className="card-header bg-light-2 text-dark p-2 pl-3">Designers</h5>
                     <div className="card-body">
                         {isAddDesignerVisible && <NewDesigner toggleVisibility={(isSaveSuccess) => this.toggleAddNewDesignerVisibility(isSaveSuccess)}/>}
                         {isEditDesignerVisible 
@@ -148,17 +164,18 @@ export default class Designers extends Component {
                                 <span className="ml-1">Include deleted designers</span>
                             </div>                                                        
                         </div>
-                        <InteractiveDataTable className="mt-2" isBusy={isBusy} 
-                            items={designers} th={this.getDesignerTh()} body={this.getDesignerTBody(designers, showDeletedDesigners)}/>
-                        {showDeletedDesigners 
-                            && <small className="text-danger">* All styles and inventory associated with deleted designers will automatically be deactivated</small>}
+                        <InteractiveDataTable className="mt-2 table-hover" isBusy={isBusy} 
+                            items={designers} th={this.getDesignerTh()} body={this.getDesignerTBody(designers, selectedDesigner, showDeletedDesigners)}/>
                         <div className="row no-gutters justify-content-end">
                             <small className="text-muted">
                                 {(showDeletedDesigners ? designers.length : designers.filter(x => x.deleted === false).length) + " items"}
                             </small>
                         </div>
+                        {showDeletedDesigners 
+                            && <small className="text-danger">* All styles and inventory associated with deleted designers will automatically be deactivated</small>}
                     </div>
-                </div>                                
+                </div> 
+                <Styles className="mt-2" designer={selectedDesigner}/>                               
             </div>
         );
     }

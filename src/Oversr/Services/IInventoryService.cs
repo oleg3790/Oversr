@@ -15,6 +15,7 @@ namespace Oversr.Services
 
         // Styles
         ICollection<Style> GetStyles(bool enabledOnly);
+        ICollection<Style> GetStylesByDesigner(Guid designerId, bool enabledOnly);
         Style GetStyleById(Guid id);
         void AddStyle(Designer designer, string number, string name = null);
         void EditStyle(Style style);

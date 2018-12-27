@@ -3,7 +3,7 @@ import BusyOverlay from './BusyOverlay';
 
 export default function InteractiveDataTable(props) {
     return (
-        <table className={"table table-sm table-hover " + props.className}>
+        <table className={"table table-sm " + props.className}>
             <thead className="bg-light-1">
                 {props.th}
             </thead>            
