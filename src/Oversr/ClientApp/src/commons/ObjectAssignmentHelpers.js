@@ -5,7 +5,7 @@
 
 function ChangeSelectionById(obj, id) {
     const newObj = unsetSelection(obj);
-    newObj.find(x => x.id == id).selected = true;
+    newObj.find(x => x.id === id).selected = true;
     return newObj;
 }
 

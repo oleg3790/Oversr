@@ -42,7 +42,7 @@ export default class Designers extends Component {
             var designerResult = await InventoryService.GetAllDesigners();
 
             if (Array.isArray(designerResult)) {
-                let sorted = designerResult.sort((a, b) => { return a.name.toLowerCase() == b.name.toLowerCase() ? 0 : a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;});            
+                let sorted = designerResult.sort((a, b) => { return a.name.toLowerCase() === b.name.toLowerCase() ? 0 : a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;});            
                 this.setState({ designers: sorted });
             }
             else {
@@ -90,35 +90,6 @@ export default class Designers extends Component {
     setDesignerToEdit(designer) {
         this.setState({ designerToEdit: designer, isEditDesignerVisible: !this.state.isEditDesignerVisible });
     }
-
-    render() {
-        return (
-            <div className="pt-4">
-                <div className="card">
-                    <h5 className="card-header bg-dark-1 text-light p-2 pl-3">Designers</h5>
-                    <div className="card-body">
-                        {this.state.isAddDesignerVisible && <NewDesigner toggleVisibility={(isSaveSuccess) => this.toggleAddNewDesignerVisibility(isSaveSuccess)}/>}
-                        {this.state.isEditDesignerVisible 
-                            && <EditDesigner toggleVisibility={(isSaveSuccess) => this.toggleEditDesignerVisibility(isSaveSuccess)}
-                                    designer={this.state.designerToEdit}
-                            />}
-                        <NotificationBanner notification={this.state.notification}/>
-                        <div className="d-inline"> 
-                            <FontAwesomeIcon icon={faPlusSquare} className="icon-btn" 
-                                size="2x" title="Add new designer" onClick={this.toggleAddNewDesignerVisibility}/>   
-                            <div className="float-right d-inline mt-2">
-                                <input type="checkbox" className="ml-2" onClick={this.toggleShowDeletedDesigners}/>
-                                <span className="ml-1">Include deleted designers</span>
-                            </div>                                                        
-                        </div>
-                        <InteractiveDataTable className="mt-2" isBusy={this.state.isBusy} 
-                            items={this.state.designers} th={this.getDesignerTh()} body={this.getDesignerTBody(this.state.designers, this.state.showDeletedDesigners)}/>
-                        {this.state.showDeletedDesigners && <small className="text-danger">* All styles and inventory associated with deleted designers will automatically be deactivated</small>}
-                    </div>
-                </div>                                
-            </div>
-        );
-    }
     
     getDesignerTh() {
         return (
@@ -152,6 +123,43 @@ export default class Designers extends Component {
                     }                    
                 })}
             </tbody>
+        );
+    }
+
+    render() {
+        const {designers, showDeletedDesigners, designerToEdit, isAddDesignerVisible, isEditDesignerVisible, notification, isBusy} = this.state;
+
+        return (
+            <div className="pt-4">
+                <div className="card">
+                    <h5 className="card-header bg-dark-1 text-light p-2 pl-3">Designers</h5>
+                    <div className="card-body">
+                        {isAddDesignerVisible && <NewDesigner toggleVisibility={(isSaveSuccess) => this.toggleAddNewDesignerVisibility(isSaveSuccess)}/>}
+                        {isEditDesignerVisible 
+                            && <EditDesigner toggleVisibility={(isSaveSuccess) => this.toggleEditDesignerVisibility(isSaveSuccess)}
+                                    designer={designerToEdit}
+                            />}
+                        <NotificationBanner notification={notification}/>
+                        <div className="d-inline"> 
+                            <FontAwesomeIcon icon={faPlusSquare} className="icon-btn" 
+                                size="2x" title="Add new designer" onClick={this.toggleAddNewDesignerVisibility}/>   
+                            <div className="float-right d-inline mt-2">
+                                <input type="checkbox" className="ml-2" onClick={this.toggleShowDeletedDesigners}/>
+                                <span className="ml-1">Include deleted designers</span>
+                            </div>                                                        
+                        </div>
+                        <InteractiveDataTable className="mt-2" isBusy={isBusy} 
+                            items={designers} th={this.getDesignerTh()} body={this.getDesignerTBody(designers, showDeletedDesigners)}/>
+                        {showDeletedDesigners 
+                            && <small className="text-danger">* All styles and inventory associated with deleted designers will automatically be deactivated</small>}
+                        <div className="row no-gutters justify-content-end">
+                            <small className="text-muted">
+                                {(showDeletedDesigners ? designers.length : designers.filter(x => x.deleted === false).length) + " items"}
+                            </small>
+                        </div>
+                    </div>
+                </div>                                
+            </div>
         );
     }
 }

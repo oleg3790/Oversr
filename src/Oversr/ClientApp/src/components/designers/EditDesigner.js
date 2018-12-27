@@ -2,6 +2,7 @@
 import ModalContainer from '../../commons/ModalContainer';
 import { InventoryService } from '../../services/InventoryService';
 import { ObjectAssignmentHelpers } from '../../commons/ObjectAssignmentHelpers';
+import TextInput from '../../commons/input/TextInput';
 
 export default class EditDesigner extends Component {
     constructor(props) {
@@ -55,35 +56,6 @@ export default class EditDesigner extends Component {
         this.setState({ notification: { isSuccess: isSuccess, text: text }});
     }
 
-    render() {
-        return (
-            <ModalContainer title="Edit Designer" toggleVisibility={this.props.toggleVisibility} 
-                notification={this.state.notification} footer={this.getModalFooter()}>
-                <div className="row">
-                    <div className="col-12">
-                        <div className="input-group">
-                            <div className="input-group-prepend">
-                                <label className="input-group-text input-lbl">Name</label>
-                            </div>
-                            <input className="form-control" type="text" value={this.state.designer.name} onChange={this.handleInputChange}/>
-                        </div> 
-                    </div>
-                </div>
-                <div className="row mt-2">
-                    <div className="col-12">
-                        <div className="input-group">
-                            <div className="input-group-prepend">
-                                <label className="input-group-text input-lbl">Created</label>
-                            </div>
-                            <input className="form-control" type="text" value={ObjectAssignmentHelpers.ToLongDate(this.state.designer.created)} readOnly/>
-                        </div> 
-                    </div>
-                </div>
-                {this.state.designer.deleted && <small className="mt-2 text-danger">This designer is currently in a deleted state</small>}
-            </ModalContainer>
-        );
-    }
-
     getModalFooter() {
         return (
             <div className="modal-footer justify-content-start row no-gutters">
@@ -100,6 +72,25 @@ export default class EditDesigner extends Component {
                 </div> 
                 <small className="col-12 text-danger mt-2">* Deleting a designer will deactive all styles and inventory associated with it</small>                               
             </div>
+        );
+    }
+
+    render() {
+        return (
+            <ModalContainer title="Edit Designer" toggleVisibility={this.props.toggleVisibility} 
+                notification={this.state.notification} footer={this.getModalFooter()}>
+                <div className="row">
+                    <div className="col-12">
+                        <TextInput label="Name" onChange={this.handleInputChange} value={this.state.designer.name}/>
+                    </div>
+                </div>
+                <div className="row mt-2">
+                    <div className="col-12">
+                        <TextInput label="Created" value={ObjectAssignmentHelpers.ToLongDate(this.state.designer.created)} readOnly/>
+                    </div>
+                </div>
+                {this.state.designer.deleted && <small className="mt-2 text-danger">This designer is currently in a deleted state</small>}
+            </ModalContainer>
         );
     }
 }

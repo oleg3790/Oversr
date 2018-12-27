@@ -62,7 +62,7 @@ input[type='checkbox'] {
 }
 
     .icon-btn:hover {
-        color: #2f692f;
+        filter: brightness(85%);
     }
 
 .combo-input {

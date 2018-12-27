@@ -1,6 +1,7 @@
 ﻿import React, { Component } from 'react';
 import { InventoryService } from '../../services/InventoryService';
 import ModalContainer from '../../commons/ModalContainer';
+import TextInput from '../../commons/input/TextInput';
 
 export default class NewDesigner extends Component {
     constructor(props) {
@@ -53,24 +54,6 @@ export default class NewDesigner extends Component {
         this.setState({ notification: { isSuccess: isSuccess, text: text }});
     }
 
-    render() {
-        return (
-            <ModalContainer title="Add Designer" toggleVisibility={this.props.toggleVisibility} 
-                notification={this.state.notification} footer={this.getModalFooter()}>
-                <div className="row">
-                    <div className="col-12">
-                        <div className="input-group">
-                            <div className="input-group-prepend">
-                                <label className="input-group-text input-lbl">Name</label>
-                            </div>
-                            <input className="form-control" type="text" onChange={this.handleNameChange}></input>
-                        </div> 
-                    </div>
-                </div>
-            </ModalContainer>
-        );
-    }
-
     getModalFooter() {
         return (
             <div className="modal-footer row no-gutters">
@@ -81,6 +64,19 @@ export default class NewDesigner extends Component {
                     <button className="btn btn-block btn-primary" onClick={this.handleSave}>Save</button>
                 </div>
             </div>
+        );
+    }
+
+    render() {
+        return (
+            <ModalContainer title="Add Designer" toggleVisibility={this.props.toggleVisibility}
+                notification={this.state.notification} footer={this.getModalFooter()}>
+                <div className="row">
+                    <div className="col-12">
+                        <TextInput label="Name" onChange={this.handleNameChange}/>
+                    </div>
+                </div>
+            </ModalContainer>
         );
     }
 }
