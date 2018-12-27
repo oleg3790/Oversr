@@ -56,6 +56,13 @@ namespace Oversr.Services
             ;
         }
 
+        public ICollection<Style> GetStylesByDesigner(Guid designerId, bool enabledOnly)
+        {
+            return enabledOnly
+                ? this.QueryAllStylesByDesigner(designerId).Where(x => x.Deleted.Equals(false) && x.Designer.Deleted.Equals(false)).ToList()
+                : this.QueryAllStylesByDesigner(designerId).ToList();
+        }
+
         public Style GetStyleById(Guid id)
         {
             return this.QueryAllStyles()
@@ -78,6 +85,11 @@ namespace Oversr.Services
             dbItem.Discontinued = style.Discontinued;
             dbItem.Deleted = style.Deleted;
             _dbContext.SaveChanges();
+        }
+
+        private IQueryable<Style> QueryAllStylesByDesigner(Guid designerId)
+        {
+            return this.QueryAllStyles().Where(x => x.Designer.Id == designerId);
         }
 
         private IQueryable<Style> QueryAllStyles()

@@ -3,6 +3,10 @@
     background-color: #f9f8f8 !important;
 }
 
+.bg-light-2 {
+    background-color: #dbdfe7 !important;
+}
+
 .bg-dark-1, .btn-dark-1 {
     background-color: #517496 !important;
 }
@@ -16,6 +20,10 @@
         background-color: #486581 !important;
         border-color: #486581 !important;
     }
+
+.text-warning-1 {
+    color: #ce9e0d !important;
+}
 
 /*** bootstrap overrides ***/
 .modal {
@@ -37,6 +45,14 @@
 .show {
     opacity: 1;
     display: block !important;
+}
+
+.card-header {
+    border-bottom: unset !important;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #d7deec !important;
 }
 
 input[type='checkbox'] {
@@ -75,6 +91,10 @@ input[type='checkbox'] {
     .search-input:focus {
         outline: none !important;
     }
+
+.selected-row, .selected-row:hover {
+    background-color: #d7deec !important;
+}
 
 /*** specific ***/
 #main {

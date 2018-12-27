@@ -37,7 +37,7 @@ namespace Oversr.Controllers
 
                 return Ok(designers.Select(x => new DesignerVM() { Id = x.Id.ToString("N"), Created = x.Created, Name = x.Name, Deleted = x.Deleted }));
             }
-            catch
+            catch (Exception ex)
             {
                 return StatusCode(500);
             }
@@ -52,15 +52,22 @@ namespace Oversr.Controllers
                 return Ok(ModelState.GetAllErrors());
             }
 
-            var designers = _inventoryService.GetDesigners(false);
-
-            if (designers.Any(x => x.Name.ToLower() == vm.Name.ToLower()))
+            try
             {
-                return Ok("A designer with this name already exists");
-            }
+                var designers = _inventoryService.GetDesigners(false);
 
-            _inventoryService.AddDesigner(vm.Name);
-            return Ok();
+                if (designers.Any(x => x.Name.ToLower() == vm.Name.ToLower()))
+                {
+                    return Ok("A designer with this name already exists");
+                }
+
+                _inventoryService.AddDesigner(vm.Name);
+                return Ok();
+            } 
+            catch (Exception ex)
+            {
+                return StatusCode(500);
+            }            
         }
 
         // api/Designer/Edit
@@ -97,9 +104,9 @@ namespace Oversr.Controllers
             {
                 return StatusCode(500, "Designer ID is in an incorrect format");
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                return StatusCode(500, e.Message);
+                return StatusCode(500);
             }
         }
     }

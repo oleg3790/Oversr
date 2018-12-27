@@ -29,7 +29,7 @@ namespace Oversr.Controllers
             {
                 return Ok(_inventoryService.GetAllStatuses());
             }
-            catch
+            catch (Exception ex)
             {
                 return StatusCode(500, "Could not return statuses");
             }
@@ -80,7 +80,7 @@ namespace Oversr.Controllers
                     }
                 ));
             }
-            catch
+            catch (Exception ex)
             {
                 return StatusCode(500);
             }
@@ -134,7 +134,7 @@ namespace Oversr.Controllers
                     }
                 ));
             }
-            catch
+            catch (Exception ex)
             {
                 return StatusCode(500);
             }
@@ -180,7 +180,7 @@ namespace Oversr.Controllers
             {
                 return StatusCode(500, "Could not parse Id");
             }
-            catch
+            catch (Exception ex)
             {
                 return StatusCode(500);
             }
@@ -219,7 +219,7 @@ namespace Oversr.Controllers
             {
                 return StatusCode(500, "Could not parse Id");
             }
-            catch
+            catch (Exception ex)
             {
                 return StatusCode(500, "Error encountered while trying to delete sample inventory item");
             }
