@@ -14,7 +14,7 @@ export default class ComboInput extends Component {
             isInputActive: false,
             newValueText: null,
             error: null
-        }
+        };
     }
 
     handleSelectionChange(e) {

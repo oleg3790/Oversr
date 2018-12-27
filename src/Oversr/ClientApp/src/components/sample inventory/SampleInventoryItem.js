@@ -1,5 +1,5 @@
 ﻿import React, { Component } from 'react';
-import ComboInput from '../../commons/ComboInput';
+import ComboInput from '../../commons/input/ComboInput';
 import { InventoryService } from '../../services/InventoryService';
 import NotificationBanner from '../../commons/NotificationBanner';
 import BusyOverlay from '../../commons/BusyOverlay';

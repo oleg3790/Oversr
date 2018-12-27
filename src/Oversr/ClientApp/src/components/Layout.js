@@ -8,7 +8,7 @@ export default function Layout(props) {
         <div>    
             <nav className="navbar fixed-top navbar-expand nav-bg">
                 <span className="text-danger pr-5">
-                    <img src={logo} width="150"/>
+                    <img src={logo} width="150" alt="Logo"/>
                 </span>
                 {UserService.IsAuthenticated() && <Link className="nav-link btn btn-dark-1 mr-3" to="/inventory">Inventory</Link>}
                 {UserService.IsAuthenticated() && <Link className="nav-link btn btn-dark-1" to="/designers">Designers</Link>}                
