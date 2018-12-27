@@ -81,10 +81,6 @@ input[type='checkbox'] {
         filter: brightness(85%);
     }
 
-.combo-input {
-    color: rgb(146, 146, 146);
-}
-
 .search-input {
     border-color: transparent;
 }
