@@ -17,7 +17,7 @@ namespace Oversr.Services
         ICollection<Style> GetStyles(bool enabledOnly);
         ICollection<Style> GetStylesByDesigner(Guid designerId, bool enabledOnly);
         Style GetStyleById(Guid id);
-        void AddStyle(Designer designer, string number, string name = null);
+        void AddStyle(Designer designer, int msrpPrice, int wholesalePrice, string number, string name = null);
         void EditStyle(Style style);
 
         // Status
@@ -26,7 +26,7 @@ namespace Oversr.Services
         // Inventory Items
         ICollection<SampleInventoryItem> GetSampleInventoryItems(bool enabledOnly);
         ICollection<SampleInventoryItem> GetSampleInventoryItemsByStatus(SampleInventoryStatus status, bool enabledOnly);
-        void AddSampleInventoryItem(Style style, SampleInventoryStatus inventoryStatus, string size, string color, int wholesalePrice, int msrpPrice, DateTime dateOrdered, DateTime? dateRecieved);
+        void AddSampleInventoryItem(Style style, SampleInventoryStatus inventoryStatus, string size, string color, DateTime dateOrdered, DateTime? dateRecieved);
         void EditSampleInventoryItem(SampleInventoryItem sampleInventoryItem);
     }
 }

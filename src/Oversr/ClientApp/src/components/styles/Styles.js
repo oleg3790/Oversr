@@ -83,6 +83,8 @@ export default class Styles extends Component {
                 <th scope="col" width="200">Designer</th>  
                 <th scope="col" width="200">Number</th>
                 <th scope="col" width="200">Name</th>
+                <th scope="col" width="200">MSRP</th>
+                <th scope="col" width="200">Wholesale Price</th>
                 <th scope="col" width="300">Created</th>                                              
                 <th scope="col" width="100"></th>
                 <th scope="col" width="170"></th> 
@@ -98,6 +100,8 @@ export default class Styles extends Component {
                         <td>{x.designer.name}</td>
                         <td>{x.number}</td>
                         <td>{x.name}</td>
+                        <td>{x.msrpPrice}</td>
+                        <td>{x.wholesalePrice}</td>
                         <td>{ObjectAssignmentHelpers.ToLongDate(x.created)}</td>                                                
                         <td>
                             <FontAwesomeIcon icon={faEdit} className="icon-btn text-info"/>

@@ -64,6 +64,8 @@ namespace Oversr.Migrations
                     LastModified = table.Column<DateTime>(nullable: false, defaultValueSql: "getdate()"),
                     Number = table.Column<string>(maxLength: 100, nullable: false),
                     Name = table.Column<string>(maxLength: 100, nullable: true),
+                    WholesalePrice = table.Column<int>(nullable: false),
+                    MsrpPrice = table.Column<int>(nullable: false),
                     Discontinued = table.Column<bool>(nullable: false, defaultValueSql: "0")
                 },
                 constraints: table =>
@@ -89,8 +91,6 @@ namespace Oversr.Migrations
                     InventoryStatusId = table.Column<int>(nullable: false),
                     Size = table.Column<string>(nullable: false),
                     Color = table.Column<string>(nullable: false),
-                    WholesalePrice = table.Column<int>(nullable: false),
-                    MsrpPrice = table.Column<int>(nullable: false),
                     DateOrdered = table.Column<DateTime>(nullable: false),
                     DateRecieved = table.Column<DateTime>(nullable: true)
                 },

@@ -10,7 +10,7 @@ using Oversr.Data;
 namespace Oversr.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20181221023758_Initial")]
+    [Migration("20181228001517_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -73,14 +73,10 @@ namespace Oversr.Migrations
                         .ValueGeneratedOnAdd()
                         .HasDefaultValueSql("getdate()");
 
-                    b.Property<int>("MsrpPrice");
-
                     b.Property<string>("Size")
                         .IsRequired();
 
                     b.Property<Guid>("StyleId");
-
-                    b.Property<int>("WholesalePrice");
 
                     b.HasKey("Id");
 
@@ -135,12 +131,16 @@ namespace Oversr.Migrations
                         .ValueGeneratedOnAdd()
                         .HasDefaultValueSql("getdate()");
 
+                    b.Property<int>("MsrpPrice");
+
                     b.Property<string>("Name")
                         .HasMaxLength(100);
 
                     b.Property<string>("Number")
                         .IsRequired()
                         .HasMaxLength(100);
+
+                    b.Property<int>("WholesalePrice");
 
                     b.HasKey("Id");
 

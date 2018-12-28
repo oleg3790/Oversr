@@ -55,8 +55,6 @@ namespace Oversr.Controllers
                         Created = x.Created,
                         Size = x.Size,
                         Color = x.Color,
-                        WholesalePrice = x.WholesalePrice,
-                        MsrpPrice = x.MsrpPrice,
                         DateOrdered = x.DateOrdered,
                         DateRecieved = x.DateRecieved,
                         InventoryStatus = Enum.Parse<SampleInventoryStatus>(x.InventoryStatus.Name),
@@ -109,8 +107,6 @@ namespace Oversr.Controllers
                         Created = x.Created,
                         Size = x.Size,
                         Color = x.Color,
-                        WholesalePrice = x.WholesalePrice,
-                        MsrpPrice = x.MsrpPrice,
                         DateOrdered = x.DateOrdered,
                         DateRecieved = x.DateRecieved,
                         InventoryStatus = Enum.Parse<SampleInventoryStatus>(x.InventoryStatus.Name),
@@ -169,8 +165,6 @@ namespace Oversr.Controllers
                     vm.InventoryStatus,
                     vm.Size,
                     vm.Color,
-                    vm.WholesalePrice,
-                    vm.MsrpPrice,
                     vm.DateOrdered,
                     vm.DateRecieved);
 
@@ -205,8 +199,6 @@ namespace Oversr.Controllers
                     InventoryStatusId = (int)vm.InventoryStatus,
                     Size = vm.Size,
                     Color = vm.Color,
-                    WholesalePrice = vm.WholesalePrice,
-                    MsrpPrice = vm.MsrpPrice,
                     DateOrdered = vm.DateOrdered,
                     DateRecieved = vm.DateRecieved,
                     Style = _inventoryService.GetStyleById(Guid.Parse(vm.Style.Id))
@@ -221,7 +213,7 @@ namespace Oversr.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Error encountered while trying to delete sample inventory item");
+                return StatusCode(500);
             }
         }
     }

@@ -22,7 +22,9 @@ export default class NewStyle extends Component {
             data: {
                 designer: null,
                 number: '',
-                name: ''
+                name: '',
+                msrpPrice: '',
+                wholesalePrice: ''
             }            
         }
     }
@@ -116,17 +118,27 @@ export default class NewStyle extends Component {
                 notification={this.state.notification} footer={this.getModalFooter()}>
                 <div className="row no-gutters">
                     <div className="col-12">
-                        <ComboInput label="Designer" fieldId="designer" selectionItems={this.state.designers} onSelectionChange={this.handleInputChange}/>
+                        <ComboInput label="Designer" fieldId="designer" labelWidth="160px" selectionItems={this.state.designers} onSelectionChange={this.handleInputChange}/>
                     </div>
                 </div>
                 <div className="row no-gutters mt-2">
                     <div className="col-12">
-                        <TextInput label="Number" fieldId="number" onChange={this.handleInputChange}/>
+                        <TextInput label="Number" fieldId="number" labelWidth="160px" onChange={this.handleInputChange}/>
                     </div>
                 </div>
                 <div className="row no-gutters mt-2">
                     <div className="col-12">
-                        <TextInput label="Name" fieldId="name" onChange={this.handleInputChange}/>
+                        <TextInput label="Name" fieldId="name" labelWidth="160px" onChange={this.handleInputChange}/>
+                    </div>
+                </div>
+                <div className="row no-gutters mt-2">
+                    <div className="col-12">
+                         <TextInput label="MSRP" fieldId="msrpPrice" labelWidth="160px" onChange={this.handleInputChange}/>
+                    </div>                    
+                </div>
+                <div className="row no-gutters mt-2">
+                    <div className="col-12">
+                         <TextInput label="Wholesale Price" fieldId="wholesalePrice" labelWidth="160px" onChange={this.handleInputChange}/>
                     </div>
                 </div>
             </ModalContainer>
