@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Oversr.Model.Entities;
@@ -14,10 +15,12 @@ namespace Oversr.Controllers
     public class StylesController : Controller
     {
         private readonly IInventoryService _inventoryService;
+        private readonly IMapper _mapper;
 
-        public StylesController(IInventoryService inventoryService)
+        public StylesController(IInventoryService inventoryService, IMapper mapper)
         {
             _inventoryService = inventoryService;
+            _mapper = mapper;
         }
 
         // api/Styles/
@@ -33,28 +36,11 @@ namespace Oversr.Controllers
                     return Ok(new List<StyleVM>());
                 }
 
-                return Ok(styles.Select(x => new StyleVM()
-                {
-                    Id = x.Id.ToString("N"),
-                    Designer = new DesignerVM()
-                    {
-                        Id = x.Designer.Id.ToString("N"),
-                        Created = x.Designer.Created,
-                        Name = x.Designer.Name,
-                        Deleted = x.Designer.Deleted
-                    },
-                    Created = x.Created,
-                    Name = x.Name,
-                    Number = x.Number,
-                    MsrpPrice = x.MsrpPrice,
-                    WholesalePrice = x.WholesalePrice,
-                    Discontinued = x.Discontinued,
-                    Deleted = x.Deleted
-                }));
+                return Ok(styles.Select(x => _mapper.Map<StyleVM>(x)));
             }
             catch (Exception ex)
             {
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }
                 
         }
@@ -72,28 +58,11 @@ namespace Oversr.Controllers
                     return Ok(new List<StyleVM>());
                 }
 
-                return Ok(styles.Select(x => new StyleVM()
-                {
-                    Id = x.Id.ToString("N"),
-                    Designer = new DesignerVM()
-                    {
-                        Id = x.Designer.Id.ToString("N"),
-                        Created = x.Designer.Created,
-                        Name = x.Designer.Name,
-                        Deleted = x.Designer.Deleted
-                    },
-                    Created = x.Created,
-                    Name = x.Name,
-                    Number = x.Number,
-                    MsrpPrice = x.MsrpPrice,
-                    WholesalePrice = x.WholesalePrice,
-                    Discontinued = x.Discontinued,
-                    Deleted = x.Deleted
-                }));
+                return Ok(styles.Select(x => _mapper.Map<StyleVM>(x)));
             }
             catch (Exception ex)
             {
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -131,7 +100,7 @@ namespace Oversr.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }            
         }
 
@@ -141,26 +110,21 @@ namespace Oversr.Controllers
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(vm.Id))
+                var allStyles = _inventoryService.GetStyles(false);
+
+                if (!allStyles.Any(x => x.Id == Guid.Parse(vm.Id)))
                 {
-                    return BadRequest("Style ID is required");
+                    return Ok("A style with this Id is not found");
                 }
 
-                var style = new Style()
+                if (allStyles.Where(x => x.Id != Guid.Parse(vm.Id)).Any(x => x.Number == vm.Number))
                 {
-                    Id = Guid.Parse(vm.Id),
-                    Created = vm.Created,
-                    LastModified = DateTime.Now,
-                    Number = vm.Number,
-                    Name = vm.Name,
-                    MsrpPrice = vm.MsrpPrice,
-                    WholesalePrice = vm.WholesalePrice,
-                    Deleted = vm.Deleted,
-                    Discontinued = vm.Discontinued,
-                    Designer = _inventoryService.GetDesigner(Guid.Parse(vm.Designer.Id)),
-                };                
+                    return Ok("A style with this number already exists");
+                }
 
+                var style = _mapper.Map<Style>(vm);                
                 _inventoryService.EditStyle(style);
+
                 return Ok();
             }
             catch (FormatException)
@@ -169,7 +133,7 @@ namespace Oversr.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }            
         }
     }

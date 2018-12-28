@@ -8,7 +8,6 @@ namespace Oversr.Services
     {
         // Designers
         ICollection<Designer> GetDesigners(bool enabledOnly);
-        ICollection<Designer> GetDesignersExceptThis(Guid id);
         Designer GetDesigner(Guid id);
         void AddDesigner(string name);
         void EditDesigner(Designer designer);       

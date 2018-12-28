@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Oversr.Model.Entities;
@@ -15,10 +16,12 @@ namespace Oversr.Controllers
     public class SampleInventoryController : Controller
     {
         private readonly IInventoryService _inventoryService;
+        private readonly IMapper _mapper;
 
-        public SampleInventoryController(IInventoryService inventoryService)
+        public SampleInventoryController(IInventoryService inventoryService, IMapper mapper)
         {
             _inventoryService = inventoryService;
+            _mapper = mapper;
         }
 
         // api/SampleInventory/Statuses
@@ -31,7 +34,7 @@ namespace Oversr.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, "Could not return statuses");
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -48,39 +51,11 @@ namespace Oversr.Controllers
                     return Ok(new List<SampleInventoryItemVM>());
                 }
 
-                return Ok(items.Select(x =>                
-                    new SampleInventoryItemVM()
-                    {
-                        Id = x.Id.ToString("N"),
-                        Created = x.Created,
-                        Size = x.Size,
-                        Color = x.Color,
-                        DateOrdered = x.DateOrdered,
-                        DateRecieved = x.DateRecieved,
-                        InventoryStatus = Enum.Parse<SampleInventoryStatus>(x.InventoryStatus.Name),
-                        Deleted = x.Deleted,                        
-                        Style = new StyleVM()
-                        {
-                            Id = x.Style.Id.ToString("N"),
-                            Designer = new DesignerVM()
-                            {
-                                Id = x.Style.Designer.Id.ToString("N"),
-                                Created = x.Style.Designer.Created,
-                                Name = x.Style.Designer.Name,
-                                Deleted = x.Style.Designer.Deleted
-                            },
-                            Created = x.Style.Created,
-                            Name = x.Style.Name,
-                            Number = x.Style.Number,
-                            Discontinued = x.Style.Discontinued,
-                            Deleted = x.Style.Deleted
-                        }
-                    }
-                ));
+                return Ok(items.Select(x => _mapper.Map<SampleInventoryItemVM>(x)));
             }
             catch (Exception ex)
             {
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -99,40 +74,11 @@ namespace Oversr.Controllers
                 }
 
                 ICollection<SampleInventoryItem> items = _inventoryService.GetSampleInventoryItemsByStatus(status, enabledOnly);
-
-                return Ok(items.Select(x =>
-                    new SampleInventoryItemVM()
-                    {
-                        Id = x.Id.ToString("N"),
-                        Created = x.Created,
-                        Size = x.Size,
-                        Color = x.Color,
-                        DateOrdered = x.DateOrdered,
-                        DateRecieved = x.DateRecieved,
-                        InventoryStatus = Enum.Parse<SampleInventoryStatus>(x.InventoryStatus.Name),
-                        Deleted = x.Deleted,
-                        Style = new StyleVM()
-                        {
-                            Id = x.Style.Id.ToString("N"),
-                            Designer = new DesignerVM()
-                            {
-                                Id = x.Style.Designer.Id.ToString("N"),
-                                Created = x.Style.Designer.Created,
-                                Name = x.Style.Designer.Name,
-                                Deleted = x.Style.Designer.Deleted
-                            },
-                            Created = x.Style.Created,
-                            Name = x.Style.Name,
-                            Number = x.Style.Number,
-                            Discontinued = x.Style.Discontinued,
-                            Deleted = x.Style.Deleted
-                        }
-                    }
-                ));
+                return Ok(items.Select(x => _mapper.Map<SampleInventoryItemVM>(x)));
             }
             catch (Exception ex)
             {
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }
 
         }
@@ -176,7 +122,7 @@ namespace Oversr.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -190,21 +136,9 @@ namespace Oversr.Controllers
 
             try
             {
-                var sampleInventoryItem = new SampleInventoryItem()
-                {
-                    Id = Guid.Parse(vm.Id),
-                    Created = vm.Created,
-                    LastModified = DateTime.Now,
-                    Deleted = vm.Deleted,
-                    InventoryStatusId = (int)vm.InventoryStatus,
-                    Size = vm.Size,
-                    Color = vm.Color,
-                    DateOrdered = vm.DateOrdered,
-                    DateRecieved = vm.DateRecieved,
-                    Style = _inventoryService.GetStyleById(Guid.Parse(vm.Style.Id))
-                };
-
+                var sampleInventoryItem = _mapper.Map<SampleInventoryItem>(vm);
                 _inventoryService.EditSampleInventoryItem(sampleInventoryItem);
+
                 return Ok();
             }
             catch (FormatException)
@@ -213,7 +147,7 @@ namespace Oversr.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }
         }
     }
