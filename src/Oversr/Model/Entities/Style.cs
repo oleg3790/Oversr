@@ -20,6 +20,12 @@ namespace Oversr.Model.Entities
         public string Name { get; set; }
 
         [Required]
+        public int WholesalePrice { get; set; }
+
+        [Required]
+        public int MsrpPrice { get; set; }
+
+        [Required]
         public bool Discontinued { get; set; }
     }
 }

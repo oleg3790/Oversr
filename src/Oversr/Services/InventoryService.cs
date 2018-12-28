@@ -69,9 +69,9 @@ namespace Oversr.Services
                 .FirstOrDefault(x => x.Id.Equals(id));
         }
 
-        public void AddStyle(Designer designer, string number, string name = null)
+        public void AddStyle(Designer designer, int msrpPrice, int wholesalePrice, string number, string name = null)
         {
-            base.Add<Style>(new Style() { Designer = designer, Number = number, Name = name });
+            base.Add<Style>(new Style() { Designer = designer, MsrpPrice = msrpPrice, WholesalePrice = wholesalePrice, Number = number, Name = name });
         }
 
         public void EditStyle(Style style)
@@ -81,6 +81,8 @@ namespace Oversr.Services
             dbItem.LastModified = DateTime.Now;
             dbItem.Number = style.Number;
             dbItem.Name = style.Name;
+            dbItem.MsrpPrice = style.MsrpPrice;
+            dbItem.WholesalePrice = dbItem.WholesalePrice;
             dbItem.Designer = style.Designer;
             dbItem.Discontinued = style.Discontinued;
             dbItem.Deleted = style.Deleted;
@@ -137,8 +139,6 @@ namespace Oversr.Services
             SampleInventoryStatus inventoryStatus,
             string size,
             string color,
-            int wholesalePrice,
-            int msrpPrice,
             DateTime dateOrdered,
             DateTime? dateRecieved)
         {
@@ -147,8 +147,6 @@ namespace Oversr.Services
                 Style = style,
                 Size = size,
                 Color = color,
-                WholesalePrice = wholesalePrice,
-                MsrpPrice = msrpPrice,
                 DateOrdered = dateOrdered,
                 DateRecieved = dateRecieved,
                 InventoryStatusId = (int)inventoryStatus
@@ -166,8 +164,6 @@ namespace Oversr.Services
             dbItem.Size = sampleInventoryItem.Size;
             dbItem.Color = sampleInventoryItem.Color;
             dbItem.InventoryStatusId = sampleInventoryItem.InventoryStatusId;
-            dbItem.WholesalePrice = sampleInventoryItem.WholesalePrice;
-            dbItem.MsrpPrice = sampleInventoryItem.MsrpPrice;
             dbItem.DateOrdered = sampleInventoryItem.DateOrdered;
             dbItem.DateRecieved = sampleInventoryItem.DateRecieved;
             dbItem.Deleted = sampleInventoryItem.Deleted;

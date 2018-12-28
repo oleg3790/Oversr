@@ -71,14 +71,10 @@ namespace Oversr.Migrations
                         .ValueGeneratedOnAdd()
                         .HasDefaultValueSql("getdate()");
 
-                    b.Property<int>("MsrpPrice");
-
                     b.Property<string>("Size")
                         .IsRequired();
 
                     b.Property<Guid>("StyleId");
-
-                    b.Property<int>("WholesalePrice");
 
                     b.HasKey("Id");
 
@@ -133,12 +129,16 @@ namespace Oversr.Migrations
                         .ValueGeneratedOnAdd()
                         .HasDefaultValueSql("getdate()");
 
+                    b.Property<int>("MsrpPrice");
+
                     b.Property<string>("Name")
                         .HasMaxLength(100);
 
                     b.Property<string>("Number")
                         .IsRequired()
                         .HasMaxLength(100);
+
+                    b.Property<int>("WholesalePrice");
 
                     b.HasKey("Id");
 

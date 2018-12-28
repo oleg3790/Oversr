@@ -46,6 +46,8 @@ namespace Oversr.Controllers
                     Created = x.Created,
                     Name = x.Name,
                     Number = x.Number,
+                    MsrpPrice = x.MsrpPrice,
+                    WholesalePrice = x.WholesalePrice,
                     Discontinued = x.Discontinued,
                     Deleted = x.Deleted
                 }));
@@ -83,6 +85,8 @@ namespace Oversr.Controllers
                     Created = x.Created,
                     Name = x.Name,
                     Number = x.Number,
+                    MsrpPrice = x.MsrpPrice,
+                    WholesalePrice = x.WholesalePrice,
                     Discontinued = x.Discontinued,
                     Deleted = x.Deleted
                 }));
@@ -118,7 +122,7 @@ namespace Oversr.Controllers
                 }
 
                 Designer designer = _inventoryService.GetDesigner(designerId);
-                _inventoryService.AddStyle(designer, vm.Number, vm.Name);
+                _inventoryService.AddStyle(designer, vm.MsrpPrice, vm.WholesalePrice, vm.Number, vm.Name);
                 return Ok();
             }
             catch (FormatException)
@@ -149,6 +153,8 @@ namespace Oversr.Controllers
                     LastModified = DateTime.Now,
                     Number = vm.Number,
                     Name = vm.Name,
+                    MsrpPrice = vm.MsrpPrice,
+                    WholesalePrice = vm.WholesalePrice,
                     Deleted = vm.Deleted,
                     Discontinued = vm.Discontinued,
                     Designer = _inventoryService.GetDesigner(Guid.Parse(vm.Designer.Id)),

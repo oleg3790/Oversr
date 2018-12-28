@@ -7,7 +7,13 @@ namespace Oversr.Model.ViewModel
         [Required]
         public string Number { get; set; }
 
-        public string Name { get; set; }        
+        public string Name { get; set; }
+
+        [Required]
+        public int WholesalePrice { get; set; }
+
+        [Required]
+        public int MsrpPrice { get; set; }
 
         [Required]
         public DesignerVM Designer { get; set; }
