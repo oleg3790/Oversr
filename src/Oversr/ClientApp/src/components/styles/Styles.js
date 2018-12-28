@@ -83,11 +83,11 @@ export default class Styles extends Component {
                 <th scope="col" width="200">Designer</th>  
                 <th scope="col" width="200">Number</th>
                 <th scope="col" width="200">Name</th>
-                <th scope="col" width="200">MSRP</th>
+                <th scope="col" width="150">MSRP</th>
                 <th scope="col" width="200">Wholesale Price</th>
                 <th scope="col" width="300">Created</th>                                              
                 <th scope="col" width="100"></th>
-                <th scope="col" width="170"></th> 
+                <th scope="col"></th> 
             </tr>
         );
     }
