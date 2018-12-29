@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Oversr.Model.Entities;
@@ -15,10 +16,12 @@ namespace Oversr.Controllers
     public class DesignersController : Controller
     {
         private readonly IInventoryService _inventoryService;
+        private readonly IMapper _mapper;
 
-        public DesignersController(IInventoryService inventoryService)
+        public DesignersController(IInventoryService inventoryService, IMapper mapper)
         {
             _inventoryService = inventoryService;
+            _mapper = mapper;
         }
 
         // api/Designers/{getEnabledOnly}
@@ -35,11 +38,11 @@ namespace Oversr.Controllers
                     return Ok(new List<DesignerVM>());
                 }
 
-                return Ok(designers.Select(x => new DesignerVM() { Id = x.Id.ToString("N"), Created = x.Created, Name = x.Name, Deleted = x.Deleted }));
+                return Ok(designers.Select(x => _mapper.Map<DesignerVM>(x)));
             }
             catch (Exception ex)
             {
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -66,7 +69,7 @@ namespace Oversr.Controllers
             } 
             catch (Exception ex)
             {
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }            
         }
 
@@ -81,23 +84,21 @@ namespace Oversr.Controllers
 
             try
             {
-                var existingDesigners = _inventoryService.GetDesignersExceptThis(Guid.Parse(vm.Id));
+                var designers = _inventoryService.GetDesigners(false);
 
-                if (existingDesigners.Any(x => x.Name.ToLower() == vm.Name.ToLower()))
+                if (!designers.Any(x => x.Id == Guid.Parse(vm.Id)))
+                {
+                    return Ok("A designer with this Id does not exist");
+                }
+
+                if (designers.Where(x => x.Id != Guid.Parse(vm.Id)).Any(x => x.Name.ToLower() == vm.Name.ToLower()))
                 {
                     return Ok("A designer with this name already exists");
                 }
 
-                var designer = new Designer()
-                {
-                    Id = Guid.Parse(vm.Id),
-                    Created = vm.Created,
-                    LastModified = DateTime.Now,
-                    Name = vm.Name,
-                    Deleted = vm.Deleted
-                };
-
+                var designer = _mapper.Map<Designer>(vm);
                 _inventoryService.EditDesigner(designer);
+
                 return Ok();
             }
             catch (FormatException)
@@ -106,7 +107,7 @@ namespace Oversr.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500);
+                return StatusCode(500, ex.Message);
             }
         }
     }

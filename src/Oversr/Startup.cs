@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using AutoMapper;
 using Oversr.Data;
 using Oversr.Services;
 using System.Text;
@@ -29,6 +30,7 @@ namespace Oversr
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddJsonOptions(x => x.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
 
+            services.AddAutoMapper();
             services.AddCors();
           
             // Configure JWT Authentication

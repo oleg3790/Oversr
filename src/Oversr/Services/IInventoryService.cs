@@ -8,7 +8,6 @@ namespace Oversr.Services
     {
         // Designers
         ICollection<Designer> GetDesigners(bool enabledOnly);
-        ICollection<Designer> GetDesignersExceptThis(Guid id);
         Designer GetDesigner(Guid id);
         void AddDesigner(string name);
         void EditDesigner(Designer designer);       
@@ -26,7 +25,7 @@ namespace Oversr.Services
         // Inventory Items
         ICollection<SampleInventoryItem> GetSampleInventoryItems(bool enabledOnly);
         ICollection<SampleInventoryItem> GetSampleInventoryItemsByStatus(SampleInventoryStatus status, bool enabledOnly);
-        void AddSampleInventoryItem(Style style, SampleInventoryStatus inventoryStatus, string size, string color, DateTime dateOrdered, DateTime? dateRecieved);
+        void AddSampleInventoryItem(Style style, SampleInventoryStatusLookup inventoryStatus, string size, string color, DateTime dateOrdered, DateTime? dateRecieved);
         void EditSampleInventoryItem(SampleInventoryItem sampleInventoryItem);
     }
 }

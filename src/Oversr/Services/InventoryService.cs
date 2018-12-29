@@ -21,11 +21,6 @@ namespace Oversr.Services
             return enabledOnly ? base.GetAllEnabled<Designer>() : base.GetAllEntities<Designer>();
         }
 
-        public ICollection<Designer> GetDesignersExceptThis(Guid id)
-        {
-            return base.GetAllExceptThis<Designer>(id);
-        }
-
         public Designer GetDesigner(Guid id)
         {
             return base.GetById<Designer>(id);
@@ -79,13 +74,14 @@ namespace Oversr.Services
             var dbItem = base.GetById<Style>(style.Id);
 
             dbItem.LastModified = DateTime.Now;
+            dbItem.DesignerId = style.Designer.Id;
             dbItem.Number = style.Number;
             dbItem.Name = style.Name;
             dbItem.MsrpPrice = style.MsrpPrice;
-            dbItem.WholesalePrice = dbItem.WholesalePrice;
-            dbItem.Designer = style.Designer;
+            dbItem.WholesalePrice = style.WholesalePrice;
             dbItem.Discontinued = style.Discontinued;
             dbItem.Deleted = style.Deleted;
+
             _dbContext.SaveChanges();
         }
 
@@ -136,7 +132,7 @@ namespace Oversr.Services
 
         public void AddSampleInventoryItem(
             Style style,
-            SampleInventoryStatus inventoryStatus,
+            SampleInventoryStatusLookup inventoryStatus,
             string size,
             string color,
             DateTime dateOrdered,
@@ -149,7 +145,7 @@ namespace Oversr.Services
                 Color = color,
                 DateOrdered = dateOrdered,
                 DateRecieved = dateRecieved,
-                InventoryStatusId = (int)inventoryStatus
+                InventoryStatus = inventoryStatus
             };
 
             base.Add<SampleInventoryItem>(item);
@@ -160,13 +156,14 @@ namespace Oversr.Services
             var dbItem = base.GetById<SampleInventoryItem>(sampleInventoryItem.Id);
 
             dbItem.LastModified = DateTime.Now;
-            dbItem.Style = sampleInventoryItem.Style;
+            dbItem.StyleId = sampleInventoryItem.Style.Id;
             dbItem.Size = sampleInventoryItem.Size;
             dbItem.Color = sampleInventoryItem.Color;
-            dbItem.InventoryStatusId = sampleInventoryItem.InventoryStatusId;
+            dbItem.InventoryStatusId = sampleInventoryItem.InventoryStatus.Id;
             dbItem.DateOrdered = sampleInventoryItem.DateOrdered;
             dbItem.DateRecieved = sampleInventoryItem.DateRecieved;
             dbItem.Deleted = sampleInventoryItem.Deleted;
+
             _dbContext.SaveChanges();
         }
 

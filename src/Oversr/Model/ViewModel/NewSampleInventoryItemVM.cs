@@ -18,7 +18,7 @@ namespace Oversr.Model.ViewModel
         public DateTime? DateRecieved { get; set; }
 
         [Required]
-        public SampleInventoryStatus InventoryStatus { get; set; }
+        public SampleInventoryStatusLookup InventoryStatus { get; set; }
 
         [Required]
         public StyleVM Style { get; set; }
