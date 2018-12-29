@@ -12,8 +12,6 @@ namespace Oversr
             // Generic conversions
             CreateMap<string, Guid>().ConvertUsing(x => Guid.Parse(x));
             CreateMap<Guid, string>().ConvertUsing(x => x.ToString("N"));
-            CreateMap<SampleInventoryStatusLookup, SampleInventoryStatus>().ConstructUsing(x => Enum.Parse<SampleInventoryStatus>(x.Name));
-            CreateMap<SampleInventoryStatus, SampleInventoryStatusLookup>().ConstructUsing(x => new SampleInventoryStatusLookup() { Id = (int)x, Name = x.ToString() });
 
             // Specific conversions
             CreateMap<Designer, DesignerVM>();

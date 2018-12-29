@@ -132,7 +132,7 @@ namespace Oversr.Services
 
         public void AddSampleInventoryItem(
             Style style,
-            SampleInventoryStatus inventoryStatus,
+            SampleInventoryStatusLookup inventoryStatus,
             string size,
             string color,
             DateTime dateOrdered,
@@ -145,7 +145,7 @@ namespace Oversr.Services
                 Color = color,
                 DateOrdered = dateOrdered,
                 DateRecieved = dateRecieved,
-                InventoryStatusId = (int)inventoryStatus
+                InventoryStatus = inventoryStatus
             };
 
             base.Add<SampleInventoryItem>(item);
@@ -159,10 +159,11 @@ namespace Oversr.Services
             dbItem.StyleId = sampleInventoryItem.Style.Id;
             dbItem.Size = sampleInventoryItem.Size;
             dbItem.Color = sampleInventoryItem.Color;
-            dbItem.InventoryStatusId = sampleInventoryItem.InventoryStatusId;
+            dbItem.InventoryStatusId = sampleInventoryItem.InventoryStatus.Id;
             dbItem.DateOrdered = sampleInventoryItem.DateOrdered;
             dbItem.DateRecieved = sampleInventoryItem.DateRecieved;
             dbItem.Deleted = sampleInventoryItem.Deleted;
+
             _dbContext.SaveChanges();
         }
 

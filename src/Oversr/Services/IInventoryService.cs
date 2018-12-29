@@ -25,7 +25,7 @@ namespace Oversr.Services
         // Inventory Items
         ICollection<SampleInventoryItem> GetSampleInventoryItems(bool enabledOnly);
         ICollection<SampleInventoryItem> GetSampleInventoryItemsByStatus(SampleInventoryStatus status, bool enabledOnly);
-        void AddSampleInventoryItem(Style style, SampleInventoryStatus inventoryStatus, string size, string color, DateTime dateOrdered, DateTime? dateRecieved);
+        void AddSampleInventoryItem(Style style, SampleInventoryStatusLookup inventoryStatus, string size, string color, DateTime dateOrdered, DateTime? dateRecieved);
         void EditSampleInventoryItem(SampleInventoryItem sampleInventoryItem);
     }
 }
