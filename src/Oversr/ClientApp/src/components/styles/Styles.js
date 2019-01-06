@@ -6,13 +6,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import { ObjectAssignmentHelpers } from '../../commons/ObjectAssignmentHelpers';
 import NewStyle from './NewStyle';
+import EditStyle from './EditStyle';
 
 export default class Styles extends Component {
     constructor(props) {
         super(props);
         this.getStyles = this.getStyles.bind(this);
         this.setNotification = this.setNotification.bind(this);
+        this.handleEditStyle = this.handleEditStyle.bind(this);
         this.toggleAddStyleVisibility = this.toggleAddStyleVisibility.bind(this);
+        this.toggleEditStyleVisibility = this.toggleEditStyleVisibility.bind(this);
         this.state = {
             isBusy: false,
             notification: {
@@ -20,6 +23,7 @@ export default class Styles extends Component {
                 text: null
             },
             styles: [],
+            styleEditRender: null,
             showDeletedStyles: false,
             isAddStyleVisible: false
         };
@@ -77,6 +81,14 @@ export default class Styles extends Component {
         }
     }
 
+    toggleEditStyleVisibility() {
+        this.setState({ styleEditRender: null });
+    }
+
+    handleEditStyle(editableStyle) {
+        this.setState({ styleEditRender: <EditStyle style={editableStyle} toggleVisibility={this.toggleEditStyleVisibility}/> });
+    }
+
     getStylesTh() {
         return (
             <tr>
@@ -104,7 +116,7 @@ export default class Styles extends Component {
                         <td>{x.wholesalePrice}</td>
                         <td>{ObjectAssignmentHelpers.ToLongDate(x.created)}</td>                                                
                         <td>
-                            <FontAwesomeIcon icon={faEdit} className="icon-btn text-info"/>
+                            <FontAwesomeIcon icon={faEdit} className="icon-btn text-info" onClick={() => this.handleEditStyle(x)}/>
                         </td>
                         <td>{x.discontinued && "Discontinued"}</td>
                     </tr>
@@ -114,13 +126,14 @@ export default class Styles extends Component {
     }
 
     render() {
-        const {styles, showDeletedStyles, isAddStyleVisible, notification, isBusy} = this.state
+        const {styles, showDeletedStyles, styleEditRender, isAddStyleVisible, notification, isBusy} = this.state;
 
         return (
             <div className={this.props.className + " card"}>
                 <h5 className="card-header bg-light-2 text-dark p-2 pl-3">Styles</h5>
                 <div className="card-body">
                     {isAddStyleVisible && <NewStyle toggleVisibility={this.toggleAddStyleVisibility}/>}
+                    {styleEditRender}
                     <NotificationBanner notification={notification}/>
                     <div className="d-inline"> 
                         <FontAwesomeIcon icon={faPlusSquare} className="icon-btn" 

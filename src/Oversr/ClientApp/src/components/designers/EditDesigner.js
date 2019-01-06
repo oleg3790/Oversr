@@ -70,7 +70,7 @@ export default class EditDesigner extends Component {
                     ? <button className="btn btn-block btn-success" onClick={this.handleDeleteRestore}>Restore</button>
                     : <button className="btn btn-block btn-danger" onClick={this.handleDeleteRestore}>Delete</button>}
                 </div> 
-                <small className="col-12 text-danger mt-2">* Deleting a designer will deactive all styles and inventory associated with it</small>                               
+                <small className="col-12 text-danger mt-2">* Deleting a designer will deactivate all styles and inventory associated with it</small>                               
             </div>
         );
     }

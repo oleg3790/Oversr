@@ -4,14 +4,9 @@ import TextInput from '../../commons/input/TextInput';
 import ComboInput from '../../commons/input/ComboInput';
 import { InventoryService } from '../../services/InventoryService';
 
-export default class NewStyle extends Component {
+export default class EditStyle extends Component {
     constructor(props) {
         super(props);
-        this.setNotification = this.setNotification.bind(this);
-        this.handleSave = this.handleSave.bind(this);
-        this.handleInputChange = this.handleInputChange.bind(this);
-        this.getModalFooter = this.getModalFooter.bind(this);  
-        this.toggleIsBusy = this.toggleIsBusy.bind(this);      
         this.state = {
             isBusy: false,
             notification: {
@@ -19,14 +14,12 @@ export default class NewStyle extends Component {
                 text: null
             },
             designers: null,
-            data: {
-                designer: null,
-                number: '',
-                name: '',
-                msrpPrice: '',
-                wholesalePrice: ''
-            }          
+            style: null          
         };
+    }
+
+    componentWillMount() {
+        this.setState({ style: this.props.style });
     }
 
     async componentDidMount() {
@@ -44,51 +37,8 @@ export default class NewStyle extends Component {
         catch (err) {
             this.setNotification(false, err.message);
         }
+        
         this.toggleIsBusy();
-    }
-
-    async handleSave() {
-        const { data } = this.state;
-
-        for(let key in data) {
-            if (!data[key] && key !== "name") {
-                this.setNotification(false, `Cannot save when fields are empty`);
-                return;
-            }
-        }
-
-        this.toggleIsBusy();
-
-        try {
-            const result = await InventoryService.SaveNewStyle(data);
-
-            if (!result) {
-                this.props.toggleVisibility(true);
-            }
-            else {
-                this.setNotification(false, result);
-            }
-        }
-        catch (err) {
-            this.setNotification(false, err.message);
-        }   
-        this.toggleIsBusy();         
-    }
-
-    handleInputChange(e) {
-        const fieldId = e.target.id;
-        const value = e.target.value;
-
-        let data = {...this.state.data};
-
-        if (fieldId === 'designer' && value) {
-            data[fieldId] = this.state.designers.find(x => x.name === value);
-        } 
-        else {
-            data[fieldId] = value;
-        }        
-
-        this.setState({ data: data });
     }
 
     setNotification(isSuccess, text) {
@@ -101,20 +51,28 @@ export default class NewStyle extends Component {
 
     getModalFooter() {
         return (
-            <div className="modal-footer row no-gutters">
-                <div className="col-2">
-                    <button className="btn btn-block btn-outline-primary" onClick={this.props.toggleVisibility}>Cancel</button>                                    
-                </div>
+            <div className="modal-footer justify-content-start row no-gutters">
                 <div className="col-3">
                     <button className="btn btn-block btn-primary" onClick={this.handleSave}>Save</button>
                 </div>
+                <div className="col-2">
+                    <button className="btn btn-block btn-outline-primary" onClick={this.props.toggleVisibility}>Cancel</button>                                    
+                </div>
+                <div className="col-2 align-self-end">
+                    {this.state.style.deleted 
+                    ? <button className="btn btn-block btn-success" onClick={this.handleDeleteRestore}>Restore</button>
+                    : <button className="btn btn-block btn-danger" onClick={this.handleDeleteRestore}>Delete</button>}
+                </div> 
+                <small className="col-12 text-danger mt-2">* Deleting a style will deactivate all inventory associated with it</small>                               
             </div>
         );
     }
 
     render() {
-        return(
-            <ModalContainer title="Add Style" toggleVisibility={this.props.toggleVisibility}
+        const { style } = this.state;
+
+        return (
+            <ModalContainer title="Edit Style" toggleVisibility={this.props.toggleVisibility}
                 notification={this.state.notification} footer={this.getModalFooter()}>
                 <div className="row no-gutters">
                     <div className="col-12">
@@ -123,22 +81,22 @@ export default class NewStyle extends Component {
                 </div>
                 <div className="row no-gutters mt-2">
                     <div className="col-12">
-                        <TextInput label="Number" fieldId="number" labelWidth="160px" onChange={this.handleInputChange}/>
+                        <TextInput label="Number" fieldId="number" labelWidth="160px" onChange={this.handleInputChange} value={style.number}/>
                     </div>
                 </div>
                 <div className="row no-gutters mt-2">
                     <div className="col-12">
-                        <TextInput label="Name" fieldId="name" labelWidth="160px" onChange={this.handleInputChange}/>
+                        <TextInput label="Name" fieldId="name" labelWidth="160px" onChange={this.handleInputChange} value={style.name}/>
                     </div>
                 </div>
                 <div className="row no-gutters mt-2">
                     <div className="col-12">
-                         <TextInput label="MSRP" fieldId="msrpPrice" labelWidth="160px" onChange={this.handleInputChange}/>
+                         <TextInput label="MSRP" fieldId="msrpPrice" labelWidth="160px" onChange={this.handleInputChange} value={style.msrpPrice}/>
                     </div>                    
                 </div>
                 <div className="row no-gutters mt-2">
                     <div className="col-12">
-                         <TextInput label="Wholesale Price" fieldId="wholesalePrice" labelWidth="160px" onChange={this.handleInputChange}/>
+                         <TextInput label="Wholesale Price" fieldId="wholesalePrice" labelWidth="160px" onChange={this.handleInputChange} value={style.wholesalePrice}/>
                     </div>
                 </div>
             </ModalContainer>
