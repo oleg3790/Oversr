@@ -145,6 +145,14 @@ export default class EditStyle extends Component {
                          <TextInput label="Wholesale Price" fieldId="wholesalePrice" labelWidth="160px" onChange={this.handleInputChange} value={style.wholesalePrice}/>
                     </div>
                 </div>
+                <div className="row no-gutters mt-1">
+                    <div className="col-12">
+                        <div className="float-right d-inline">
+                            <input type="checkbox" className="ml-2" checked={this.state.style.discontinued && true}/>
+                            <span className="ml-1">Discontinued</span>
+                        </div>  
+                    </div>
+                </div>
             </ModalContainer>
         );
     }

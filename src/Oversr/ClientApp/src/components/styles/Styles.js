@@ -125,7 +125,7 @@ export default class Styles extends Component {
                     }
                     else if (x.discontinued) {
                         status = "Discontinued";
-                        statusClass = "text-warning-1 font-weight-bold";
+                        statusClass = "text-warning-1";
                     }
 
                     return (
