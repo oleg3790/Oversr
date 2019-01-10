@@ -12,13 +12,13 @@ export default class NewStyle extends Component {
         this.handleInputChange = this.handleInputChange.bind(this);
         this.getModalFooter = this.getModalFooter.bind(this);  
         this.toggleIsBusy = this.toggleIsBusy.bind(this);      
+        this.designers = null;
         this.state = {
             isBusy: false,
             notification: {
                 isSuccess: false,
                 text: null
             },
-            designers: null,
             data: {
                 designer: null,
                 number: '',
@@ -35,7 +35,7 @@ export default class NewStyle extends Component {
             let result = await InventoryService.GetAllDesigners(true);            
             if (Array.isArray(result)) {
                 result.sort((a, b) => { return a.name.toLowerCase() === b.name.toLowerCase() ? 0 : a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;});
-                this.setState({ designers: result });
+                this.designers = result;
             }
             else {
                 this.setNotification(false, result);
@@ -82,7 +82,7 @@ export default class NewStyle extends Component {
         let data = {...this.state.data};
 
         if (fieldId === 'designer' && value) {
-            data[fieldId] = this.state.designers.find(x => x.name === value);
+            data[fieldId] = this.designers.find(x => x.name === value);
         } 
         else {
             data[fieldId] = value;
@@ -118,7 +118,7 @@ export default class NewStyle extends Component {
                 notification={this.state.notification} footer={this.getModalFooter()}>
                 <div className="row no-gutters">
                     <div className="col-12">
-                        <ComboInput label="Designer" fieldId="designer" labelWidth="160px" selectionItems={this.state.designers} onSelectionChange={this.handleInputChange}/>
+                        <ComboInput label="Designer" fieldId="designer" labelWidth="160px" selectionItems={this.designers} onSelectionChange={this.handleInputChange}/>
                     </div>
                 </div>
                 <div className="row no-gutters mt-2">

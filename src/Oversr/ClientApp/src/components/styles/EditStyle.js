@@ -12,15 +12,15 @@ export default class EditStyle extends Component {
         this.handleSave = this.handleSave.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleDeleteRestore = this.handleDeleteRestore.bind(this);
+        this.designers = null;
         this.state = {
             isBusy: false,
             notification: {
                 isSuccess: false,
                 text: null
             },
-            designers: null,
             style: null          
-        };
+        };        
     }
 
     componentWillMount() {
@@ -33,7 +33,7 @@ export default class EditStyle extends Component {
             let result = await InventoryService.GetAllDesigners(true);            
             if (Array.isArray(result)) {
                 result.sort((a, b) => { return a.name.toLowerCase() === b.name.toLowerCase() ? 0 : a.name.toLowerCase() < b.name.toLowerCase() ? -1 : 1;});
-                this.setState({ designers: result });
+                this.designers = result;
             }
             else {
                 this.setNotification(false, result);
@@ -61,7 +61,7 @@ export default class EditStyle extends Component {
         let data = {...this.state.style};
 
         if (fieldId === 'designer' && value) {
-            data[fieldId] = this.state.designers.find(x => x.name === value);
+            data[fieldId] = this.designers.find(x => x.name === value);
         } 
         else {
             data[fieldId] = value;
@@ -87,9 +87,11 @@ export default class EditStyle extends Component {
     }
 
     async handleDeleteRestore() {
+        this.toggleIsBusy();
         const tmp = { ...this.state.style, deleted: !this.state.style.deleted }
-        await this.setState({ style: tmp });
+        await this.setState({ style: tmp });        
         this.handleSave();
+        this.toggleIsBusy();
     }
 
     getModalFooter() {
@@ -120,7 +122,7 @@ export default class EditStyle extends Component {
                 <div className="row no-gutters">
                     <div className="col-12">
                         <ComboInput label="Designer" fieldId="designer" labelWidth="160px" 
-                            selectionItems={this.state.designers} onSelectionChange={this.handleInputChange} selectedValue={this.state.style.designer.name}/>
+                            selectionItems={this.designers} onSelectionChange={this.handleInputChange} selectedValue={this.state.style.designer.name}/>
                     </div>
                 </div>
                 <div className="row no-gutters mt-2">
