@@ -81,8 +81,12 @@ export default class Styles extends Component {
         }
     }
 
-    toggleEditStyleVisibility() {
+    toggleEditStyleVisibility(isSaveSuccessful) {
         this.setState({ styleEditRender: null });
+
+        if (isSaveSuccessful) {
+            this.getStyles();
+        }
     }
 
     handleEditStyle(editableStyle) {
@@ -92,13 +96,13 @@ export default class Styles extends Component {
     getStylesTh() {
         return (
             <tr>
-                <th scope="col" width="200">Designer</th>  
-                <th scope="col" width="200">Number</th>
-                <th scope="col" width="200">Name</th>
-                <th scope="col" width="150">MSRP</th>
-                <th scope="col" width="200">Wholesale Price</th>
-                <th scope="col" width="300">Created</th>                                              
-                <th scope="col" width="100"></th>
+                <th scope="col" width="160">Designer</th>  
+                <th scope="col" width="160">Number</th>
+                <th scope="col" width="160">Name</th>
+                <th scope="col" width="120">MSRP</th>
+                <th scope="col" width="180">Wholesale Price</th>
+                <th scope="col" width="140">Created</th>                                              
+                <th scope="col" width="50"></th>
                 <th scope="col"></th> 
             </tr>
         );
@@ -107,20 +111,38 @@ export default class Styles extends Component {
     getStylesTBody(styles, showDeletedStyles) {
         return (
             <tbody>
-                {styles.map(x => (
-                    <tr key={x.id} className={x.discontinued ? "text-warning-1 font-weight-bold" : undefined}>
-                        <td>{x.designer.name}</td>
-                        <td>{x.number}</td>
-                        <td>{x.name}</td>
-                        <td>{x.msrpPrice}</td>
-                        <td>{x.wholesalePrice}</td>
-                        <td>{ObjectAssignmentHelpers.ToLongDate(x.created)}</td>                                                
-                        <td>
-                            <FontAwesomeIcon icon={faEdit} className="icon-btn text-info" onClick={() => this.handleEditStyle(x)}/>
-                        </td>
-                        <td>{x.discontinued && "Discontinued"}</td>
-                    </tr>
-                ))}
+                {styles.map(x => {
+                    let status;
+                    let statusClass;
+
+                    if (x.deleted && x.discontinued) {
+                        status = "Deleted and Discontinued";
+                        statusClass = "text-danger";
+                    } 
+                    else  if (x.deleted) {
+                        status = "Deleted";
+                        statusClass = "text-danger";
+                    }
+                    else if (x.discontinued) {
+                        status = "Discontinued";
+                        statusClass = "text-warning-1 font-weight-bold";
+                    }
+
+                    return (
+                        <tr key={x.id} className={statusClass}>
+                            <td>{x.designer.name}</td>
+                            <td>{x.number}</td>
+                            <td>{x.name}</td>
+                            <td>{x.msrpPrice}</td>
+                            <td>{x.wholesalePrice}</td>
+                            <td>{ObjectAssignmentHelpers.ToLongDate(x.created)}</td>                                                
+                            <td>
+                                <FontAwesomeIcon icon={faEdit} className="icon-btn text-info" onClick={() => this.handleEditStyle(x)}/>
+                            </td>
+                            <td>{status}</td>
+                        </tr>
+                    )                
+                })}
             </tbody>
         );
     }
@@ -145,6 +167,11 @@ export default class Styles extends Component {
                     </div>
                     <InteractiveDataTable className="mt-2" isBusy={isBusy} 
                             items={styles} th={this.getStylesTh()} body={this.getStylesTBody(styles, showDeletedStyles)}/>
+                    <div className="row no-gutters justify-content-end">
+                        <small className="text-muted">
+                            {(showDeletedStyles ? styles.length : styles.filter(x => x.deleted === false).length) + " items"}
+                        </small>
+                    </div>
                 </div>
             </div>
         );

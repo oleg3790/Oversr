@@ -7,6 +7,11 @@ import { InventoryService } from '../../services/InventoryService';
 export default class EditStyle extends Component {
     constructor(props) {
         super(props);
+        this.setNotification = this.setNotification.bind(this);
+        this.toggleIsBusy = this.toggleIsBusy.bind(this);
+        this.handleSave = this.handleSave.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this);
+        this.handleDeleteRestore = this.handleDeleteRestore.bind(this);
         this.state = {
             isBusy: false,
             notification: {
@@ -49,6 +54,44 @@ export default class EditStyle extends Component {
         this.setState({ isBusy: !this.state.isBusy });
     }
 
+    handleInputChange(e) {
+        const fieldId = e.target.id;
+        const value = e.target.value;
+
+        let data = {...this.state.style};
+
+        if (fieldId === 'designer' && value) {
+            data[fieldId] = this.state.designers.find(x => x.name === value);
+        } 
+        else {
+            data[fieldId] = value;
+        }        
+
+        this.setState({ style: data });
+    }
+
+    async handleSave() {
+        try {
+            const result = await InventoryService.EditStyle(this.state.style);
+
+            if (!result) {
+                this.props.toggleVisibility(true);
+            }
+            else {
+                this.setNotification(false, result);
+            }
+        }
+        catch (err) {
+            this.setNotification(false, err.message);
+        }
+    }
+
+    async handleDeleteRestore() {
+        const tmp = { ...this.state.style, deleted: !this.state.style.deleted }
+        await this.setState({ style: tmp });
+        this.handleSave();
+    }
+
     getModalFooter() {
         return (
             <div className="modal-footer justify-content-start row no-gutters">
@@ -62,7 +105,7 @@ export default class EditStyle extends Component {
                     {this.state.style.deleted 
                     ? <button className="btn btn-block btn-success" onClick={this.handleDeleteRestore}>Restore</button>
                     : <button className="btn btn-block btn-danger" onClick={this.handleDeleteRestore}>Delete</button>}
-                </div> 
+                </div>                
                 <small className="col-12 text-danger mt-2">* Deleting a style will deactivate all inventory associated with it</small>                               
             </div>
         );
@@ -76,7 +119,8 @@ export default class EditStyle extends Component {
                 notification={this.state.notification} footer={this.getModalFooter()}>
                 <div className="row no-gutters">
                     <div className="col-12">
-                        <ComboInput label="Designer" fieldId="designer" labelWidth="160px" selectionItems={this.state.designers} onSelectionChange={this.handleInputChange}/>
+                        <ComboInput label="Designer" fieldId="designer" labelWidth="160px" 
+                            selectionItems={this.state.designers} onSelectionChange={this.handleInputChange} selectedValue={this.state.style.designer.name}/>
                     </div>
                 </div>
                 <div className="row no-gutters mt-2">

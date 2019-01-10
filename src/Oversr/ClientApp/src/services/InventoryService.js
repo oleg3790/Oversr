@@ -7,6 +7,7 @@ export const InventoryService = {
     GetAllStyles,
     GetAllStylesByDesigner,
     SaveNewStyle,
+    EditStyle,
     GetAllInventoryStatuses,
     SaveNewSampleInventoryItem,
     GetSampleInventoryItems
@@ -30,6 +31,10 @@ async function GetAllStyles(enabledOnly = false) {
 
 async function GetAllStylesByDesigner(designerId) {
     return await RequestHandler.Get(`/api/Styles/Designer/${designerId}/false`);
+}
+
+async function EditStyle(style) {
+    return await RequestHandler.Post('/api/Styles/Edit/', style);
 }
 
 async function SaveNewStyle(style) {

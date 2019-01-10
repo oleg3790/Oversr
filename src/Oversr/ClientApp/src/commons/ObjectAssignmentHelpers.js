@@ -11,7 +11,7 @@ function ChangeSelectionById(obj, id) {
 
 function ToLongDate(dateString) {
     const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+    return date.toLocaleDateString("en-US", { year: 'numeric', month: 'numeric', day: 'numeric' });
 }
 
 function unsetSelection(obj) {

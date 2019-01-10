@@ -5,6 +5,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Oversr.Model.Entities;
+using Oversr.Model.Extensions;
 using Oversr.Model.ViewModel;
 using Oversr.Services;
 
@@ -70,6 +71,11 @@ namespace Oversr.Controllers
         [HttpPost("[action]")]
         public ActionResult Create([FromBody] NewStyleVM vm)
         {
+            if (!ModelState.IsValid)
+            {
+                return Ok(ModelState.GetAllErrors());
+            }
+
             try
             {
                 if (vm.Designer == null)
@@ -108,6 +114,11 @@ namespace Oversr.Controllers
         [HttpPost("[action]")]
         public ActionResult Edit([FromBody] StyleVM vm)
         {
+            if (!ModelState.IsValid)
+            {
+                return Ok(ModelState.GetAllErrors());
+            }
+
             try
             {
                 var allStyles = _inventoryService.GetStyles(false);

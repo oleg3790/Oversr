@@ -10,7 +10,7 @@ export default function ComboInput(props) {
             <select className="form-control" id={props.fieldId} onChange={props.onSelectionChange}>
                 <option></option>
                 {props.selectionItems && props.selectionItems.map(x =>
-                    <option key={x.id}>{x.name}</option>
+                    <option key={x.id} selected={x.name == props.selectedValue && "selected"}>{x.name}</option>
                 )}
             </select>
         </div>
