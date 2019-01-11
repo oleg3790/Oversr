@@ -9,6 +9,7 @@ export default class EditStyle extends Component {
         super(props);
         this.setNotification = this.setNotification.bind(this);
         this.toggleIsBusy = this.toggleIsBusy.bind(this);
+        this.toggleDiscontinue = this.toggleDiscontinue.bind(this);
         this.handleSave = this.handleSave.bind(this);
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleDeleteRestore = this.handleDeleteRestore.bind(this);
@@ -68,6 +69,11 @@ export default class EditStyle extends Component {
         }        
 
         this.setState({ style: data });
+    }
+
+    toggleDiscontinue() {
+        const obj = {...this.state.style, discontinued: !this.state.style.discontinued }
+        this.setState({ style: obj });
     }
 
     async handleSave() {
@@ -148,7 +154,7 @@ export default class EditStyle extends Component {
                 <div className="row no-gutters mt-1">
                     <div className="col-12">
                         <div className="float-right d-inline">
-                            <input type="checkbox" className="ml-2" checked={this.state.style.discontinued && true}/>
+                            <input type="checkbox" className="ml-2" checked={this.state.style.discontinued ? true : undefined} onChange={this.toggleDiscontinue}/>
                             <span className="ml-1">Discontinued</span>
                         </div>  
                     </div>

@@ -182,6 +182,8 @@ export default class Styles extends Component {
                             {(showDeletedStyles ? styles.length : styles.filter(x => x.deleted === false).length) + " items"}
                         </small>
                     </div>
+                    {showDeletedStyles 
+                            && <small className="text-danger">* All styles and inventory associated with deleted styles will automatically be deactivated</small>}
                 </div>
             </div>
         );
