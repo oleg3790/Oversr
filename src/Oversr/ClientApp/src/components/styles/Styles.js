@@ -16,6 +16,7 @@ export default class Styles extends Component {
         this.handleEditStyle = this.handleEditStyle.bind(this);
         this.toggleAddStyleVisibility = this.toggleAddStyleVisibility.bind(this);
         this.toggleEditStyleVisibility = this.toggleEditStyleVisibility.bind(this);
+        this.toggleShowDeletedStyles = this.toggleShowDeletedStyles.bind(this);
         this.state = {
             isBusy: false,
             notification: {
@@ -89,6 +90,10 @@ export default class Styles extends Component {
         }
     }
 
+    toggleShowDeletedStyles() {
+        this.setState({ showDeletedStyles: !this.state.showDeletedStyles });
+    }
+
     handleEditStyle(editableStyle) {
         this.setState({ styleEditRender: <EditStyle style={editableStyle} toggleVisibility={this.toggleEditStyleVisibility}/> });
     }
@@ -128,20 +133,25 @@ export default class Styles extends Component {
                         statusClass = "text-warning-1";
                     }
 
-                    return (
-                        <tr key={x.id} className={statusClass}>
-                            <td>{x.designer.name}</td>
-                            <td>{x.number}</td>
-                            <td>{x.name}</td>
-                            <td>{x.msrpPrice}</td>
-                            <td>{x.wholesalePrice}</td>
-                            <td>{ObjectAssignmentHelpers.ToLongDate(x.created)}</td>                                                
-                            <td>
-                                <FontAwesomeIcon icon={faEdit} className="icon-btn text-info" onClick={() => this.handleEditStyle(x)}/>
-                            </td>
-                            <td>{status}</td>
-                        </tr>
-                    )                
+                    if (!showDeletedStyles && x.deleted) {
+                        return null;
+                    } 
+                    else {
+                        return (
+                            <tr key={x.id} className={statusClass}>
+                                <td>{x.designer.name}</td>
+                                <td>{x.number}</td>
+                                <td>{x.name}</td>
+                                <td>{x.msrpPrice}</td>
+                                <td>{x.wholesalePrice}</td>
+                                <td>{ObjectAssignmentHelpers.ToLongDate(x.created)}</td>                                                
+                                <td>
+                                    <FontAwesomeIcon icon={faEdit} className="icon-btn text-info" onClick={() => this.handleEditStyle(x)}/>
+                                </td>
+                                <td>{status}</td>
+                            </tr>
+                        ) 
+                    }                                   
                 })}
             </tbody>
         );
@@ -161,7 +171,7 @@ export default class Styles extends Component {
                         <FontAwesomeIcon icon={faPlusSquare} className="icon-btn" 
                             size="2x" title="Add new style" onClick={this.toggleAddStyleVisibility}/>   
                         <div className="float-right d-inline mt-2">
-                            <input type="checkbox" className="ml-2"/>
+                            <input type="checkbox" className="ml-2" onClick={this.toggleShowDeletedStyles}/>
                             <span className="ml-1">Include deleted styles</span>
                         </div>                                                        
                     </div>
