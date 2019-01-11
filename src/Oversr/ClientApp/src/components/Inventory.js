@@ -27,7 +27,7 @@ export default class Inventory extends Component {
 
     render() {
         return (
-            <div className="mt-2 row no-gutters">
+            <div className="pt-2 row no-gutters">
                 <div className="col-12">
                     <NavigationTabs navItems={this.state.types} onSelectionChange={this.handleTabSelectionChange}/>
                 </div>    

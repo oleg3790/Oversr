@@ -1,6 +1,6 @@
 ﻿import React, { Component } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch, faPlusSquare } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faPlusSquare, faEdit } from '@fortawesome/free-solid-svg-icons';
 import SampleInventoryItem from './SampleInventoryItem';
 import { InventoryService } from '../../services/InventoryService';
 import BusyOverlay from '../../commons/BusyOverlay';
@@ -44,6 +44,36 @@ export default class SampleInventory extends Component {
         this.setState({ isBusy: !this.state.isBusy });
     }
 
+    getTableRow(item) {
+        return (
+            <tr key={item.id}>
+                <td>
+                    <div>                                         
+                        {item.style.designer.deleted 
+                        ? <span className="text-danger">{item.style.designer.name} (Inactive)</span>
+                        : item.style.designer.name}                                      
+                    </div>                                    
+                </td>
+                <td>
+                    <div>
+                        Number: {item.style.number}
+                    </div> 
+                    <div>
+                        Name: {item.style.name}
+                    </div>   
+                    {item.style.discontinued && <div className="text-warning-1">This style has been discontinued</div>}
+                    {item.style.deleted && <div className="text-danger">Inactive style</div>}
+                </td>
+                <td>{item.size}</td>
+                <td>{item.color}</td>
+                <td className={item.inventoryStatus.name === "Sold" && "text-danger"}>{item.inventoryStatus.name}</td>
+                <td>
+                    <FontAwesomeIcon icon={faEdit} className="icon-btn text-info"/>
+                </td>
+            </tr>
+        );
+    }
+
     render() {
         return (
             <div className="m-3 mt-4">
@@ -56,14 +86,15 @@ export default class SampleInventory extends Component {
                     <FontAwesomeIcon icon={faPlusSquare} className="mt-2 text-right icon-btn" 
                         size="2x" title="Add new inventory sample" onClick={this.toggleAddNewItemModal}/>
                 </div>                                
-                <table className="table table-sm">
+                <table className="table table-sm" style={{ fontSize: '14px' }}>
                     <thead className="bg-light-1">
                         <tr>
-                            <th scope="col">Designer</th>
-                            <th scope="col">Style #</th>
-                            <th scope="col">Style Name</th>
+                            <th scope="col" width="250">Designer</th>
+                            <th scope="col" width="300">Style</th>
                             <th scope="col">Size</th>
+                            <th scope="col">Color</th>
                             <th scope="col">Status</th>
+                            <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -74,16 +105,7 @@ export default class SampleInventory extends Component {
                                 </td>                                
                             </tr>
                         )}
-                        {this.state.sampleInventoryItems.length !== 0 
-                        && this.state.sampleInventoryItems.map(x => (
-                            <tr key={x.id}>
-                                <td>{x.designer.name}</td>
-                                <td>{x.styleNumber}</td>
-                                <td>{x.styleName}</td>
-                                <td>{x.size}</td>
-                                <td>{x.inventoryStatus.name}</td>
-                            </tr>
-                        ))} 
+                        {this.state.sampleInventoryItems.length !== 0 && this.state.sampleInventoryItems.map(x => this.getTableRow(x))} 
                         {this.state.sampleInventoryItems.length === 0 && !this.state.isBusy && (
                             <tr>
                                 <td colSpan="5" className="text-center pt-4">

@@ -102,11 +102,11 @@ export default class Styles extends Component {
         return (
             <tr>
                 <th scope="col" width="160">Designer</th>  
-                <th scope="col" width="160">Number</th>
-                <th scope="col" width="160">Name</th>
-                <th scope="col" width="120">MSRP</th>
+                <th scope="col" width="140">Number</th>
+                <th scope="col" width="150">Name</th>
+                <th scope="col" width="100">MSRP</th>
                 <th scope="col" width="180">Wholesale Price</th>
-                <th scope="col" width="140">Created</th>                                              
+                <th scope="col" width="130">Created</th>                                              
                 <th scope="col" width="50"></th>
                 <th scope="col"></th> 
             </tr>
@@ -131,9 +131,12 @@ export default class Styles extends Component {
                     else if (x.discontinued) {
                         status = "Discontinued";
                         statusClass = "text-warning-1";
+                    } else if (x.designer.deleted) {
+                        status = "Designer Deleted";
+                        statusClass = "text-danger";
                     }
 
-                    if (!showDeletedStyles && x.deleted) {
+                    if (!showDeletedStyles && (x.deleted || x.designer.deleted)) {
                         return null;
                     } 
                     else {
@@ -179,7 +182,7 @@ export default class Styles extends Component {
                             items={styles} th={this.getStylesTh()} body={this.getStylesTBody(styles, showDeletedStyles)}/>
                     <div className="row no-gutters justify-content-end">
                         <small className="text-muted">
-                            {(showDeletedStyles ? styles.length : styles.filter(x => x.deleted === false).length) + " items"}
+                            {(showDeletedStyles ? styles.length : styles.filter(x => x.deleted === false && x.designer.deleted == false).length) + " items"}
                         </small>
                     </div>
                     {showDeletedStyles 
