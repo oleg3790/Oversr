@@ -25,8 +25,8 @@ namespace Oversr.Controllers
         }
 
         // api/SampleInventory/Statuses
-        [HttpGet("[action]")]
-        public ActionResult Statuses()
+        [HttpGet("Statuses")]
+        public ActionResult GetStatuses()
         {
             try
             {
@@ -38,8 +38,8 @@ namespace Oversr.Controllers
             }
         }
 
-        // api/SampleInventory
-        [HttpGet("{enabledOnly}")]
+        // api/SampleInventory?enabledOnly={bool}
+        [HttpGet]
         public ActionResult Get(bool enabledOnly)
         {
             try
@@ -59,21 +59,21 @@ namespace Oversr.Controllers
             }
         }
 
-        // api/SampleInventory/{statusString}/{enabledOnly}
-        [HttpGet("{statusString}/{enabledOnly}")]
-        public ActionResult GetByStatus(string statusString, bool enabledOnly)
+        // api/SampleInventory?status={status}
+        [HttpGet]
+        public ActionResult GetByStatus(string status)
         {
             try
             {
-                SampleInventoryStatus status;
-                bool isStatusValid = Enum.TryParse(statusString, out status);
+                SampleInventoryStatus sampleInventoryStatus;
+                bool isStatusValid = Enum.TryParse(status, out sampleInventoryStatus);
 
                 if (!isStatusValid)
                 {
                     return BadRequest("Invalid status");
                 }
 
-                ICollection<SampleInventoryItem> items = _inventoryService.GetSampleInventoryItemsByStatus(status, enabledOnly);
+                ICollection<SampleInventoryItem> items = _inventoryService.GetSampleInventoryItemsByStatus(sampleInventoryStatus, true);
                 return Ok(items.Select(x => _mapper.Map<SampleInventoryItemVM>(x)));
             }
             catch (Exception ex)
@@ -83,8 +83,8 @@ namespace Oversr.Controllers
 
         }
 
-        // api/SampleInventory/Create
-        [HttpPost("[action]")]
+        // api/SampleInventory
+        [HttpPost]
         public ActionResult Create([FromBody] NewSampleInventoryItemVM vm)
         {
             if (!ModelState.IsValid)
@@ -126,7 +126,8 @@ namespace Oversr.Controllers
             }
         }
 
-        [HttpPost("[action]")]
+        // api/SampleInventory
+        [HttpPut]
         public ActionResult Edit([FromBody] SampleInventoryItemVM vm)
         {
             if (!ModelState.IsValid)

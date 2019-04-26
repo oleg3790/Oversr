@@ -7,7 +7,7 @@ export const UserService = {
 };
 
 async function Login(username, password) { 
-    const response = await Axios.post('/api/UserAccount/Login', {
+    const response = await Axios.post('/api/UserAccount', {
         username: username,
         password: password
     }, {

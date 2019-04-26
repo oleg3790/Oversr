@@ -24,13 +24,13 @@ namespace Oversr.Controllers
             _mapper = mapper;
         }
 
-        // api/Designers/{getEnabledOnly}
-        [HttpGet("{getEnabledOnly}")]
-        public ActionResult Get(bool getEnabledOnly)
+        // api/Designers?enabledOnly={bool}
+        [HttpGet]
+        public ActionResult Get(bool enabledOnly)
         {
             try
             {
-                ICollection<Designer> designers = _inventoryService.GetDesigners(getEnabledOnly);
+                ICollection<Designer> designers = _inventoryService.GetDesigners(enabledOnly);
 
                 if (designers == null || designers.Count == 0)
                 {
@@ -46,8 +46,8 @@ namespace Oversr.Controllers
             }
         }
 
-        // api/Designers/Create
-        [HttpPost("[action]")]
+        // api/Designers
+        [HttpPost]
         public ActionResult Create([FromBody] NewDesignerVM vm)
         {
             if (!ModelState.IsValid)
@@ -73,8 +73,8 @@ namespace Oversr.Controllers
             }            
         }
 
-        // api/Designer/Edit
-        [HttpPost("[action]")]
+        // api/Designer
+        [HttpPut]
         public ActionResult Edit([FromBody] DesignerVM vm)
         {
             if (!ModelState.IsValid)

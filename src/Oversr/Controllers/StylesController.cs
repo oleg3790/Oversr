@@ -24,8 +24,8 @@ namespace Oversr.Controllers
             _mapper = mapper;
         }
 
-        // api/Styles/
-        [HttpGet("{getEnabledOnly}")]
+        // api/Styles?enabledOnly={bool}
+        [HttpGet]
         public ActionResult Get(bool getEnabledOnly)
         {
             try
@@ -46,13 +46,13 @@ namespace Oversr.Controllers
                 
         }
 
-        // api/Styles/Designer/{designerId}/{getEnabledOnly}
-        [HttpGet("Designer/{designerId}/{getEnabledOnly}")]
-        public ActionResult GetByDesigner(string designerId, bool getEnabledOnly)
+        // api/Styles/Designer/{designerId}/?enabledOnly={getEnabledOnly}
+        [HttpGet("Designer/{designerId}/")]
+        public ActionResult GetByDesigner(string designerId, bool enabledOnly)
         {
             try
             {
-                ICollection<Style> styles = _inventoryService.GetStylesByDesigner(Guid.Parse(designerId), getEnabledOnly);
+                ICollection<Style> styles = _inventoryService.GetStylesByDesigner(Guid.Parse(designerId), enabledOnly);
 
                 if (styles == null || styles.Count == 0)
                 {
@@ -67,8 +67,8 @@ namespace Oversr.Controllers
             }
         }
 
-        // api/Styles/Create
-        [HttpPost("[action]")]
+        // api/Styles
+        [HttpPost]
         public ActionResult Create([FromBody] NewStyleVM vm)
         {
             if (!ModelState.IsValid)
@@ -110,8 +110,8 @@ namespace Oversr.Controllers
             }            
         }
 
-        // api/Styles/Edit
-        [HttpPost("[action]")]
+        // api/Styles
+        [HttpPut]
         public ActionResult Edit([FromBody] StyleVM vm)
         {
             if (!ModelState.IsValid)

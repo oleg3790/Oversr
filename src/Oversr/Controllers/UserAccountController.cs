@@ -17,7 +17,7 @@ namespace Oversr.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("[action]")]
+        [HttpPost()]
         public IActionResult Login([FromBody]UserVM vm)
         {
             var user = _userService.Login(vm);

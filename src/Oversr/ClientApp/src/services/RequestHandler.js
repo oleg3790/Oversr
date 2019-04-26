@@ -9,12 +9,13 @@ function getHeaders() {
             'Access-Control-Allow-Origin': '*',
             'Authorization': 'Bearer ' + token
         }
-    }
+    };
 }
 
 export const RequestHandler = {
     Get,
-    Post
+    Post,
+    Put
 };
 
 async function Get(requestUrl) {
@@ -26,5 +27,11 @@ async function Get(requestUrl) {
 async function Post(requestUrl, data) {
     const headers = getHeaders();
     const result = await axios.post(requestUrl, data, headers);
+    return await result.data;
+}
+
+async function Put(requestUrl, data) {
+    const headers = getHeaders();
+    const result = await axios.put(requestUrl, data, headers);
     return await result.data;
 }

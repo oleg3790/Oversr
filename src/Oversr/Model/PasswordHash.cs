@@ -13,11 +13,21 @@ namespace Oversr.Model
             Hash = GetHash(password, salt);
         }        
 
-        public static Tuple<string, string> GenerateHashAndSalt(string password)
+        /// <summary>
+        /// Helper method used for generating test hash and salt
+        /// </summary>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public static Tuple<string[], string[]> GenerateAuthElements(string password)
         {
             var salt = GenerateSalt();
             var hash = GetHash(password, salt);
-            return new Tuple<string, string>(hash, salt);
+
+            return new Tuple<string[], string[]>
+            (
+                new string[] { "hash", hash },
+                new string[] { "salt", salt }
+            );
         }
 
         private static string GenerateSalt()

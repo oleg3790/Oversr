@@ -14,31 +14,31 @@ export const InventoryService = {
 };
 
 async function GetAllDesigners(enabledOnly = false) {
-    return await RequestHandler.Get(`/api/Designers/${enabledOnly}`);
+    return await RequestHandler.Get(`/api/Designers?enabledOnly=${enabledOnly}`);
 }
 
 async function SaveNewDesigner(designer) {
-    return await RequestHandler.Post('/api/Designers/Create', { name: designer });
+    return await RequestHandler.Post('/api/Designers', { name: designer });
 } 
 
 async function EditDesigner(designer) {
-    return await RequestHandler.Post('/api/Designers/Edit', designer);
+    return await RequestHandler.Put('/api/Designers', designer);
 } 
 
 async function GetAllStyles(enabledOnly = false) {
-    return await RequestHandler.Get(`/api/Styles/${enabledOnly}`);
+    return await RequestHandler.Get(`/api/Styles?enabledOnly=${enabledOnly}`);
 }
 
 async function GetAllStylesByDesigner(designerId) {
-    return await RequestHandler.Get(`/api/Styles/Designer/${designerId}/false`);
+    return await RequestHandler.Get(`/api/Styles/Designer/${designerId}/?enabledOnly=false`);
 }
 
 async function EditStyle(style) {
-    return await RequestHandler.Post('/api/Styles/Edit/', style);
+    return await RequestHandler.Put('/api/Styles', style);
 }
 
 async function SaveNewStyle(style) {
-    return await RequestHandler.Post('/api/Styles/Create', style);
+    return await RequestHandler.Post('/api/Styles', style);
 }
 
 async function GetAllInventoryStatuses() {
@@ -46,9 +46,9 @@ async function GetAllInventoryStatuses() {
 }
 
 async function GetSampleInventoryItems(status) {
-    return await RequestHandler.Get(`/api/SampleInventory/${status}`);
+    return await RequestHandler.Get(`/api/SampleInventory?status=${status}`);
 }
 
 async function SaveNewSampleInventoryItem(data) {
-    return await RequestHandler.Post('/api/SampleInventory/Create/', data);
+    return await RequestHandler.Post('/api/SampleInventory', data);
 }
