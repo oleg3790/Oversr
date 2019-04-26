@@ -1,5 +1,8 @@
 ## Overview
-.NET-React sample web application for managing inventory
+Sample web application for managing inventory
+
+## Architecture
+This is an MVC application, built with .NET Core and React.js (and Bootstrap as CSS framework). An ORM is used for the database model (Entity Framework Core). 
 
 ## Setup 
 1. Clone this repo
