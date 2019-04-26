@@ -1,5 +1,7 @@
 ## Overview
-Sample web application for managing inventory
+Sample web application for managing inventory.
+
+This application contains 3 models of data; designers, styles, and sample inventory. A sample inventory record belongs to a style, where a style will belong to a specific designer.
 
 ## Architecture
 This is an MVC application, built with .NET Core and React.js (and Bootstrap as CSS framework). An ORM is used for the database model (Entity Framework Core). 
